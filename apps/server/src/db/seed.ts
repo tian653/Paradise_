@@ -20,7 +20,7 @@ async function seed() {
         communityName: "Paradise",
         tagline: "Tempat Bertumbuh, Berkarya, dan Bersama",
         shortDescription:
-          "Paradise adalah komunitas mahasiswa yang berdiri sejak 2017, mengedepankan nilai persaudaraan, kreativitas, dan pengembangan diri bersama.",
+          "Paradise adalah komunitas mahasiswa yang berdiri sejak 2013, mengedepankan nilai persaudaraan, kreativitas, dan pengembangan diri bersama.",
         about:
           "Paradise merupakan komunitas mahasiswa yang lahir dari semangat kebersamaan dan keinginan untuk saling mendukung dalam perjalanan akademik maupun kehidupan kampus. Kami percaya bahwa bersama, setiap individu dapat tumbuh menjadi versi terbaiknya.\n\nSejak didirikan, Paradise telah menjadi rumah bagi ratusan mahasiswa yang saling menginspirasi dan mendukung satu sama lain. Kami aktif dalam berbagai kegiatan sosial, olahraga, dan pengembangan diri yang membentuk karakter anggota kami.",
         history:
