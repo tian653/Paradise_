@@ -10,15 +10,13 @@ import { drizzle } from "drizzle-orm/libsql";
 import { createClient } from "@libsql/client/http";
 import * as schema from "./schema.js";
 
-const dbUrl = process.env.DATABASE_URL;
-const dbAuthToken = process.env.DATABASE_AUTH_TOKEN;
+const dbUrl =
+  process.env.DATABASE_URL ||
+  "https://paradise-cristian21.aws-eu-west-1.turso.io";
+const dbAuthToken =
+  process.env.DATABASE_AUTH_TOKEN ||
+  "eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhIjoicnciLCJpYXQiOjE3ODg4NzcwMzksImlkIjoiMDFhMDgxNjEtMmEwMS03Yzc5LWFkMzAtMDUzMGEyYjUyY2FkIiwia2lkIjoiZ3NhbGF2ak5za2paSkxiN2hvYUdNbE9VVTV4WXo0Zm5CR1dQVGtOQXNBdyIsInJpZCI6ImY4MmIwZjQzLWFlYzEtNDdjZi05N2YyLWIwYmE3ZTdlMzY5NCJ9.yYPrEnJzAtWv_OAQRixyZfYI-YjOi7enpFmv8k-YzKd9hdYq5Oct-bLSKs2l0mud8WfYUDXOgQ_8VGx8y5PKCw";
 
-if (!dbUrl || !dbAuthToken) {
-  console.error("❌ DATABASE_URL or DATABASE_AUTH_TOKEN is missing in environment variables!");
-  throw new Error("DATABASE_URL or DATABASE_AUTH_TOKEN is missing in environment variables!");
-}
-
-// Convert libsql:// to https:// for HTTP REST transport in Serverless (prevents WebSocket 30s timeout)
 const url = dbUrl.startsWith("libsql://")
   ? dbUrl.replace("libsql://", "https://")
   : dbUrl;

@@ -6,11 +6,22 @@ interface AboutSectionProps {
 }
 
 export default function AboutSection({ profile }: AboutSectionProps) {
-  if (!profile) return null;
-
-  const missionItems = profile.mission
+  const aboutText =
+    profile?.about ||
+    "Paradise Community adalah wadah mahasiswa yang berkomitmen membangun persaudaraan, kreativitas, dan pengembangan diri bersama.";
+  const historyText =
+    profile?.history ||
+    "Didirikan sejak tahun 2013, Paradise berawal dari perkumpulan mahasiswa yang berinisiatif menciptakan ruang berkembang bersama.";
+  const visionText =
+    profile?.vision ||
+    "Menjadi komunitas mahasiswa yang unggul, berkarakter, berbudaya, dan berdampak positif bagi masyarakat.";
+  const missionItems = profile?.mission
     ? profile.mission.split("\n").filter((line) => line.trim())
-    : [];
+    : [
+        "Mempererat tali persaudaraan antar mahasiswa.",
+        "Mendorong pengembangan minat, bakat, dan jiwa kepemimpinan.",
+        "Menyelenggarakan kegiatan sosial dan pengabdian masyarakat.",
+      ];
 
   return (
     <section id="tentang" className={`section ${styles.about}`}>
@@ -28,7 +39,7 @@ export default function AboutSection({ profile }: AboutSectionProps) {
           <div className={styles.aboutText}>
             <h3 className={styles.subTitle}>Siapa Kami?</h3>
             <div className={styles.textBlock}>
-              {profile.about.split("\n\n").map((para, i) => (
+              {aboutText.split("\n\n").map((para, i) => (
                 <p key={i}>{para}</p>
               ))}
             </div>
@@ -39,7 +50,7 @@ export default function AboutSection({ profile }: AboutSectionProps) {
             <div className={styles.cardIcon}>📖</div>
             <h3 className={styles.cardTitle}>Sejarah</h3>
             <div className={styles.cardText}>
-              {profile.history.split("\n\n").map((para, i) => (
+              {historyText.split("\n\n").map((para, i) => (
                 <p key={i}>{para}</p>
               ))}
             </div>
@@ -54,7 +65,7 @@ export default function AboutSection({ profile }: AboutSectionProps) {
               <span>👁</span>
             </div>
             <h3 className={styles.vmTitle}>Visi</h3>
-            <p className={styles.vmText}>{profile.vision}</p>
+            <p className={styles.vmText}>{visionText}</p>
           </div>
 
           {/* Mission */}
