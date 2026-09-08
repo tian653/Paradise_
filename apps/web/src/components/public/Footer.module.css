@@ -1,26 +1,29 @@
 .footer {
   background: var(--color-bg-secondary);
   border-top: 1px solid var(--color-border);
-  padding: var(--space-3xl) 0 var(--space-xl);
+  padding: var(--space-2xl) 0 var(--space-xl);
 }
 
 .inner {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-3xl);
-  margin-bottom: var(--space-2xl);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-md);
+  margin-bottom: var(--space-xl);
 }
 
 /* Brand */
 .brand {
   display: flex;
   flex-direction: column;
-  gap: var(--space-sm);
+  align-items: center;
+  gap: var(--space-xs);
 }
 
 .logoIcon {
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
   background: #1c1c1c;
   border-radius: var(--radius-md);
   display: flex;
@@ -28,14 +31,14 @@
   justify-content: center;
   font-family: var(--font-heading);
   font-weight: 600;
-  font-size: 1.1rem;
+  font-size: 1.25rem;
   color: #fcfbf8;
   margin-bottom: var(--space-xs);
 }
 
 .logoImage {
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
   object-fit: contain;
   border-radius: var(--radius-md);
   margin-bottom: var(--space-xs);
@@ -43,7 +46,7 @@
 
 .name {
   font-family: var(--font-heading);
-  font-size: 1.4rem;
+  font-size: 1.3rem;
   font-weight: 800;
   color: var(--color-text-primary);
 }
@@ -52,45 +55,13 @@
   font-size: 0.9rem;
   color: var(--color-text-muted);
   line-height: 1.6;
-  max-width: 320px;
-}
-
-/* Social */
-.socialTitle {
-  font-family: var(--font-heading);
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: var(--color-text-primary);
-  letter-spacing: -0.9px;
-  text-transform: uppercase;
-  margin-bottom: var(--space-md);
-}
-
-.socialLinks {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-sm);
-}
-
-.socialLink {
-  display: flex;
-  align-items: center;
-  gap: var(--space-sm);
-  color: var(--color-text-secondary);
-  font-size: 0.9rem;
-  transition: color var(--transition-fast);
-  text-decoration: none;
-}
-
-.socialLink:hover {
-  background: var(--color-surface);
-  color: var(--color-text-primary);
-  transform: translateY(-2px);
+  max-width: 480px;
+  text-align: center;
 }
 
 /* Bottom */
 .bottom {
-  padding-top: var(--space-xl);
+  padding-top: var(--space-lg);
   border-top: 1px solid var(--color-border);
   text-align: center;
 }
@@ -107,11 +78,4 @@
 .heart {
   color: var(--color-error);
   display: inline;
-}
-
-@media (max-width: 640px) {
-  .inner {
-    grid-template-columns: 1fr;
-    gap: var(--space-xl);
-  }
 }

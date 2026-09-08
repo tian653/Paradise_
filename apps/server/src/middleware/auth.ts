@@ -1,12 +1,11 @@
-import { Hono } from "hono";
-import { MiddlewareHandler } from "hono";
+import type { MiddlewareHandler } from "hono";
 import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "../routes/auth.js";
 
 export const authMiddleware: MiddlewareHandler = async (c, next) => {
   const authHeader = c.req.header("Authorization");
 
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+  if (!authHeader?.startsWith("Bearer ")) {
     return c.json({ error: "Unauthorized" }, 401);
   }
 

@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { X } from "lucide-react";
+import { useState, useEffect, useCallback } from "react";
+import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import styles from "./GallerySection.module.css";
 import type { GalleryItem } from "../../lib/types";
 
@@ -8,7 +8,31 @@ interface GallerySectionProps {
 }
 
 export default function GallerySection({ gallery }: GallerySectionProps) {
-  const [lightboxItem, setLightboxItem] = useState<GalleryItem | null>(null);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+
+  const handlePrev = useCallback(() => {
+    if (lightboxIndex === null || gallery.length <= 1) return;
+    setLightboxIndex((prev) => (prev! > 0 ? prev! - 1 : gallery.length - 1));
+  }, [lightboxIndex, gallery.length]);
+
+  const handleNext = useCallback(() => {
+    if (lightboxIndex === null || gallery.length <= 1) return;
+    setLightboxIndex((prev) => (prev! < gallery.length - 1 ? prev! + 1 : 0));
+  }, [lightboxIndex, gallery.length]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (lightboxIndex === null) return;
+      if (e.key === "Escape") setLightboxIndex(null);
+      if (e.key === "ArrowLeft") handlePrev();
+      if (e.key === "ArrowRight") handleNext();
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [lightboxIndex, handlePrev, handleNext]);
+
+  const currentItem = lightboxIndex !== null ? gallery[lightboxIndex] : null;
 
   return (
     <section id="galeri" className={`section ${styles.section}`}>
@@ -31,10 +55,10 @@ export default function GallerySection({ gallery }: GallerySectionProps) {
                 key={item.id}
                 className={styles.item}
                 style={{ animationDelay: `${index * 0.06}s` }}
-                onClick={() => setLightboxItem(item)}
+                onClick={() => setLightboxIndex(index)}
                 role="button"
                 tabIndex={0}
-                onKeyDown={(e) => e.key === "Enter" && setLightboxItem(item)}
+                onKeyDown={(e) => e.key === "Enter" && setLightboxIndex(index)}
                 id={`gallery-item-${item.id}`}
               >
                 <img
@@ -56,34 +80,70 @@ export default function GallerySection({ gallery }: GallerySectionProps) {
       </div>
 
       {/* Lightbox */}
-      {lightboxItem && (
+      {currentItem && (
         <div
           className={styles.lightbox}
-          onClick={() => setLightboxItem(null)}
+          onClick={() => setLightboxIndex(null)}
           role="dialog"
           aria-modal="true"
           id="gallery-lightbox"
         >
           <button
             className={styles.lightboxClose}
-            onClick={() => setLightboxItem(null)}
-            aria-label="Close lightbox"
+            onClick={() => setLightboxIndex(null)}
+            aria-label="Tutup galeri"
             id="gallery-lightbox-close"
           >
             <X size={22} />
           </button>
+
+          {gallery.length > 1 && (
+            <>
+              <button
+                className={`${styles.navBtn} ${styles.prevBtn}`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handlePrev();
+                }}
+                aria-label="Foto sebelumnya"
+                id="gallery-lightbox-prev"
+              >
+                <ChevronLeft size={28} />
+              </button>
+
+              <button
+                className={`${styles.navBtn} ${styles.nextBtn}`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleNext();
+                }}
+                aria-label="Foto selanjutnya"
+                id="gallery-lightbox-next"
+              >
+                <ChevronRight size={28} />
+              </button>
+            </>
+          )}
+
           <div
             className={styles.lightboxContent}
             onClick={(e) => e.stopPropagation()}
           >
             <img
-              src={lightboxItem.imageUrl}
-              alt={lightboxItem.caption ?? "Gallery photo"}
+              src={currentItem.imageUrl}
+              alt={currentItem.caption ?? "Gallery photo"}
               className={styles.lightboxImg}
             />
-            {lightboxItem.caption && (
-              <p className={styles.lightboxCaption}>{lightboxItem.caption}</p>
-            )}
+            <div className={styles.lightboxMeta}>
+              {currentItem.caption && (
+                <p className={styles.lightboxCaption}>{currentItem.caption}</p>
+              )}
+              {gallery.length > 1 && (
+                <span className={styles.counter}>
+                  {lightboxIndex! + 1} / {gallery.length}
+                </span>
+              )}
+            </div>
           </div>
         </div>
       )}

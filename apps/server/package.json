@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "tsx watch src/index.ts",
+    "dev": "node --import tsx --watch src/index.ts",
     "start": "node dist/index.js",
     "build": "tsc",
     "db:generate": "drizzle-kit generate",
@@ -18,7 +18,7 @@
     "bcryptjs": "^3.0.2",
     "cloudinary": "^2.11.0",
     "dotenv": "^17.4.2",
-    "drizzle-orm": "^0.38.3",
+    "drizzle-orm": "^0.45.2",
     "hono": "^4.6.14",
     "jsonwebtoken": "^9.0.2",
     "uuid": "^11.0.3"
@@ -28,7 +28,7 @@
     "@types/jsonwebtoken": "^9.0.7",
     "@types/node": "^22.9.0",
     "@types/uuid": "^10.0.0",
-    "drizzle-kit": "^0.30.1",
+    "drizzle-kit": "^0.31.10",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2"
   }

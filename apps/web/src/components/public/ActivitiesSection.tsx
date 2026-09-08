@@ -1,4 +1,5 @@
-import { Calendar } from "lucide-react";
+import { useState } from "react";
+import { Calendar, X, ExternalLink } from "lucide-react";
 import styles from "./ActivitiesSection.module.css";
 import type { Activity } from "../../lib/types";
 
@@ -7,6 +8,8 @@ interface ActivitiesSectionProps {
 }
 
 export default function ActivitiesSection({ activities }: ActivitiesSectionProps) {
+  const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
+
   return (
     <section id="kegiatan" className={`section ${styles.section}`}>
       <div className="container">
@@ -28,6 +31,11 @@ export default function ActivitiesSection({ activities }: ActivitiesSectionProps
                 key={activity.id}
                 className={styles.card}
                 style={{ animationDelay: `${index * 0.08}s` }}
+                onClick={() => setSelectedActivity(activity)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => e.key === "Enter" && setSelectedActivity(activity)}
+                id={`activity-card-${activity.id}`}
               >
                 {/* Image */}
                 <div className={styles.imgWrap}>
@@ -43,7 +51,11 @@ export default function ActivitiesSection({ activities }: ActivitiesSectionProps
                       <span>📸</span>
                     </div>
                   )}
-                  <div className={styles.imgOverlay} />
+                  <div className={styles.imgOverlay}>
+                    <span className={styles.viewBadge}>
+                      Lihat Detail <ExternalLink size={12} />
+                    </span>
+                  </div>
                 </div>
 
                 {/* Content */}
@@ -60,6 +72,51 @@ export default function ActivitiesSection({ activities }: ActivitiesSectionProps
           </div>
         )}
       </div>
+
+      {/* Activity Detail Modal */}
+      {selectedActivity && (
+        <div
+          className={styles.modalBackdrop}
+          onClick={() => setSelectedActivity(null)}
+          role="dialog"
+          aria-modal="true"
+          id="activity-modal"
+        >
+          <div
+            className={styles.modalContent}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              className={styles.modalClose}
+              onClick={() => setSelectedActivity(null)}
+              aria-label="Tutup detail kegiatan"
+              id="activity-modal-close"
+            >
+              <X size={20} />
+            </button>
+
+            {selectedActivity.imageUrl && (
+              <div className={styles.modalImgWrap}>
+                <img
+                  src={selectedActivity.imageUrl}
+                  alt={selectedActivity.name}
+                  className={styles.modalImg}
+                />
+              </div>
+            )}
+
+            <div className={styles.modalBody}>
+              <div className={styles.modalDate}>
+                <Calendar size={15} />
+                <span>{selectedActivity.date}</span>
+              </div>
+              <h2 className={styles.modalTitle}>{selectedActivity.name}</h2>
+              <div className={styles.modalDivider} />
+              <p className={styles.modalDesc}>{selectedActivity.description}</p>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

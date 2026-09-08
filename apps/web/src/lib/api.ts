@@ -6,18 +6,26 @@ function getToken(): string | null {
   return localStorage.getItem("paradise_token");
 }
 
+/** Clear auth data and redirect to login on 401 */
+function handleUnauthorized(): never {
+  localStorage.removeItem("paradise_token");
+  localStorage.removeItem("paradise_username");
+  window.location.href = "/admin/login";
+  throw new Error("Session expired. Please log in again.");
+}
+
 async function request<T>(
   path: string,
   options: RequestInit = {}
 ): Promise<T> {
   const token = getToken();
-  const headers: HeadersInit = {
+  const headers: Record<string, string> = {
     "Content-Type": "application/json",
-    ...options.headers,
+    ...(options.headers as Record<string, string>),
   };
 
   if (token) {
-    (headers as Record<string, string>)["Authorization"] = `Bearer ${token}`;
+    headers["Authorization"] = `Bearer ${token}`;
   }
 
   const res = await fetch(`${BASE_URL}${path}`, {
@@ -25,29 +33,25 @@ async function request<T>(
     headers,
   });
 
-  if (!res.ok) {
-    const error = await res.json().catch(() => ({ error: "Request failed" }));
-    throw new Error(error.error ?? `HTTP ${res.status}`);
+  // Auto-logout on expired / invalid token for protected routes
+  if (res.status === 401 && path !== "/auth/login") {
+    handleUnauthorized();
   }
 
-  return res.json();
+  if (!res.ok) {
+    const error = await res.json().catch(() => ({ error: "Request failed" }));
+    throw new Error((error as { error?: string }).error ?? `HTTP ${res.status}`);
+  }
+
+  return res.json() as Promise<T>;
 }
 
 // ─── Public API ────────────────────────────────────────────────────────────────
 export const api = {
-  // Profile
   getProfile: () => request<import("./types").SiteSettings>("/profile"),
-
-  // Activities
   getActivities: () => request<import("./types").Activity[]>("/activities"),
-
-  // Gallery
   getGallery: () => request<import("./types").GalleryItem[]>("/gallery"),
-
-  // Officers
   getOfficers: () => request<import("./types").Officer[]>("/officers"),
-
-  // Contact
   getContact: () => request<import("./types").Contact>("/contact"),
 };
 
@@ -59,8 +63,9 @@ export const authApi = {
       body: JSON.stringify({ username, password }),
     }),
 
-  logout: () =>
-    request("/auth/logout", { method: "POST" }),
+  me: () => request<{ id: number; username: string }>("/auth/me"),
+
+  logout: () => request("/auth/logout", { method: "POST" }),
 };
 
 // ─── Admin API ─────────────────────────────────────────────────────────────────
@@ -141,16 +146,18 @@ export const adminApi = {
     const res = await fetch(`${BASE_URL}/admin/upload`, {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${token}`,
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
       },
       body: formData,
     });
 
+    if (res.status === 401) handleUnauthorized();
+
     if (!res.ok) {
       const error = await res.json().catch(() => ({ error: "Upload failed" }));
-      throw new Error(error.error ?? "Upload failed");
+      throw new Error((error as { error?: string }).error ?? "Upload failed");
     }
 
-    return res.json();
+    return res.json() as Promise<{ url: string }>;
   },
 };

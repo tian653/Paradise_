@@ -17,50 +17,55 @@ import AdminGalleryPage from "./pages/admin/AdminGalleryPage";
 import AdminOfficersPage from "./pages/admin/AdminOfficersPage";
 import AdminContactPage from "./pages/admin/AdminContactPage";
 
-// Protected route wrapper
+// Show nothing while auth state is being resolved (prevents flash)
+function AuthGate({ children }: { children: React.ReactNode }) {
+  const { isLoading } = useAuth();
+  if (isLoading) return null;
+  return <>{children}</>;
+}
+
+// Redirect to login if not authenticated
 function ProtectedRoute() {
   const { isAuthenticated } = useAuth();
-  if (!isAuthenticated) {
-    return <Navigate to="/admin/login" replace />;
-  }
+  if (!isAuthenticated) return <Navigate to="/admin/login" replace />;
   return <Outlet />;
 }
 
-// Redirect if already logged in
+// Redirect to dashboard if already logged in
 function GuestRoute() {
   const { isAuthenticated } = useAuth();
-  if (isAuthenticated) {
-    return <Navigate to="/admin" replace />;
-  }
+  if (isAuthenticated) return <Navigate to="/admin" replace />;
   return <Outlet />;
 }
 
 function AppRoutes() {
   return (
-    <Routes>
-      {/* Public */}
-      <Route path="/" element={<PublicPage />} />
+    <AuthGate>
+      <Routes>
+        {/* Public */}
+        <Route path="/" element={<PublicPage />} />
 
-      {/* Admin Auth */}
-      <Route element={<GuestRoute />}>
-        <Route path="/admin/login" element={<LoginPage />} />
-      </Route>
-
-      {/* Admin Protected */}
-      <Route element={<ProtectedRoute />}>
-        <Route path="/admin" element={<AdminLayout />}>
-          <Route index element={<DashboardPage />} />
-          <Route path="profile" element={<AdminProfilePage />} />
-          <Route path="activities" element={<AdminActivitiesPage />} />
-          <Route path="gallery" element={<AdminGalleryPage />} />
-          <Route path="officers" element={<AdminOfficersPage />} />
-          <Route path="contact" element={<AdminContactPage />} />
+        {/* Admin Auth */}
+        <Route element={<GuestRoute />}>
+          <Route path="/admin/login" element={<LoginPage />} />
         </Route>
-      </Route>
 
-      {/* Fallback */}
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+        {/* Admin Protected */}
+        <Route element={<ProtectedRoute />}>
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route index element={<DashboardPage />} />
+            <Route path="profile" element={<AdminProfilePage />} />
+            <Route path="activities" element={<AdminActivitiesPage />} />
+            <Route path="gallery" element={<AdminGalleryPage />} />
+            <Route path="officers" element={<AdminOfficersPage />} />
+            <Route path="contact" element={<AdminContactPage />} />
+          </Route>
+        </Route>
+
+        {/* Fallback */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </AuthGate>
   );
 }
 

@@ -9,6 +9,7 @@ import GallerySection from "../../components/public/GallerySection";
 import OfficersSection from "../../components/public/OfficersSection";
 import ContactSection from "../../components/public/ContactSection";
 import Footer from "../../components/public/Footer";
+import FloatingActions from "../../components/public/FloatingActions";
 
 export default function PublicPage() {
   const [profile, setProfile] = useState<SiteSettings | null>(null);
@@ -78,9 +79,10 @@ export default function PublicPage() {
       <Footer
         communityName={profile?.communityName}
         shortDescription={profile?.shortDescription}
-        contact={contact}
         logoUrl={profile?.logoUrl}
       />
+
+      <FloatingActions whatsapp={contact?.whatsapp} />
     </>
   );
 }

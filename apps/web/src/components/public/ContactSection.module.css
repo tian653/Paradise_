@@ -3,14 +3,17 @@
 }
 
 .cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: var(--space-lg);
-  max-width: 900px;
+  max-width: 960px;
   margin: 0 auto;
 }
 
 .contactCard {
+  flex: 1 1 280px;
+  max-width: 340px;
   display: flex;
   align-items: center;
   gap: var(--space-lg);
@@ -88,6 +91,56 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.actionsGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.copyBtn {
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.copyBtn:hover {
+  background: #1c1c1c;
+  color: #ffffff;
+  border-color: #1c1c1c;
+  transform: scale(1.08);
+}
+
+.checkIcon {
+  color: var(--color-success);
+}
+
+.copiedBadge {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.75rem;
+  background: #1c1c1c;
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-full);
+  animation: popIn 0.2s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.8); }
+  to { opacity: 1; transform: scale(1); }
 }
 
 .arrow {

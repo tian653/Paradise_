@@ -81,41 +81,6 @@
 }
 
 /* Vision & Mission grid */
-.stats {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--space-md);
-  margin-top: var(--space-xl);
-  padding: var(--space-lg);
-  background: var(--color-bg-card);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-}
-
-.statItem {
-  text-align: center;
-  position: relative;
-}
-
-.statItem:not(:last-child)::after {
-  content: '';
-  position: absolute;
-  top: 10%;
-  right: -0.5rem;
-  height: 80%;
-  width: 1px;
-  background: var(--color-border);
-}
-
-.statValue {
-  display: block;
-  font-size: 2.5rem;
-  font-weight: 600;
-  color: var(--color-text-primary);
-  line-height: 1;
-  margin-bottom: var(--space-xs);
-  letter-spacing: -1.2px;
-}
 
 .vmGrid {
   display: grid;

@@ -1,3 +1,4 @@
+import "dotenv/config";
 import { client } from "./index.js";
 
 // Run migrations by creating tables directly using SQLite

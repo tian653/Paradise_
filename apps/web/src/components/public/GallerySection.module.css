@@ -79,11 +79,12 @@
   position: absolute;
   top: 1.5rem;
   right: 1.5rem;
+  z-index: 10001;
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
   color: white;
   display: flex;
   align-items: center;
@@ -93,30 +94,92 @@
 }
 
 .lightboxClose:hover {
-  background: rgba(255,255,255,0.2);
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.08);
+}
+
+.navBtn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10001;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.navBtn:hover {
+  background: rgba(255, 255, 255, 0.35);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.prevBtn {
+  left: 1.5rem;
+}
+
+.nextBtn {
+  right: 1.5rem;
 }
 
 .lightboxContent {
-  max-width: 90vw;
-  max-height: 90vh;
+  max-width: 85vw;
+  max-height: 85vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: var(--space-md);
+  position: relative;
+  z-index: 10000;
 }
 
 .lightboxImg {
   max-width: 100%;
-  max-height: 80vh;
+  max-height: 75vh;
   object-fit: contain;
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-lg);
+  animation: zoomIn 0.2s ease;
+}
+
+.lightboxMeta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
 }
 
 .lightboxCaption {
-  color: rgba(255,255,255,0.8);
+  color: rgba(255, 255, 255, 0.9);
   font-size: 0.95rem;
   text-align: center;
+  font-weight: 500;
+}
+
+.counter {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-full);
+}
+
+@keyframes zoomIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 @keyframes fadeIn {
@@ -127,6 +190,16 @@
 @media (max-width: 900px) {
   .grid {
     columns: 2;
+  }
+  .navBtn {
+    width: 40px;
+    height: 40px;
+  }
+  .prevBtn {
+    left: 0.75rem;
+  }
+  .nextBtn {
+    right: 0.75rem;
   }
 }
 

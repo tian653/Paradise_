@@ -1,12 +1,15 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import toast from "react-hot-toast";
 import styles from "./LoginPage.module.css";
 
 export default function LoginPage() {
   const { login } = useAuth();
+  const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -20,8 +23,10 @@ export default function LoginPage() {
     try {
       await login(username, password);
       toast.success("Login berhasil!");
-    } catch {
-      toast.error("Username atau password salah");
+      navigate("/admin", { replace: true });
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Username atau password salah";
+      toast.error(message);
     } finally {
       setLoading(false);
     }
@@ -45,7 +50,7 @@ export default function LoginPage() {
               id="login-username"
               type="text"
               className="form-input"
-              placeholder="admin"
+              placeholder="Username admin"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               autoComplete="username"
@@ -57,16 +62,38 @@ export default function LoginPage() {
             <label className="form-label" htmlFor="login-password">
               Password
             </label>
-            <input
-              id="login-password"
-              type="password"
-              className="form-input"
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              autoComplete="current-password"
-              disabled={loading}
-            />
+            <div style={{ position: "relative" }}>
+              <input
+                id="login-password"
+                type={showPassword ? "text" : "password"}
+                className="form-input"
+                placeholder="Password admin"
+                style={{ paddingRight: "2.75rem" }}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                autoComplete="current-password"
+                disabled={loading}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                style={{
+                  position: "absolute",
+                  right: "0.75rem",
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  background: "none",
+                  border: "none",
+                  color: "var(--color-text-secondary, #94a3b8)",
+                  cursor: "pointer",
+                  fontSize: "0.85rem",
+                  padding: "0.25rem",
+                }}
+                aria-label={showPassword ? "Sembunyikan password" : "Tampilkan password"}
+              >
+                {showPassword ? "🙈" : "👁️"}
+              </button>
+            </div>
           </div>
 
           <button

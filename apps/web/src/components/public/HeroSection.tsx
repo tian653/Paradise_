@@ -53,7 +53,7 @@ export default function HeroSection({ profile }: HeroSectionProps) {
         </h1>
 
         <p className={styles.tagline}>
-          {profile?.tagline || "Tempat Bertumbuh, Berkarya, dan Bersama"}
+          {profile?.tagline || "/"}
         </p>
 
 
@@ -72,12 +72,14 @@ export default function HeroSection({ profile }: HeroSectionProps) {
             Tentang Kami
             <ArrowRight size={18} />
           </button>
+
           <button
-            className="btn btn-outline btn-lg"
+            className={styles.secondaryLink}
             onClick={scrollToActivities}
             id="hero-btn-activities"
           >
-            Lihat Kegiatan
+            <span>Lihat Kegiatan</span>
+            <ChevronDown size={16} />
           </button>
         </div>
       </div>

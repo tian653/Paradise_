@@ -1,4 +1,5 @@
-import { Instagram, MessageCircle, Mail, ExternalLink } from "lucide-react";
+import { useState } from "react";
+import { Instagram, MessageCircle, Mail, ExternalLink, Copy, Check } from "lucide-react";
 import styles from "./ContactSection.module.css";
 import type { Contact } from "../../lib/types";
 
@@ -7,6 +8,16 @@ interface ContactSectionProps {
 }
 
 export default function ContactSection({ contact }: ContactSectionProps) {
+  const [copiedKey, setCopiedKey] = useState<string | null>(null);
+
+  const copyToClipboard = (text: string, key: string, e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    navigator.clipboard.writeText(text);
+    setCopiedKey(key);
+    setTimeout(() => setCopiedKey(null), 2000);
+  };
+
   return (
     <section id="kontak" className={`section ${styles.section}`}>
       <div className="container">
@@ -54,7 +65,18 @@ export default function ContactSection({ contact }: ContactSectionProps) {
                 <span className={styles.platform}>WhatsApp</span>
                 <span className={styles.value}>+{contact.whatsapp}</span>
               </div>
-              <ExternalLink size={16} className={styles.arrow} />
+              <div className={styles.actionsGroup}>
+                <button
+                  onClick={(e) => copyToClipboard(`+${contact.whatsapp}`, "wa", e)}
+                  className={styles.copyBtn}
+                  title="Salin nomor WhatsApp"
+                  aria-label="Salin nomor WhatsApp"
+                >
+                  {copiedKey === "wa" ? <Check size={15} className={styles.checkIcon} /> : <Copy size={15} />}
+                </button>
+                <ExternalLink size={16} className={styles.arrow} />
+              </div>
+              {copiedKey === "wa" && <span className={styles.copiedBadge}>Tersalin! ✓</span>}
             </a>
           )}
 
@@ -71,7 +93,18 @@ export default function ContactSection({ contact }: ContactSectionProps) {
                 <span className={styles.platform}>Email</span>
                 <span className={styles.value}>{contact.email}</span>
               </div>
-              <ExternalLink size={16} className={styles.arrow} />
+              <div className={styles.actionsGroup}>
+                <button
+                  onClick={(e) => copyToClipboard(contact.email || "", "email", e)}
+                  className={styles.copyBtn}
+                  title="Salin alamat email"
+                  aria-label="Salin alamat email"
+                >
+                  {copiedKey === "email" ? <Check size={15} className={styles.checkIcon} /> : <Copy size={15} />}
+                </button>
+                <ExternalLink size={16} className={styles.arrow} />
+              </div>
+              {copiedKey === "email" && <span className={styles.copiedBadge}>Tersalin! ✓</span>}
             </a>
           )}
 

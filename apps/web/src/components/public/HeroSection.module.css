@@ -70,7 +70,7 @@
   letter-spacing: 0.08em;
   padding: 0.4rem 1.1rem;
   border-radius: var(--radius-full);
-  margin-bottom: var(--space-2xl);
+  margin-bottom: 1.25rem;
   animation: fadeInDown 0.8s 0.2s ease backwards;
 }
 
@@ -81,7 +81,7 @@
   line-height: 1.05;
   letter-spacing: -1.5px;
   color: var(--color-text-primary);
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   animation: fadeInDown 0.8s 0.3s ease backwards;
 }
 
@@ -91,7 +91,7 @@
   font-size: clamp(1.1rem, 2.5vw, 1.5rem);
   font-weight: 500;
   color: var(--color-gold-light);
-  margin-bottom: 2rem;
+  margin-bottom: 1.25rem;
   animation: fadeInDown 0.8s 0.4s ease backwards;
 }
 
@@ -100,7 +100,7 @@
   font-size: clamp(1.1rem, 2vw, 1.25rem);
   color: var(--color-text-secondary);
   max-width: 600px;
-  margin: 0 auto 4rem;
+  margin: 0 auto 2rem;
   line-height: 1.6;
   animation: fadeInDown 0.8s 0.5s ease backwards;
 }
@@ -108,10 +108,17 @@
 /* Actions */
 .actions {
   display: flex;
-  gap: var(--space-md);
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
   justify-content: center;
-  flex-wrap: wrap;
   animation: fadeInDown 0.8s 0.6s ease backwards;
+}
+
+.actions :global(.btn) {
+  width: 100%;
+  max-width: 240px;
+  justify-content: center;
 }
 
 /* Scroll indicator */
@@ -154,14 +161,7 @@
     min-height: 100svh;
   }
 
-  .actions {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .actions .btn {
-    width: 100%;
+  .actions :global(.btn) {
     max-width: 280px;
-    justify-content: center;
   }
 }
