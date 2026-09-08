@@ -1,6 +1,6 @@
 import type { MiddlewareHandler } from "hono";
 import jwt from "jsonwebtoken";
-import { JWT_SECRET } from "../routes/auth.js";
+import { getJwtSecret } from "../routes/auth.js";
 
 export const authMiddleware: MiddlewareHandler = async (c, next) => {
   const authHeader = c.req.header("Authorization");
@@ -12,7 +12,7 @@ export const authMiddleware: MiddlewareHandler = async (c, next) => {
   const token = authHeader.replace("Bearer ", "");
 
   try {
-    const payload = jwt.verify(token, JWT_SECRET) as {
+    const payload = jwt.verify(token, getJwtSecret()) as {
       id: number;
       username: string;
     };
