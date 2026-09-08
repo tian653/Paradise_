@@ -19,15 +19,14 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-const app = new Hono().basePath("/api");
+const api = new Hono();
 
 // ── Middleware ─────────────────────────────────────────────────────────────────
-app.use("*", logger());
-app.use(
+api.use("*", logger());
+api.use(
   "*",
   cors({
     origin: (origin) => {
-      // In production on Vercel, allow all origins or incoming request origin
       if (!origin) return "*";
       return origin;
     },
@@ -38,12 +37,12 @@ app.use(
 );
 
 // ── Public Routes ──────────────────────────────────────────────────────────────
-app.route("/profile", profileRouter);
-app.route("/activities", activitiesRouter);
-app.route("/gallery", galleryRouter);
-app.route("/officers", officersRouter);
-app.route("/contact", contactRouter);
-app.route("/auth", authRouter);
+api.route("/profile", profileRouter);
+api.route("/activities", activitiesRouter);
+api.route("/gallery", galleryRouter);
+api.route("/officers", officersRouter);
+api.route("/contact", contactRouter);
+api.route("/auth", authRouter);
 
 // ── Admin Routes (protected) ───────────────────────────────────────────────────
 const admin = new Hono();
@@ -87,12 +86,17 @@ admin.post("/upload", async (c) => {
   }
 });
 
-app.route("/admin", admin);
+api.route("/admin", admin);
 
 // ── Health Check ───────────────────────────────────────────────────────────────
-app.get("/health", (c) =>
+api.get("/health", (c) =>
   c.json({ status: "ok", timestamp: new Date().toISOString() })
 );
+
+// ── Root App: Mount routes at both /api and / for dual Vercel path compatibility ─
+const app = new Hono();
+app.route("/api", api);
+app.route("/", api);
 
 // ── Vercel Handler ─────────────────────────────────────────────────────────────
 export const GET = handle(app);
