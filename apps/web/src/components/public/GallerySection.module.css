@@ -1,0 +1,137 @@
+.section {
+  background: var(--color-bg);
+}
+
+/* Grid */
+.grid {
+  columns: 3;
+  column-gap: var(--space-md);
+}
+
+.item {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  margin-bottom: var(--space-md);
+  break-inside: avoid;
+  animation: fadeIn 0.5s ease backwards;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-card);
+}
+
+.img {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: transform var(--transition-slow);
+}
+
+.item:hover .img {
+  transform: scale(1.05);
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 14, 26, 0.65);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  opacity: 0;
+  transition: opacity var(--transition-base);
+}
+
+.item:hover .overlay {
+  opacity: 1;
+}
+
+.zoomIcon {
+  font-size: 1.8rem;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+}
+
+.caption {
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.9);
+  text-align: center;
+  padding: 0 var(--space-md);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* Lightbox */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.2s ease;
+  padding: 2rem;
+}
+
+.lightboxClose {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.lightboxClose:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+.lightboxContent {
+  max-width: 90vw;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.lightboxImg {
+  max-width: 100%;
+  max-height: 80vh;
+  object-fit: contain;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+}
+
+.lightboxCaption {
+  color: rgba(255,255,255,0.8);
+  font-size: 0.95rem;
+  text-align: center;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (max-width: 900px) {
+  .grid {
+    columns: 2;
+  }
+}
+
+@media (max-width: 540px) {
+  .grid {
+    columns: 1;
+  }
+}

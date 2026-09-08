@@ -1,0 +1,105 @@
+.section {
+  background: var(--color-bg-secondary);
+}
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xl);
+  justify-content: center;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md);
+  text-align: center;
+  animation: fadeInUp 0.5s ease backwards;
+  padding: var(--space-xl);
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  width: 180px;
+  transition: all var(--transition-base);
+}
+
+.card:hover {
+  border-color: var(--color-border-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+  background: var(--color-surface);
+}
+
+.photoWrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.photo {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center top;
+  border: 1px solid var(--color-border);
+}
+
+.imageWrapper {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  padding: 4px;
+  background: var(--color-border);
+  position: relative;
+}
+
+.photoPlaceholder {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: #1c1c1c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 2rem;
+  color: #fcfbf8;
+}
+
+.photoRing {
+  display: none;
+}
+
+.name {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: 0.25rem;
+}
+
+.position {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+  font-weight: 500;
+  margin-top: auto;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 640px) {
+  .card {
+    width: 150px;
+    padding: var(--space-lg);
+  }
+
+  .photo,
+  .photoPlaceholder {
+    width: 80px;
+    height: 80px;
+  }
+}
