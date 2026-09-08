@@ -11,8 +11,8 @@ export const siteSettings = sqliteTable("site_settings", {
   history: text("history").notNull().default(""),
   vision: text("vision").notNull().default(""),
   mission: text("mission").notNull().default(""),
-  logoUrl: text("logo_url").default(null),
-  heroImageUrl: text("hero_image_url").default(null),
+  logoUrl: text("logo_url"),
+  heroImageUrl: text("hero_image_url"),
   updatedAt: text("updated_at").notNull().default(sql`(datetime('now'))`),
 });
 
@@ -22,7 +22,7 @@ export const activities = sqliteTable("activities", {
   name: text("name").notNull(),
   date: text("date").notNull(),
   description: text("description").notNull().default(""),
-  imageUrl: text("image_url").default(null),
+  imageUrl: text("image_url"),
   sortOrder: integer("sort_order").notNull().default(0),
   createdAt: text("created_at").notNull().default(sql`(datetime('now'))`),
 });
@@ -31,7 +31,7 @@ export const activities = sqliteTable("activities", {
 export const gallery = sqliteTable("gallery", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   imageUrl: text("image_url").notNull(),
-  caption: text("caption").default(null),
+  caption: text("caption"),
   sortOrder: integer("sort_order").notNull().default(0),
   createdAt: text("created_at").notNull().default(sql`(datetime('now'))`),
 });
@@ -41,7 +41,7 @@ export const officers = sqliteTable("officers", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   name: text("name").notNull(),
   position: text("position").notNull(),
-  photoUrl: text("photo_url").default(null),
+  photoUrl: text("photo_url"),
   sortOrder: integer("sort_order").notNull().default(0),
   createdAt: text("created_at").notNull().default(sql`(datetime('now'))`),
 });
@@ -49,9 +49,9 @@ export const officers = sqliteTable("officers", {
 // ─── Contact ──────────────────────────────────────────────────────────────────
 export const contact = sqliteTable("contact", {
   id: integer("id").primaryKey({ autoIncrement: true }),
-  instagram: text("instagram").default(null),
-  whatsapp: text("whatsapp").default(null),
-  email: text("email").default(null),
+  instagram: text("instagram"),
+  whatsapp: text("whatsapp"),
+  email: text("email"),
   additional: text("additional").default("[]"),
   updatedAt: text("updated_at").notNull().default(sql`(datetime('now'))`),
 });
