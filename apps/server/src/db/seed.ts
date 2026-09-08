@@ -42,6 +42,7 @@ async function seed() {
   }
 
   console.log("\n🎉 Seed complete!");
+  process.exit(0);
 }
 
 seed().catch((err) => {

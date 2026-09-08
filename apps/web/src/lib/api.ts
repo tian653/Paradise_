@@ -39,8 +39,19 @@ async function request<T>(
   }
 
   if (!res.ok) {
-    const error = await res.json().catch(() => ({ error: "Request failed" }));
-    throw new Error((error as { error?: string }).error ?? `HTTP ${res.status}`);
+    let errorMessage = `HTTP ${res.status} ${res.statusText}`;
+    try {
+      const errorJson = await res.json();
+      if (errorJson && typeof errorJson === "object" && "error" in errorJson) {
+        errorMessage = (errorJson as { error: string }).error;
+      }
+    } catch {
+      const text = await res.text().catch(() => "");
+      if (text && text.length < 200) {
+        errorMessage = text;
+      }
+    }
+    throw new Error(errorMessage);
   }
 
   return res.json() as Promise<T>;

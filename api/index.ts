@@ -27,11 +27,9 @@ app.use(
   "*",
   cors({
     origin: (origin) => {
-      // Allow the configured frontend URL, or localhost in dev
-      const allowed = process.env.FRONTEND_URL
-        ? [process.env.FRONTEND_URL]
-        : ["http://localhost:5173", "http://127.0.0.1:5173"];
-      return allowed.includes(origin) ? origin : allowed[0];
+      // In production on Vercel, allow all origins or incoming request origin
+      if (!origin) return "*";
+      return origin;
     },
     allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
     allowHeaders: ["Content-Type", "Authorization"],
