@@ -7,12 +7,25 @@ config({ path: resolve(dirname(fileURLToPath(import.meta.url)), "../../.env") })
 config({ path: resolve(dirname(fileURLToPath(import.meta.url)), "../../../../.env") });
 
 import { drizzle } from "drizzle-orm/libsql";
-import { createClient } from "@libsql/client/web";
+import { createClient } from "@libsql/client";
 import * as schema from "./schema.js";
 
+const dbUrl = process.env.DATABASE_URL;
+const dbAuthToken = process.env.DATABASE_AUTH_TOKEN;
+
+if (!dbUrl) {
+  console.error("❌ DATABASE_URL is missing in environment variables!");
+  throw new Error("DATABASE_URL is missing in environment variables!");
+}
+
+// Convert libsql:// to https:// for HTTP REST transport in Serverless (prevents WebSocket 30s timeout)
+const url = dbUrl.startsWith("libsql://")
+  ? dbUrl.replace("libsql://", "https://")
+  : dbUrl;
+
 const client = createClient({
-  url: process.env.DATABASE_URL!,
-  authToken: process.env.DATABASE_AUTH_TOKEN,
+  url,
+  authToken: dbAuthToken,
 });
 
 export const db = drizzle(client, { schema });
