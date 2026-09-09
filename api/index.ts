@@ -12,8 +12,6 @@ import officersRouter from "../apps/server/src/routes/officers.js";
 import contactRouter from "../apps/server/src/routes/contact.js";
 import { authMiddleware } from "../apps/server/src/middleware/auth.js";
 
-export const runtime = "edge";
-
 // ── Cloudinary ─────────────────────────────────────────────────────────────────
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -100,11 +98,5 @@ const app = new Hono();
 app.route("/api", api);
 app.route("/", api);
 
-// ── Vercel Edge Handler ────────────────────────────────────────────────────────
-export const GET = handle(app);
-export const POST = handle(app);
-export const PUT = handle(app);
-export const DELETE = handle(app);
-export const OPTIONS = handle(app);
-export const PATCH = handle(app);
+// ── Vercel Node.js Handler ────────────────────────────────────────────────────
 export default handle(app);
