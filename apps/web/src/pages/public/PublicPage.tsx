@@ -96,6 +96,16 @@ export default function PublicPage() {
       .catch(() => {});
   }, []);
 
+  useEffect(() => {
+    if (profile?.logoUrl) {
+      const link = (document.querySelector("link[rel*='icon']") || document.createElement("link")) as HTMLLinkElement;
+      link.type = "image/png";
+      link.rel = "icon";
+      link.href = profile.logoUrl;
+      document.getElementsByTagName("head")[0].appendChild(link);
+    }
+  }, [profile?.logoUrl]);
+
   return (
     <>
       <Navbar
