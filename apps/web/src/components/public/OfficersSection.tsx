@@ -8,7 +8,7 @@ interface OfficersSectionProps {
 
 const AVATAR_GRADIENTS = [
   "linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)",
-  "linear-gradient(135deg, #78350f 0%, #d97706 100%)",
+  "linear-gradient(135deg, #334155 0%, #64748b 100%)",
   "linear-gradient(135deg, #064e3b 0%, #10b981 100%)",
   "linear-gradient(135deg, #881337 0%, #f43f5e 100%)",
   "linear-gradient(135deg, #4c1d95 0%, #8b5cf6 100%)",

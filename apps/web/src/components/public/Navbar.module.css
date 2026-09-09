@@ -23,9 +23,10 @@
 }
 
 .navbar:not(.scrolled) .logoIcon {
-  background: var(--color-accent);
+  background: rgba(255, 255, 255, 0.2);
   color: #ffffff;
-  box-shadow: 0 4px 14px rgba(217, 119, 6, 0.4);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .navbar.scrolled {
@@ -116,31 +117,16 @@
 
 .navbar:not(.scrolled) .navLink.active {
   color: #ffffff !important;
-  background: rgba(255, 255, 255, 0.18);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: transparent;
 }
 
 .navbar.scrolled .navLink.active {
-  color: var(--color-accent) !important;
-  background: var(--color-accent-light);
+  color: var(--color-text-primary) !important;
+  background: transparent;
 }
 
 .navLink.active::after {
-  content: '';
-  position: absolute;
-  bottom: 0px;
-  left: 0.75rem;
-  right: 0.75rem;
-  height: 3px;
-  border-radius: 3px 3px 0 0;
-  background: #fbbf24;
-  box-shadow: 0 0 10px rgba(251, 191, 36, 0.7);
-}
-
-.navbar.scrolled .navLink.active::after {
-  background: var(--color-accent);
-  box-shadow: 0 0 8px var(--color-accent-glow);
+  display: none;
 }
 
 /* ─── Hamburger ─── */
@@ -197,10 +183,9 @@
 }
 
 .mobileLink.active {
-  background: var(--color-accent-light);
-  color: var(--color-accent);
+  background: transparent;
+  color: var(--color-text-primary);
   font-weight: 600;
-  border-left: 3px solid var(--color-accent);
 }
 
 /* ─── Responsive ─── */

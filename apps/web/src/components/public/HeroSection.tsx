@@ -73,10 +73,6 @@ export default function HeroSection({ profile }: HeroSectionProps) {
 
       {/* Content */}
       <div className={`container ${styles.content} ${loaded ? styles.loaded : ""}`}>
-        <div className={styles.badge}>
-          <Calendar size={13} className={styles.badgeIcon} />
-          <span>EST. 2013</span>
-        </div>
 
         <h1 className={styles.title}>
           {profile?.communityName || "Paradise"}
