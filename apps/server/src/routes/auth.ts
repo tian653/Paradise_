@@ -39,31 +39,24 @@ authRouter.post("/login", async (c) => {
       .from(admins)
       .where(eq(sql`lower(${admins.username})`, cleanUsername.toLowerCase()))
   )[0];
-  console.log("🔵 [4] DB query done, found:", !!admin);
 
   if (!admin) {
     console.warn(`⚠️ User "${cleanUsername}" not found`);
-    console.log("🔵 [5a] Before dummy bcrypt.compare");
-    await bcrypt.compare(cleanPassword, "$2b$12$abcdefghijklmnopqrstuuABCDEFGHIJKLMNOPQRSTUVWXYZabcde");
-    console.log("🔵 [5b] After dummy bcrypt.compare");
     return c.json({ error: "Invalid credentials" }, 401);
   }
 
-  console.log("🔵 [6a] Before real bcrypt.compare");
   const isValid = await bcrypt.compare(cleanPassword, admin.passwordHash);
-  console.log("🔵 [6b] After real bcrypt.compare, valid:", isValid);
 
   if (!isValid) {
+    console.warn(`⚠️ Invalid password for user "${cleanUsername}"`);
     return c.json({ error: "Invalid credentials" }, 401);
   }
 
-  console.log("🔵 [7] Before jwt.sign");
   const token = jwt.sign(
     { id: admin.id, username: admin.username },
     getJwtSecret(),
     { expiresIn: "7d" }
   );
-  console.log("🔵 [8] After jwt.sign — success");
 
   return c.json({ token, username: admin.username });
 });
