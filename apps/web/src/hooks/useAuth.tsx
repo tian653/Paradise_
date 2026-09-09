@@ -43,32 +43,37 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // Restore session on mount — check token validity before trusting localStorage
   useEffect(() => {
-    const token = localStorage.getItem("paradise_token");
-    const savedUsername = localStorage.getItem("paradise_username");
+    try {
+      const token = localStorage.getItem("paradise_token");
+      const savedUsername = localStorage.getItem("paradise_username");
 
-    if (token && savedUsername && !isTokenExpired(token)) {
-      setIsAuthenticated(true);
-      setUsername(savedUsername);
-    } else if (token) {
-      // Token exists but is expired — clear stale data
-      localStorage.removeItem("paradise_token");
-      localStorage.removeItem("paradise_username");
-    }
+      if (token && savedUsername && !isTokenExpired(token)) {
+        setIsAuthenticated(true);
+        setUsername(savedUsername);
+      } else if (token) {
+        localStorage.removeItem("paradise_token");
+        localStorage.removeItem("paradise_username");
+      }
+    } catch {}
 
     setIsLoading(false);
   }, []);
 
   const login = async (user: string, password: string) => {
     const res = await authApi.login(user, password);
-    localStorage.setItem("paradise_token", res.token);
-    localStorage.setItem("paradise_username", res.username);
+    try {
+      localStorage.setItem("paradise_token", res.token);
+      localStorage.setItem("paradise_username", res.username);
+    } catch {}
     setIsAuthenticated(true);
     setUsername(res.username);
   };
 
   const logout = () => {
-    localStorage.removeItem("paradise_token");
-    localStorage.removeItem("paradise_username");
+    try {
+      localStorage.removeItem("paradise_token");
+      localStorage.removeItem("paradise_username");
+    } catch {}
     setIsAuthenticated(false);
     setUsername(null);
   };

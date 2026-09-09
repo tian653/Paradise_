@@ -1,16 +1,23 @@
 // ─── API Client ───────────────────────────────────────────────────────────────
 import { compressImage } from "./imageCompressor";
 
-const BASE_URL = import.meta.env.VITE_API_URL || "/api";
+const rawBaseUrl = (import.meta.env.VITE_API_URL as string | undefined) || "/api";
+const BASE_URL = rawBaseUrl.endsWith("/") ? rawBaseUrl.slice(0, -1) : rawBaseUrl;
 
 function getToken(): string | null {
-  return localStorage.getItem("paradise_token");
+  try {
+    return localStorage.getItem("paradise_token");
+  } catch {
+    return null;
+  }
 }
 
 /** Clear auth data and redirect to login on 401 */
 function handleUnauthorized(): never {
-  localStorage.removeItem("paradise_token");
-  localStorage.removeItem("paradise_username");
+  try {
+    localStorage.removeItem("paradise_token");
+    localStorage.removeItem("paradise_username");
+  } catch {}
   window.location.href = "/admin/login";
   throw new Error("Session expired. Please log in again.");
 }
@@ -32,15 +39,20 @@ async function request<T>(
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 30000);
 
+  const cleanPath = path.startsWith("/") ? path : `/${path}`;
+  const fullUrl = `${BASE_URL}${cleanPath}`;
+
   let res: Response;
   try {
-    res = await fetch(`${BASE_URL}${path}`, {
+    console.log(`🌐 [API Request] Fetching: ${fullUrl}`);
+    res = await fetch(fullUrl, {
       ...options,
       headers,
       signal: controller.signal,
       cache: "no-store",
     });
   } catch (err: any) {
+    console.error(`❌ [API Error] Fetch failed for ${fullUrl}:`, err);
     if (err?.name === "AbortError") {
       throw new Error("Request timed out. Please try again.");
     }
