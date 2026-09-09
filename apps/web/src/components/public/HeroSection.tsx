@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ChevronDown, ArrowRight, Sparkles } from "lucide-react";
+import { ChevronDown, ArrowRight, Calendar } from "lucide-react";
 import styles from "./HeroSection.module.css";
 import type { SiteSettings } from "../../lib/types";
 
@@ -48,8 +48,8 @@ export default function HeroSection({ profile }: HeroSectionProps) {
       {/* Content */}
       <div className={`container ${styles.content} ${loaded ? styles.loaded : ""}`}>
         <div className={styles.badge}>
-          <Sparkles size={14} className={styles.badgeIcon} />
-          <span>Est. 2013</span>
+          <Calendar size={13} className={styles.badgeIcon} />
+          <span>EST. 2013</span>
         </div>
 
         <h1 className={styles.title}>
