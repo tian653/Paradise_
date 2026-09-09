@@ -7,7 +7,7 @@ config({ path: resolve(dirname(fileURLToPath(import.meta.url)), "../../.env") })
 config({ path: resolve(dirname(fileURLToPath(import.meta.url)), "../../../../.env") });
 
 import { drizzle } from "drizzle-orm/libsql";
-import { createClient } from "@libsql/client/web";
+import { createClient } from "@libsql/client";
 import * as schema from "./schema.js";
 
 const dbUrl = process.env.DATABASE_URL;
@@ -17,12 +17,8 @@ if (!dbUrl || !dbAuthToken) {
   throw new Error("Missing database credentials: DATABASE_URL or DATABASE_AUTH_TOKEN is not defined.");
 }
 
-const url = dbUrl.startsWith("libsql://")
-  ? dbUrl.replace("libsql://", "https://")
-  : dbUrl;
-
 const client = createClient({
-  url,
+  url: dbUrl,
   authToken: dbAuthToken,
 });
 
