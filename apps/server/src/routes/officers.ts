@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import { db } from "../db/index.js";
 import { officers } from "../db/schema.js";
-import { eq, asc } from "drizzle-orm";
+import { eq, asc, desc } from "drizzle-orm";
 
 const officersRouter = new Hono();
 
@@ -23,13 +23,23 @@ officersRouter.post("/", async (c) => {
     return c.json({ error: "Name and position are required" }, 400);
   }
 
+  let finalSortOrder = typeof sortOrder === "number" && sortOrder > 0 ? sortOrder : undefined;
+  if (!finalSortOrder) {
+    const maxRow = await db
+      .select({ sortOrder: officers.sortOrder })
+      .from(officers)
+      .orderBy(desc(officers.sortOrder))
+      .limit(1);
+    finalSortOrder = (maxRow[0]?.sortOrder ?? 0) + 1;
+  }
+
   const result = await db
     .insert(officers)
     .values({
       name,
       position,
       photoUrl: photoUrl ?? null,
-      sortOrder: sortOrder ?? 0,
+      sortOrder: finalSortOrder,
     })
     .returning();
 

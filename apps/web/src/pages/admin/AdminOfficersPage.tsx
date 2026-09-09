@@ -13,7 +13,7 @@ type FormData = {
   sortOrder: number;
 };
 
-const EMPTY_FORM: FormData = { name: "", position: "", photoUrl: "", sortOrder: 0 };
+const EMPTY_FORM: FormData = { name: "", position: "", photoUrl: "", sortOrder: 1 };
 
 export default function AdminOfficersPage() {
   const [items, setItems] = useState<Officer[]>([]);
@@ -32,13 +32,14 @@ export default function AdminOfficersPage() {
   useEffect(() => { load(); }, []);
 
   const openCreate = () => {
-    setForm({ ...EMPTY_FORM, sortOrder: items.length + 1 });
+    const nextSort = items.length > 0 ? Math.max(...items.map((i) => i.sortOrder || 0)) + 1 : 1;
+    setForm({ ...EMPTY_FORM, sortOrder: nextSort });
     setEditItem(null);
     setModal("create");
   };
 
   const openEdit = (item: Officer) => {
-    setForm({ name: item.name, position: item.position, photoUrl: item.photoUrl ?? "", sortOrder: item.sortOrder });
+    setForm({ name: item.name, position: item.position, photoUrl: item.photoUrl ?? "", sortOrder: item.sortOrder || 1 });
     setEditItem(item);
     setModal("edit");
   };
@@ -47,7 +48,7 @@ export default function AdminOfficersPage() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: name === "sortOrder" ? parseInt(value) || 0 : value }));
+    setForm((prev) => ({ ...prev, [name]: name === "sortOrder" ? Math.max(1, parseInt(value) || 1) : value }));
   };
 
   const handleSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -71,6 +72,15 @@ export default function AdminOfficersPage() {
 
   const handleSave = async () => {
     if (!form.name || !form.position) { toast.error("Nama dan jabatan wajib diisi"); return; }
+    if (form.sortOrder < 1) { toast.error("Urutan tampil minimal 1"); return; }
+    const isDuplicate = items.some(
+      (item) => item.id !== editItem?.id && item.sortOrder === form.sortOrder
+    );
+    if (isDuplicate) {
+      toast.error(`Urutan ${form.sortOrder} sudah digunakan oleh pengurus lain`);
+      return;
+    }
+
     setSaving(true);
     try {
       const payload = { ...form, photoUrl: form.photoUrl || null };
@@ -98,15 +108,27 @@ export default function AdminOfficersPage() {
 
   const moveOrder = async (item: Officer, dir: "up" | "down") => {
     const idx = items.findIndex((o) => o.id === item.id);
-    const target = dir === "up" ? items[idx - 1] : items[idx + 1];
+    const targetIdx = dir === "up" ? idx - 1 : idx + 1;
+    const target = items[targetIdx];
     if (!target) return;
+
+    const newItems = [...items];
+    newItems[idx] = target;
+    newItems[targetIdx] = item;
+
+    const resequenced = newItems.map((it, i) => ({ ...it, sortOrder: i + 1 }));
+    setItems(resequenced);
+
     try {
       await Promise.all([
-        adminApi.updateOfficer(item.id, { sortOrder: target.sortOrder }),
-        adminApi.updateOfficer(target.id, { sortOrder: item.sortOrder }),
+        adminApi.updateOfficer(item.id, { sortOrder: targetIdx + 1 }),
+        adminApi.updateOfficer(target.id, { sortOrder: idx + 1 }),
       ]);
       load();
-    } catch { toast.error("Gagal mengubah urutan"); }
+    } catch {
+      toast.error("Gagal mengubah urutan");
+      load();
+    }
   };
 
   return (

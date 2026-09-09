@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import { db } from "../db/index.js";
 import { activities } from "../db/schema.js";
-import { eq, asc } from "drizzle-orm";
+import { eq, asc, desc } from "drizzle-orm";
 
 const activitiesRouter = new Hono();
 
@@ -23,6 +23,16 @@ activitiesRouter.post("/", async (c) => {
     return c.json({ error: "Name and date are required" }, 400);
   }
 
+  let finalSortOrder = typeof sortOrder === "number" && sortOrder > 0 ? sortOrder : undefined;
+  if (!finalSortOrder) {
+    const maxRow = await db
+      .select({ sortOrder: activities.sortOrder })
+      .from(activities)
+      .orderBy(desc(activities.sortOrder))
+      .limit(1);
+    finalSortOrder = (maxRow[0]?.sortOrder ?? 0) + 1;
+  }
+
   const result = await db
     .insert(activities)
     .values({
@@ -30,7 +40,7 @@ activitiesRouter.post("/", async (c) => {
       date,
       description: description ?? "",
       imageUrl: imageUrl ?? null,
-      sortOrder: sortOrder ?? 0,
+      sortOrder: finalSortOrder,
     })
     .returning();
 

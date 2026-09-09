@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { Plus, Pencil, Trash2, X, Upload } from "lucide-react";
+import { Plus, Pencil, Trash2, X, Upload, ChevronUp, ChevronDown } from "lucide-react";
 import toast from "react-hot-toast";
 import { adminApi } from "../../lib/api";
 import type { Activity } from "../../lib/types";
@@ -19,7 +19,7 @@ const EMPTY_FORM: FormData = {
   date: "",
   description: "",
   imageUrl: "",
-  sortOrder: 0,
+  sortOrder: 1,
 };
 
 export default function AdminActivitiesPage() {
@@ -43,7 +43,8 @@ export default function AdminActivitiesPage() {
   useEffect(() => { load(); }, []);
 
   const openCreate = () => {
-    setForm(EMPTY_FORM);
+    const nextSort = items.length > 0 ? Math.max(...items.map((i) => i.sortOrder || 0)) + 1 : 1;
+    setForm({ ...EMPTY_FORM, sortOrder: nextSort });
     setEditItem(null);
     setModal("create");
   };
@@ -54,7 +55,7 @@ export default function AdminActivitiesPage() {
       date: item.date,
       description: item.description,
       imageUrl: item.imageUrl ?? "",
-      sortOrder: item.sortOrder,
+      sortOrder: item.sortOrder || 1,
     });
     setEditItem(item);
     setModal("edit");
@@ -72,7 +73,7 @@ export default function AdminActivitiesPage() {
     const { name, value } = e.target;
     setForm((prev) => ({
       ...prev,
-      [name]: name === "sortOrder" ? parseInt(value) || 0 : value,
+      [name]: name === "sortOrder" ? Math.max(1, parseInt(value) || 1) : value,
     }));
   };
 
@@ -103,6 +104,18 @@ export default function AdminActivitiesPage() {
       toast.error("Nama dan tanggal wajib diisi");
       return;
     }
+    if (form.sortOrder < 1) {
+      toast.error("Urutan tampil minimal 1");
+      return;
+    }
+    const isDuplicate = items.some(
+      (item) => item.id !== editItem?.id && item.sortOrder === form.sortOrder
+    );
+    if (isDuplicate) {
+      toast.error(`Urutan ${form.sortOrder} sudah digunakan oleh kegiatan lain`);
+      return;
+    }
+
     setSaving(true);
     try {
       const payload = { ...form, imageUrl: form.imageUrl || null };
@@ -130,6 +143,32 @@ export default function AdminActivitiesPage() {
       setItems((prev) => prev.filter((a) => a.id !== id));
     } catch {
       toast.error("Gagal menghapus");
+    }
+  };
+
+  const moveOrder = async (item: Activity, dir: "up" | "down") => {
+    const idx = items.findIndex((a) => a.id === item.id);
+    const targetIdx = dir === "up" ? idx - 1 : idx + 1;
+    const target = items[targetIdx];
+    if (!target) return;
+
+    const newItems = [...items];
+    newItems[idx] = target;
+    newItems[targetIdx] = item;
+
+    // Resequence 1..N cleanly
+    const resequenced = newItems.map((it, i) => ({ ...it, sortOrder: i + 1 }));
+    setItems(resequenced);
+
+    try {
+      await Promise.all([
+        adminApi.updateActivity(item.id, { sortOrder: targetIdx + 1 }),
+        adminApi.updateActivity(target.id, { sortOrder: idx + 1 }),
+      ]);
+      load();
+    } catch {
+      toast.error("Gagal mengubah urutan");
+      load();
     }
   };
 
@@ -163,7 +202,7 @@ export default function AdminActivitiesPage() {
               </tr>
             </thead>
             <tbody>
-              {items.map((item) => (
+              {items.map((item, idx) => (
                 <tr key={item.id}>
                   <td>
                     {item.imageUrl ? (
@@ -186,9 +225,25 @@ export default function AdminActivitiesPage() {
                       WebkitBoxOrient: "vertical", overflow: "hidden"
                     }}>{item.description}</span>
                   </td>
-                  <td>{item.sortOrder}</td>
+                  <td><span className="badge badge-gold">{item.sortOrder}</span></td>
                   <td>
                     <div className={styles.tableActions}>
+                      <button
+                        className="btn btn-ghost btn-sm"
+                        onClick={() => moveOrder(item, "up")}
+                        disabled={idx === 0}
+                        id={`activities-up-${item.id}`}
+                      >
+                        <ChevronUp size={14} />
+                      </button>
+                      <button
+                        className="btn btn-ghost btn-sm"
+                        onClick={() => moveOrder(item, "down")}
+                        disabled={idx === items.length - 1}
+                        id={`activities-down-${item.id}`}
+                      >
+                        <ChevronDown size={14} />
+                      </button>
                       <button
                         className="btn btn-ghost btn-sm"
                         onClick={() => openEdit(item)}
@@ -251,8 +306,8 @@ export default function AdminActivitiesPage() {
                 <input ref={fileInputRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handleSelectFile} />
               </div>
               <div className="form-group">
-                <label className="form-label">Urutan Tampil</label>
-                <input type="number" name="sortOrder" className="form-input" value={form.sortOrder} onChange={handleChange} min={0} id="activities-form-sort" />
+                <label className="form-label">Urutan Tampil (Minimal 1)</label>
+                <input type="number" name="sortOrder" className="form-input" value={form.sortOrder} onChange={handleChange} min={1} id="activities-form-sort" />
               </div>
             </div>
             <div className={styles.modalFooter}>

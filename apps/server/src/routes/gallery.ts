@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import { db } from "../db/index.js";
 import { gallery } from "../db/schema.js";
-import { eq, asc } from "drizzle-orm";
+import { eq, asc, desc } from "drizzle-orm";
 
 const galleryRouter = new Hono();
 
@@ -23,12 +23,22 @@ galleryRouter.post("/", async (c) => {
     return c.json({ error: "imageUrl is required" }, 400);
   }
 
+  let finalSortOrder = typeof sortOrder === "number" && sortOrder > 0 ? sortOrder : undefined;
+  if (!finalSortOrder) {
+    const maxRow = await db
+      .select({ sortOrder: gallery.sortOrder })
+      .from(gallery)
+      .orderBy(desc(gallery.sortOrder))
+      .limit(1);
+    finalSortOrder = (maxRow[0]?.sortOrder ?? 0) + 1;
+  }
+
   const result = await db
     .insert(gallery)
     .values({
       imageUrl,
       caption: caption ?? null,
-      sortOrder: sortOrder ?? 0,
+      sortOrder: finalSortOrder,
     })
     .returning();
 
