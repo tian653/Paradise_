@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { ChevronDown, ArrowRight, Calendar } from "lucide-react";
 import styles from "./HeroSection.module.css";
 import type { SiteSettings } from "../../lib/types";
@@ -10,6 +10,7 @@ interface HeroSectionProps {
 export default function HeroSection({ profile }: HeroSectionProps) {
   const [loaded, setLoaded] = useState(false);
   const [customImgLoaded, setCustomImgLoaded] = useState(false);
+  const imgRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
     const timer = setTimeout(() => setLoaded(true), 50);
@@ -32,25 +33,32 @@ export default function HeroSection({ profile }: HeroSectionProps) {
       ? profile.heroImageUrl
       : null;
 
+  const bgImageUrl = customHeroUrl || "/hero-bg.webp";
+
+  useEffect(() => {
+    if (imgRef.current && imgRef.current.complete) {
+      setCustomImgLoaded(true);
+    }
+  }, [bgImageUrl]);
+
   const taglineText =
     profile?.tagline && profile.tagline !== "/" ? profile.tagline : "Dairi Horas Njuah Njuah";
 
   return (
     <section id="home" className={styles.hero}>
-      {/* Background - Instant CSS background with custom image crossfade */}
+      {/* Background - Clean background without template flash */}
       <div className={styles.heroBg}>
-        {customHeroUrl ? (
-          <img
-            src={customHeroUrl}
-            alt=""
-            className={`${styles.heroBgImg} ${
-              customImgLoaded ? styles.imgVisible : styles.imgHidden
-            }`}
-            loading="eager"
-            decoding="async"
-            onLoad={() => setCustomImgLoaded(true)}
-          />
-        ) : null}
+        <img
+          ref={imgRef}
+          src={bgImageUrl}
+          alt=""
+          className={`${styles.heroBgImg} ${
+            customImgLoaded ? styles.imgVisible : styles.imgHidden
+          }`}
+          loading="eager"
+          decoding="async"
+          onLoad={() => setCustomImgLoaded(true)}
+        />
         <div className={styles.overlay} />
       </div>
 

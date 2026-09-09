@@ -15,10 +15,6 @@
   inset: 0;
   z-index: 0;
   background-color: #0f172a;
-  background-image: radial-gradient(circle at center, rgba(30, 58, 138, 0.4) 0%, rgba(15, 23, 42, 0.95) 100%), url('/hero-bg.webp');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
 }
 
 .heroBgImg {
@@ -28,7 +24,7 @@
   height: 100%;
   object-fit: cover;
   object-position: center;
-  transition: opacity 0.5s ease-in-out;
+  transition: opacity 0.4s ease-out;
 }
 
 .imgHidden {
@@ -36,7 +32,7 @@
 }
 
 .imgVisible {
-  opacity: 0.85;
+  opacity: 0.95;
 }
 
 .overlay {
@@ -44,9 +40,9 @@
   inset: 0;
   background: linear-gradient(
     180deg,
-    rgba(15, 23, 42, 0.7) 0%,
-    rgba(15, 23, 42, 0.5) 35%,
-    rgba(15, 23, 42, 0.85) 75%,
+    rgba(15, 23, 42, 0.45) 0%,
+    rgba(15, 23, 42, 0.25) 40%,
+    rgba(15, 23, 42, 0.65) 75%,
     var(--color-bg) 100%
   );
   pointer-events: none;
