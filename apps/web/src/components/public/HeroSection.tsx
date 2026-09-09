@@ -27,11 +27,12 @@ export default function HeroSection({ profile }: HeroSectionProps) {
     <section id="home" className={styles.hero}>
       {/* Background */}
       <div className={styles.heroBg}>
-        {profile?.heroImageUrl && (
+        {profile?.heroImageUrl && profile.heroImageUrl.startsWith("http") && (
           <img
             src={profile.heroImageUrl}
-            alt="Paradise Community"
+            alt=""
             className={styles.heroBgImg}
+            onError={(e) => { e.currentTarget.style.display = "none"; }}
           />
         )}
         <div className={styles.overlay} />

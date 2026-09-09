@@ -63,8 +63,13 @@ export default function Navbar({ communityName = "Paradise", logoUrl }: NavbarPr
             handleNavClick("#home");
           }}
         >
-          {logoUrl ? (
-            <img src={logoUrl} alt={communityName} className={styles.logoImg} />
+          {logoUrl && logoUrl.startsWith("http") ? (
+            <img
+              src={logoUrl}
+              alt=""
+              className={styles.logoImg}
+              onError={(e) => { e.currentTarget.style.display = "none"; }}
+            />
           ) : (
             <div className={styles.logoIcon}>P</div>
           )}

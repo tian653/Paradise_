@@ -19,8 +19,17 @@ export default function PublicPage() {
   const [contact, setContact] = useState<Contact | null>(null);
 
   useEffect(() => {
+    // ── Restore cached profile instantly to avoid logo flash ──────────────────
+    const cached = localStorage.getItem("paradise_profile");
+    if (cached) {
+      try { setProfile(JSON.parse(cached)); } catch { /* ignore */ }
+    }
+
     // Fetch each independently so one endpoint failure never blocks the page render
-    api.getProfile().then(setProfile).catch(() => {});
+    api.getProfile().then((data) => {
+      setProfile(data);
+      localStorage.setItem("paradise_profile", JSON.stringify(data));
+    }).catch(() => {});
     api.getActivities().then(setActivities).catch(() => {});
     api.getGallery().then(setGallery).catch(() => {});
     api.getOfficers().then(setOfficers).catch(() => {});

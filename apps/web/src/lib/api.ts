@@ -37,6 +37,7 @@ async function request<T>(
       ...options,
       headers,
       signal: controller.signal,
+      cache: "no-store",
     });
   } catch (err: any) {
     if (err?.name === "AbortError") {
