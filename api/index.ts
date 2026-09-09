@@ -178,5 +178,64 @@ const app = new Hono();
 app.route("/api", api);
 app.route("/", api);
 
-export default handle(app);
+export default async function handler(req: any, res: any) {
+  if (req instanceof Request || typeof req?.headers?.get === "function") {
+    return app.fetch(req);
+  }
+
+  try {
+    const protocol = req.headers["x-forwarded-proto"] || "https";
+    const host = req.headers["x-forwarded-host"] || req.headers.host || "localhost";
+    const url = `${protocol}://${host}${req.url}`;
+
+    const headers = new Headers();
+    for (const [key, value] of Object.entries(req.headers)) {
+      if (value !== undefined) {
+        if (Array.isArray(value)) {
+          for (const v of value) headers.append(key, v);
+        } else {
+          headers.set(key, value as string);
+        }
+      }
+    }
+
+    let body: any = undefined;
+    if (req.method !== "GET" && req.method !== "HEAD") {
+      if (req.body) {
+        body = typeof req.body === "string" ? req.body : JSON.stringify(req.body);
+      } else {
+        const chunks: Uint8Array[] = [];
+        for await (const chunk of req) {
+          chunks.push(chunk);
+        }
+        if (chunks.length > 0) {
+          body = Buffer.concat(chunks);
+        }
+      }
+    }
+
+    const webReq = new Request(url, {
+      method: req.method,
+      headers,
+      body: body || undefined,
+    });
+
+    const webRes = await app.fetch(webReq);
+
+    res.statusCode = webRes.status;
+    webRes.headers.forEach((val: string, key: string) => {
+      res.setHeader(key, val);
+    });
+
+    const arrayBuffer = await webRes.arrayBuffer();
+    res.end(Buffer.from(arrayBuffer));
+  } catch (err: any) {
+    console.error("❌ Fatal Vercel Handler Error:", err);
+    if (!res.headersSent) {
+      res.statusCode = 500;
+      res.setHeader("Content-Type", "application/json");
+      res.end(JSON.stringify({ error: err?.message || "Internal Server Error" }));
+    }
+  }
+}
 
