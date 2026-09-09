@@ -173,4 +173,12 @@ const app = new Hono();
 app.route("/api", api);
 app.route("/", api);
 
-export default handle(app);
+const nodeHandler = handle(app);
+
+export default async function vercelHandler(req: any, res: any) {
+  if (req && typeof req.headers?.get === "function") {
+    return app.fetch(req);
+  }
+  return nodeHandler(req, res);
+}
+
