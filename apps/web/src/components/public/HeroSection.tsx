@@ -23,23 +23,29 @@ export default function HeroSection({ profile }: HeroSectionProps) {
     document.getElementById("kegiatan")?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const bgImageUrl = profile?.heroImageUrl || "/hero-bg.png";
-  const taglineText = profile?.tagline && profile.tagline !== "/" ? profile.tagline : "Dairi Horas Njuah Njuah";
+  const bgImageUrl =
+    profile?.heroImageUrl && profile.heroImageUrl.trim().length > 5
+      ? profile.heroImageUrl
+      : "/hero-bg.png";
+  const taglineText =
+    profile?.tagline && profile.tagline !== "/" ? profile.tagline : "Dairi Horas Njuah Njuah";
 
   return (
     <section id="home" className={styles.hero}>
       {/* Background */}
       <div className={styles.heroBg}>
-        {bgImageUrl && (
-          <img
-            src={bgImageUrl}
-            alt=""
-            className={styles.heroBgImg}
-            loading="eager"
-            decoding="async"
-            onError={(e) => { e.currentTarget.style.display = "none"; }}
-          />
-        )}
+        <img
+          src={bgImageUrl}
+          alt=""
+          className={styles.heroBgImg}
+          loading="eager"
+          decoding="async"
+          onError={(e) => {
+            if (!e.currentTarget.src.endsWith("/hero-bg.png")) {
+              e.currentTarget.src = "/hero-bg.png";
+            }
+          }}
+        />
         <div className={styles.overlay} />
       </div>
 
