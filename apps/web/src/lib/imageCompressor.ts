@@ -51,14 +51,14 @@ export async function compressImage(
 
       ctx.drawImage(img, 0, 0, width, height);
 
-      // Prefer JPEG for photos, PNG for transparent images
-      const isPng = file.type === "image/png";
+      // Prefer JPEG for photos/large images to ensure high compression ratio
+      const isPng = file.type === "image/png" && file.size < 500 * 1024;
       const outputType = isPng ? "image/png" : "image/jpeg";
 
       canvas.toBlob(
         (blob) => {
-          if (!blob || blob.size >= file.size) {
-            // Keep original if compressed version is not smaller
+          if (!blob || (blob.size >= file.size && file.size < 1024 * 1024)) {
+            // Keep original if compressed version is not smaller and already under 1MB
             resolve(file);
             return;
           }
