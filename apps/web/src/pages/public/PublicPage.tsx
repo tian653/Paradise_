@@ -11,13 +11,31 @@ import ContactSection from "../../components/public/ContactSection";
 import Footer from "../../components/public/Footer";
 import FloatingActions from "../../components/public/FloatingActions";
 
+const DEFAULT_PROFILE: SiteSettings = {
+  id: 1,
+  communityName: "Paradise",
+  tagline: "Dairi Horas Njuah Njuah",
+  shortDescription:
+    "Wadah mahasiswa asal Kabupaten Dairi di Kota Semarang untuk membangun kebersamaan, solidaritas, dan kekeluargaan.",
+  about:
+    "PARADISE merupakan organisasi mahasiswa asal Kabupaten Dairi yang berada di Kota Semarang.",
+  history: "",
+  vision: "",
+  mission: "",
+  logoUrl:
+    "https://res.cloudinary.com/tmndf3jh/image/upload/v1788931337/paradise_community/dq41wqyxuwemivwvcp9w.png",
+  heroImageUrl:
+    "https://res.cloudinary.com/tmndf3jh/image/upload/v1788935209/paradise_community/kou4tdutrjn39jwwzgpv.jpg",
+  updatedAt: new Date().toISOString(),
+};
+
 export default function PublicPage() {
-  const [profile, setProfile] = useState<SiteSettings | null>(() => {
+  const [profile, setProfile] = useState<SiteSettings>(() => {
     try {
       const cached = localStorage.getItem("paradise_profile");
-      return cached ? JSON.parse(cached) : null;
+      return cached ? JSON.parse(cached) : DEFAULT_PROFILE;
     } catch {
-      return null;
+      return DEFAULT_PROFILE;
     }
   });
   const [activities, setActivities] = useState<Activity[]>(() => {

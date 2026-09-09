@@ -25,17 +25,18 @@ export default function HeroSection({ profile }: HeroSectionProps) {
     document.getElementById("kegiatan")?.scrollIntoView({ behavior: "smooth" });
   };
 
+  const DEFAULT_HERO_IMAGE =
+    "https://res.cloudinary.com/tmndf3jh/image/upload/v1788935209/paradise_community/kou4tdutrjn39jwwzgpv.jpg";
+
   const customHeroUrl =
     profile?.heroImageUrl &&
     profile.heroImageUrl.trim().length > 5 &&
     profile.heroImageUrl !== "/hero-bg.webp" &&
     profile.heroImageUrl !== "/hero-bg.png"
       ? profile.heroImageUrl
-      : null;
+      : DEFAULT_HERO_IMAGE;
 
-  // While profile is null (loading), do not render template image fallback.
-  // Render template image only if profile is loaded and user has no custom image.
-  const bgImageUrl = profile === null ? null : (customHeroUrl || "/hero-bg.webp");
+  const bgImageUrl = customHeroUrl;
 
   useEffect(() => {
     if (imgRef.current && imgRef.current.complete) {
