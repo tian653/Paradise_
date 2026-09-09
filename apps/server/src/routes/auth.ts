@@ -31,36 +31,44 @@ authRouter.post("/login", async (c) => {
     console.warn("⚠️ Username or password empty");
     return c.json({ error: "Username and password are required" }, 400);
   }
-  console.log("🔵 [3] Before DB query");
+  try {
+    console.log("🔵 [3] Before DB query");
 
-  const admin = (
-    await db
-      .select()
-      .from(admins)
-      .where(eq(sql`lower(${admins.username})`, cleanUsername.toLowerCase()))
-  )[0];
+    const admin = (
+      await db
+        .select()
+        .from(admins)
+        .where(eq(sql`lower(${admins.username})`, cleanUsername.toLowerCase()))
+    )[0];
 
-  if (!admin) {
-    console.warn(`⚠️ User "${cleanUsername}" not found`);
-    return c.json({ error: "Invalid credentials" }, 401);
+    if (!admin) {
+      console.warn(`⚠️ User "${cleanUsername}" not found`);
+      return c.json({ error: "Invalid credentials" }, 401);
+    }
+
+    const isValid = await bcrypt.compare(cleanPassword, admin.passwordHash);
+
+    if (!isValid) {
+      console.warn(`⚠️ Invalid password for user "${cleanUsername}"`);
+      return c.json({ error: "Invalid credentials" }, 401);
+    }
+
+    console.log("🔵 [7] Before jwt.sign");
+    const token = jwt.sign(
+      { id: admin.id, username: admin.username },
+      getJwtSecret(),
+      { expiresIn: "7d" }
+    );
+    console.log("🔵 [8] After jwt.sign — success");
+
+    return c.json({ token, username: admin.username });
+  } catch (err: any) {
+    console.error("❌ [Login DB Error]:", err?.message || err);
+    return c.json(
+      { error: "Gagal terhubung ke database. Pastikan variabel DATABASE_URL dan DATABASE_AUTH_TOKEN sudah diset di Vercel Settings." },
+      500
+    );
   }
-
-  const isValid = await bcrypt.compare(cleanPassword, admin.passwordHash);
-
-  if (!isValid) {
-    console.warn(`⚠️ Invalid password for user "${cleanUsername}"`);
-    return c.json({ error: "Invalid credentials" }, 401);
-  }
-
-  console.log("🔵 [7] Before jwt.sign");
-  const token = jwt.sign(
-    { id: admin.id, username: admin.username },
-    getJwtSecret(),
-    { expiresIn: "7d" }
-  );
-  console.log("🔵 [8] After jwt.sign — success");
-
-  return c.json({ token, username: admin.username });
 });
 
 // GET /api/auth/me — validate token & return current user
