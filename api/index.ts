@@ -80,9 +80,12 @@ admin.post("/upload", async (c) => {
     });
 
     return c.json({ url: result.secure_url });
-  } catch (error) {
-    console.error("Upload error:", error);
-    return c.json({ error: "Failed to upload image" }, 500);
+  } catch (error: any) {
+    console.error("Upload error details:", error);
+    return c.json(
+      { error: error?.message || "Failed to upload image" },
+      500
+    );
   }
 });
 
@@ -98,53 +101,5 @@ const app = new Hono();
 app.route("/api", api);
 app.route("/", api);
 
-// ── Custom Vercel Node.js Handler ─────────────────────────────────────────────
-export default async function handler(req: any, res: any) {
-  try {
-    const host = req.headers["host"] || "localhost";
-    const protocol = req.headers["x-forwarded-proto"] || "https";
-    const url = `${protocol}://${host}${req.url}`;
-
-    let body: any = undefined;
-    if (req.method !== "GET" && req.method !== "HEAD") {
-      if (req.body !== undefined && req.body !== null) {
-        body =
-          typeof req.body === "object" && !(req.body instanceof Buffer)
-            ? JSON.stringify(req.body)
-            : req.body;
-      }
-    }
-
-    const headers = new Headers();
-    for (const [key, value] of Object.entries(req.headers)) {
-      if (value !== undefined) {
-        if (Array.isArray(value)) {
-          for (const v of value) headers.append(key, v);
-        } else {
-          headers.set(key, value as string);
-        }
-      }
-    }
-
-    const webRequest = new Request(url, {
-      method: req.method,
-      headers,
-      body: body ? body : undefined,
-    });
-
-    const webResponse = await app.fetch(webRequest);
-
-    res.statusCode = webResponse.status;
-    webResponse.headers.forEach((value, key) => {
-      res.setHeader(key, value);
-    });
-
-    const arrayBuffer = await webResponse.arrayBuffer();
-    res.end(Buffer.from(arrayBuffer));
-  } catch (err: any) {
-    console.error("Vercel Function Error:", err);
-    res.statusCode = 500;
-    res.setHeader("Content-Type", "application/json");
-    res.end(JSON.stringify({ error: "Internal Server Error", details: err?.message }));
-  }
-}
+// ── Vercel Node.js Handler ─────────────────────────────────────────────────────
+export default handle(app);
