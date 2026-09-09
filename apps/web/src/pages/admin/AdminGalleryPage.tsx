@@ -3,6 +3,7 @@ import { Plus, Pencil, Trash2, X, Upload } from "lucide-react";
 import toast from "react-hot-toast";
 import { adminApi } from "../../lib/api";
 import type { GalleryItem } from "../../lib/types";
+import ImageCropperModal from "../../components/admin/ImageCropperModal";
 import styles from "./AdminPages.module.css";
 import galleryStyles from "./AdminGalleryPage.module.css";
 
@@ -13,6 +14,7 @@ export default function AdminGalleryPage() {
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [caption, setCaption] = useState("");
+  const [cropQueue, setCropQueue] = useState<File[] | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const batchInputRef = useRef<HTMLInputElement>(null);
 
@@ -21,8 +23,15 @@ export default function AdminGalleryPage() {
 
   useEffect(() => { load(); }, []);
 
-  const handleBatchUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSelectFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files ?? []);
+    if (!files.length) return;
+    setCropQueue(files);
+    e.target.value = "";
+  };
+
+  const handleCroppedUpload = async (files: File[]) => {
+    setCropQueue(null);
     if (!files.length) return;
     const toastId = toast.loading(`Mengupload ${files.length} foto...`);
     try {
@@ -78,7 +87,7 @@ export default function AdminGalleryPage() {
         <button className="btn btn-primary" onClick={() => batchInputRef.current?.click()} id="gallery-upload">
           <Plus size={16} /> Upload Foto
         </button>
-        <input ref={batchInputRef} type="file" accept="image/*" multiple style={{ display: "none" }} onChange={handleBatchUpload} />
+        <input ref={batchInputRef} type="file" accept="image/*" multiple style={{ display: "none" }} onChange={handleSelectFiles} />
       </div>
 
       {loading ? (
@@ -112,6 +121,17 @@ export default function AdminGalleryPage() {
             </div>
           ))}
         </div>
+      )}
+
+      {/* Image Cropper Modal */}
+      {cropQueue && (
+        <ImageCropperModal
+          files={cropQueue}
+          defaultAspect="4:3"
+          title="Potong Foto Galeri"
+          onCropComplete={handleCroppedUpload}
+          onCancel={() => setCropQueue(null)}
+        />
       )}
 
       {/* Edit Caption Modal */}

@@ -3,6 +3,7 @@ import { Plus, Pencil, Trash2, X, Upload } from "lucide-react";
 import toast from "react-hot-toast";
 import { adminApi } from "../../lib/api";
 import type { Activity } from "../../lib/types";
+import ImageCropperModal from "../../components/admin/ImageCropperModal";
 import styles from "./AdminPages.module.css";
 
 type FormData = {
@@ -29,6 +30,7 @@ export default function AdminActivitiesPage() {
   const [form, setForm] = useState<FormData>(EMPTY_FORM);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [cropFile, setCropFile] = useState<File[] | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const load = () =>
@@ -74,12 +76,19 @@ export default function AdminActivitiesPage() {
     }));
   };
 
-  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    setCropFile([file]);
+    e.target.value = "";
+  };
+
+  const handleCroppedUpload = async (files: File[]) => {
+    if (!files[0]) return;
+    setCropFile(null);
     setUploading(true);
     try {
-      const { url } = await adminApi.uploadFile(file);
+      const { url } = await adminApi.uploadFile(files[0]);
       setForm((prev) => ({ ...prev, imageUrl: url }));
       toast.success("Foto berhasil diupload");
     } catch (err: any) {
@@ -239,7 +248,7 @@ export default function AdminActivitiesPage() {
                     {uploading ? <span className="spinner" style={{ width: 14, height: 14 }} /> : <Upload size={14} />}
                   </button>
                 </div>
-                <input ref={fileInputRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handleUpload} />
+                <input ref={fileInputRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handleSelectFile} />
               </div>
               <div className="form-group">
                 <label className="form-label">Urutan Tampil</label>
@@ -255,6 +264,16 @@ export default function AdminActivitiesPage() {
             </div>
           </div>
         </div>
+      )}
+
+      {cropFile && (
+        <ImageCropperModal
+          files={cropFile}
+          defaultAspect="4:3"
+          title="Potong Foto Kegiatan"
+          onCropComplete={handleCroppedUpload}
+          onCancel={() => setCropFile(null)}
+        />
       )}
     </div>
   );

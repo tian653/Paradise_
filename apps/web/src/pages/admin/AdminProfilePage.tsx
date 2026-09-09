@@ -3,12 +3,20 @@ import { Upload, Save } from "lucide-react";
 import toast from "react-hot-toast";
 import { adminApi } from "../../lib/api";
 import type { SiteSettings } from "../../lib/types";
+import ImageCropperModal, { AspectRatioOption } from "../../components/admin/ImageCropperModal";
 import styles from "./AdminPages.module.css";
 
 export default function AdminProfilePage() {
   const [profile, setProfile] = useState<SiteSettings | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [cropState, setCropState] = useState<{
+    files: File[];
+    field: "logoUrl" | "heroImageUrl";
+    aspect: AspectRatioOption;
+    title: string;
+  } | null>(null);
+
   const logoInputRef = useRef<HTMLInputElement>(null);
   const heroInputRef = useRef<HTMLInputElement>(null);
 
@@ -41,16 +49,29 @@ export default function AdminProfilePage() {
     }
   };
 
-  const handleUpload = async (
+  const handleSelectFile = (
     e: React.ChangeEvent<HTMLInputElement>,
     field: "logoUrl" | "heroImageUrl"
   ) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    setCropState({
+      files: [file],
+      field,
+      aspect: field === "logoUrl" ? "1:1" : "16:9",
+      title: field === "logoUrl" ? "Potong Logo Komunitas" : "Potong Foto Hero",
+    });
+    e.target.value = "";
+  };
+
+  const handleCroppedUpload = async (files: File[]) => {
+    if (!cropState || !files[0]) return;
+    const { field } = cropState;
+    setCropState(null);
 
     const toastId = toast.loading("Mengupload foto...");
     try {
-      const { url } = await adminApi.uploadFile(file);
+      const { url } = await adminApi.uploadFile(files[0]);
       const updated = await adminApi.updateProfile({ [field]: url });
       setProfile(updated);
       toast.success("Foto berhasil diupload!", { id: toastId });
@@ -115,7 +136,7 @@ export default function AdminProfilePage() {
               type="file"
               accept="image/*"
               style={{ display: "none" }}
-              onChange={(e) => handleUpload(e, "logoUrl")}
+              onChange={(e) => handleSelectFile(e, "logoUrl")}
             />
           </div>
         </div>
@@ -149,7 +170,7 @@ export default function AdminProfilePage() {
               type="file"
               accept="image/*"
               style={{ display: "none" }}
-              onChange={(e) => handleUpload(e, "heroImageUrl")}
+              onChange={(e) => handleSelectFile(e, "heroImageUrl")}
             />
           </div>
         </div>
@@ -257,6 +278,16 @@ export default function AdminProfilePage() {
           </span>
         </div>
       </div>
+
+      {cropState && (
+        <ImageCropperModal
+          files={cropState.files}
+          defaultAspect={cropState.aspect}
+          title={cropState.title}
+          onCropComplete={handleCroppedUpload}
+          onCancel={() => setCropState(null)}
+        />
+      )}
     </div>
   );
 }

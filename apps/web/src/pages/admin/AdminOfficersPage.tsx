@@ -3,6 +3,7 @@ import { Plus, Pencil, Trash2, X, Upload, ChevronUp, ChevronDown } from "lucide-
 import toast from "react-hot-toast";
 import { adminApi } from "../../lib/api";
 import type { Officer } from "../../lib/types";
+import ImageCropperModal from "../../components/admin/ImageCropperModal";
 import styles from "./AdminPages.module.css";
 
 type FormData = {
@@ -22,6 +23,7 @@ export default function AdminOfficersPage() {
   const [form, setForm] = useState<FormData>(EMPTY_FORM);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [cropFile, setCropFile] = useState<File[] | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const load = () =>
@@ -48,12 +50,19 @@ export default function AdminOfficersPage() {
     setForm((prev) => ({ ...prev, [name]: name === "sortOrder" ? parseInt(value) || 0 : value }));
   };
 
-  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    setCropFile([file]);
+    e.target.value = "";
+  };
+
+  const handleCroppedUpload = async (files: File[]) => {
+    if (!files[0]) return;
+    setCropFile(null);
     setUploading(true);
     try {
-      const { url } = await adminApi.uploadFile(file);
+      const { url } = await adminApi.uploadFile(files[0]);
       setForm((prev) => ({ ...prev, photoUrl: url }));
       toast.success("Foto berhasil diupload");
     } catch (err: any) { toast.error(err?.message || "Gagal upload foto"); }
@@ -176,7 +185,7 @@ export default function AdminOfficersPage() {
                   <button className="btn btn-outline btn-sm" onClick={() => fileInputRef.current?.click()} disabled={uploading} id="officers-form-upload">
                     {uploading ? <span className="spinner" style={{ width: 12, height: 12 }} /> : <Upload size={12} />} Upload Foto
                   </button>
-                  <input ref={fileInputRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handleUpload} />
+                  <input ref={fileInputRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handleSelectFile} />
                 </div>
               </div>
               <div className="form-group">
@@ -204,6 +213,16 @@ export default function AdminOfficersPage() {
             </div>
           </div>
         </div>
+      )}
+
+      {cropFile && (
+        <ImageCropperModal
+          files={cropFile}
+          defaultAspect="1:1"
+          title="Potong Foto Pengurus"
+          onCropComplete={handleCroppedUpload}
+          onCancel={() => setCropFile(null)}
+        />
       )}
     </div>
   );
