@@ -56,18 +56,30 @@ admin.route("/contact", contactRouter);
 // ── File Upload ────────────────────────────────────────────────────────────────
 admin.post("/upload", async (c) => {
   try {
-    const formData = await c.req.formData();
+    console.log("📸 [Upload] Upload request received");
+    const formData = await c.req.formData().catch((err) => {
+      console.error("❌ [Upload] Failed to parse formData:", err);
+      return null;
+    });
+    if (!formData) return c.json({ error: "Failed to parse form data" }, 400);
+
     const file = formData.get("file") as File | null;
+    if (!file) {
+      console.warn("⚠️ [Upload] No file found in form data");
+      return c.json({ error: "No file provided" }, 400);
+    }
 
-    if (!file) return c.json({ error: "No file provided" }, 400);
+    console.log(`📸 [Upload] File received: name="${file.name}", type="${file.type}", size=${file.size}`);
 
-    const allowedTypes = ["image/jpeg", "image/png", "image/webp", "image/gif"];
+    const allowedTypes = ["image/jpeg", "image/png", "image/webp", "image/gif", "image/svg+xml"];
     if (!allowedTypes.includes(file.type)) {
-      return c.json({ error: "Invalid file type. Only images are allowed." }, 400);
+      console.warn(`⚠️ [Upload] Invalid file type: ${file.type}`);
+      return c.json({ error: `Invalid file type: ${file.type}. Only images are allowed.` }, 400);
     }
 
     const maxSize = 5 * 1024 * 1024; // 5MB
     if (file.size > maxSize) {
+      console.warn(`⚠️ [Upload] File too large: ${file.size} bytes`);
       return c.json({ error: "File too large. Max 5MB." }, 400);
     }
 
@@ -75,13 +87,15 @@ admin.post("/upload", async (c) => {
     const base64Data = Buffer.from(buffer).toString("base64");
     const dataURI = `data:${file.type};base64,${base64Data}`;
 
+    console.log("📸 [Upload] Uploading to Cloudinary...");
     const result = await cloudinary.uploader.upload(dataURI, {
       folder: "paradise_community",
     });
 
+    console.log("✅ [Upload] Cloudinary upload successful:", result.secure_url);
     return c.json({ url: result.secure_url });
   } catch (error: any) {
-    console.error("Upload error details:", error);
+    console.error("❌ [Upload] Upload error details:", error);
     return c.json(
       { error: error?.message || "Failed to upload image" },
       500
@@ -111,6 +125,12 @@ function getRawBody(req: any): Promise<Buffer> {
   });
 }
 
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
+
 // ── Custom Vercel Node.js Handler ─────────────────────────────────────────────
 export default async function handler(req: any, res: any) {
   try {
@@ -120,7 +140,13 @@ export default async function handler(req: any, res: any) {
 
     let body: any = undefined;
     if (req.method !== "GET" && req.method !== "HEAD") {
-      if (req.body !== undefined && req.body !== null) {
+      const contentType = req.headers["content-type"] || "";
+      if (contentType.includes("multipart/form-data")) {
+        const rawBuffer = await getRawBody(req);
+        if (rawBuffer.length > 0) {
+          body = rawBuffer;
+        }
+      } else if (req.body !== undefined && req.body !== null) {
         body =
           typeof req.body === "object" && !(req.body instanceof Buffer)
             ? JSON.stringify(req.body)
