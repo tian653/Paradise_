@@ -2,7 +2,11 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 import { v2 as cloudinary } from "cloudinary";
-import { handle } from "@hono/node-server/vercel";
+import { handle } from "hono/vercel";
+
+export const config = {
+  runtime: "edge",
+};
 
 import authRouter from "../apps/server/src/routes/auth.js";
 import profileRouter from "../apps/server/src/routes/profile.js";
@@ -178,12 +182,5 @@ const app = new Hono();
 app.route("/api", api);
 app.route("/", api);
 
-const nodeHandler = handle(app);
-
-export default async function vercelHandler(req: any, res: any) {
-  if (req && typeof req.headers?.get === "function") {
-    return app.fetch(req);
-  }
-  return nodeHandler(req, res);
-}
+export default handle(app);
 
