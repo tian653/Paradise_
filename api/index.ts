@@ -57,15 +57,29 @@ admin.route("/contact", contactRouter);
 admin.post("/upload", async (c) => {
   try {
     console.log("📸 [Upload] Upload request received");
-    const formData = await c.req.formData().catch((err) => {
-      console.error("❌ [Upload] Failed to parse formData:", err);
-      return null;
-    });
-    if (!formData) return c.json({ error: "Gagal memproses form data." }, 400);
+    
+    let file: File | null = null;
+    
+    // 1. Try c.req.parseBody()
+    try {
+      const body = await c.req.parseBody();
+      if (body && body["file"] instanceof File) {
+        file = body["file"];
+      }
+    } catch (e) {
+      console.warn("⚠️ [Upload] parseBody failed, trying formData:", e);
+    }
 
-    const file = formData.get("file") as File | null;
+    // 2. Fallback to c.req.formData()
     if (!file) {
-      console.warn("⚠️ [Upload] No file found in form data");
+      const formData = await c.req.formData().catch(() => null);
+      if (formData) {
+        file = formData.get("file") as File | null;
+      }
+    }
+
+    if (!file) {
+      console.warn("⚠️ [Upload] No file found in request body");
       return c.json({ error: "Tidak ada file yang diunggah." }, 400);
     }
 
@@ -118,15 +132,21 @@ admin.post("/upload", async (c) => {
       process.env.CLOUDINARY_API_KEY &&
       process.env.CLOUDINARY_API_SECRET
     ) {
-      console.log("📸 [Upload] Uploading to Cloudinary...");
-      const result = await cloudinary.uploader.upload(dataURI, {
-        folder: "paradise_community",
-      });
-      console.log("✅ [Upload] Cloudinary upload successful:", result.secure_url);
-      return c.json({ url: result.secure_url });
+      try {
+        console.log("📸 [Upload] Uploading to Cloudinary...");
+        const result = await cloudinary.uploader.upload(dataURI, {
+          folder: "paradise_community",
+        });
+        if (result && result.secure_url) {
+          console.log("✅ [Upload] Cloudinary upload successful:", result.secure_url);
+          return c.json({ url: result.secure_url });
+        }
+      } catch (cloudErr: any) {
+        console.error("❌ [Upload] Cloudinary upload failed:", cloudErr?.message || cloudErr);
+      }
     }
 
-    console.warn("⚠️ [Upload] Cloudinary environment variables missing. Returning Data URI.");
+    console.warn("⚠️ [Upload] Cloudinary not configured or failed. Returning Data URI fallback.");
     return c.json({ url: dataURI });
   } catch (error: any) {
     console.error("❌ [Upload] Upload error details:", error);

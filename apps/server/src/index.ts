@@ -107,8 +107,21 @@ admin.route("/contact", contactRouter);
 // ── File Upload Endpoint ───────────────────────────────────────────────────────
 admin.post("/upload", async (c) => {
   try {
-    const formData = await c.req.formData();
-    const file = formData.get("file") as File | null;
+    let file: File | null = null;
+    
+    try {
+      const body = await c.req.parseBody();
+      if (body && body["file"] instanceof File) {
+        file = body["file"];
+      }
+    } catch {}
+
+    if (!file) {
+      const formData = await c.req.formData().catch(() => null);
+      if (formData) {
+        file = formData.get("file") as File | null;
+      }
+    }
 
     if (!file) {
       return c.json({ error: "Tidak ada file yang diunggah." }, 400);

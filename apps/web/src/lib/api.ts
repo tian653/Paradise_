@@ -1,4 +1,5 @@
 // ─── API Client ───────────────────────────────────────────────────────────────
+import { compressImage } from "./imageCompressor";
 
 const BASE_URL = import.meta.env.VITE_API_URL || "/api";
 
@@ -166,8 +167,12 @@ export const adminApi = {
   // File Upload
   uploadFile: async (file: File): Promise<{ url: string }> => {
     const token = getToken();
+    
+    // Compress image client-side if needed to avoid Vercel 4.5MB request limit
+    const processedFile = await compressImage(file).catch(() => file);
+
     const formData = new FormData();
-    formData.append("file", file);
+    formData.append("file", processedFile);
 
     const res = await fetch(`${BASE_URL}/admin/upload`, {
       method: "POST",
@@ -180,8 +185,18 @@ export const adminApi = {
     if (res.status === 401) handleUnauthorized();
 
     if (!res.ok) {
-      const error = await res.json().catch(() => ({ error: "Upload failed" }));
-      throw new Error((error as { error?: string }).error ?? "Upload failed");
+      if (res.status === 413) {
+        throw new Error("Ukuran foto terlalu besar untuk diunggah (Maksimal 4.5MB).");
+      }
+      const text = await res.text().catch(() => "");
+      let errorMsg = "Gagal mengunggah foto.";
+      try {
+        const json = JSON.parse(text);
+        if (json.error) errorMsg = json.error;
+      } catch {
+        if (res.status === 500) errorMsg = "Terjadi kesalahan pada server saat mengunggah foto.";
+      }
+      throw new Error(errorMsg);
     }
 
     return res.json() as Promise<{ url: string }>;
