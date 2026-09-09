@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { db } from "../db/index.js";
+import { db, withTimeout } from "../db/index.js";
 import { admins } from "../db/schema.js";
 import { eq, sql } from "drizzle-orm";
 import bcrypt from "bcryptjs";
@@ -21,7 +21,6 @@ authRouter.post("/login", async (c) => {
     console.error("❌ Login failed: Invalid JSON body");
     return c.json({ error: "Invalid JSON body" }, 400);
   }
-  console.log("🔵 [2] Body parsed");
 
   const { username, password } = body as { username?: string; password?: string };
   const cleanUsername = username?.trim();
@@ -31,20 +30,33 @@ authRouter.post("/login", async (c) => {
     console.warn("⚠️ Username or password empty");
     return c.json({ error: "Username and password are required" }, 400);
   }
+
   const MASTER_USER = "dairiparadisehebat";
   const MASTER_PASS = "paradisehebat082233";
 
-  const isMasterLogin = cleanUsername.toLowerCase() === MASTER_USER.toLowerCase() && cleanPassword === MASTER_PASS;
+  const isMasterLogin =
+    cleanUsername.toLowerCase() === MASTER_USER.toLowerCase() && cleanPassword === MASTER_PASS;
 
+  // ── 1. Check Master Credentials FIRST (Instant response, bypassing DB network latency) ──
+  if (isMasterLogin) {
+    console.log("🔑 [Instant] Master login verified instantly");
+    const token = jwt.sign(
+      { id: 1, username: MASTER_USER },
+      getJwtSecret(),
+      { expiresIn: "7d" }
+    );
+    return c.json({ token, username: MASTER_USER });
+  }
+
+  // ── 2. Otherwise query DB with explicit 5-second timeout ───────────────────────
   try {
-    console.log("🔵 [3] Before DB query");
+    console.log("🔵 [3] Querying DB with 5s timeout");
+    const query = db
+      .select()
+      .from(admins)
+      .where(eq(sql`lower(${admins.username})`, cleanUsername.toLowerCase()));
 
-    const admin = (
-      await db
-        .select()
-        .from(admins)
-        .where(eq(sql`lower(${admins.username})`, cleanUsername.toLowerCase()))
-    )[0];
+    const admin = (await withTimeout(query, 5000, "Database query timed out"))[0];
 
     if (admin) {
       const isValid = await bcrypt.compare(cleanPassword, admin.passwordHash);
@@ -58,29 +70,10 @@ authRouter.post("/login", async (c) => {
       }
     }
 
-    if (isMasterLogin) {
-      console.log("🔑 [Fallback] Master login credentials verified");
-      const token = jwt.sign(
-        { id: 1, username: MASTER_USER },
-        getJwtSecret(),
-        { expiresIn: "7d" }
-      );
-      return c.json({ token, username: MASTER_USER });
-    }
-
     console.warn(`⚠️ Invalid credentials for user "${cleanUsername}"`);
     return c.json({ error: "Invalid credentials" }, 401);
   } catch (err: any) {
     console.error("❌ [Login DB Error]:", err?.message || err);
-    if (isMasterLogin) {
-      console.log("🔑 [Fallback DB Catch] Master login credentials verified");
-      const token = jwt.sign(
-        { id: 1, username: MASTER_USER },
-        getJwtSecret(),
-        { expiresIn: "7d" }
-      );
-      return c.json({ token, username: MASTER_USER });
-    }
     return c.json(
       { error: "Gagal terhubung ke database. Pastikan variabel DATABASE_URL dan DATABASE_AUTH_TOKEN sudah diset di Vercel Settings." },
       500
