@@ -12,33 +12,48 @@ import Footer from "../../components/public/Footer";
 import FloatingActions from "../../components/public/FloatingActions";
 
 export default function PublicPage() {
-  const [profile, setProfile] = useState<SiteSettings | null>(null);
-  const [activities, setActivities] = useState<Activity[]>([]);
-  const [gallery, setGallery] = useState<GalleryItem[]>([]);
-  const [officers, setOfficers] = useState<Officer[]>([]);
-  const [contact, setContact] = useState<Contact | null>(null);
+  const [profile, setProfile] = useState<SiteSettings | null>(() => {
+    try {
+      const cached = localStorage.getItem("paradise_profile");
+      return cached ? JSON.parse(cached) : null;
+    } catch {
+      return null;
+    }
+  });
+  const [activities, setActivities] = useState<Activity[]>(() => {
+    try {
+      const cached = localStorage.getItem("paradise_activities");
+      return cached ? JSON.parse(cached) : [];
+    } catch {
+      return [];
+    }
+  });
+  const [gallery, setGallery] = useState<GalleryItem[]>(() => {
+    try {
+      const cached = localStorage.getItem("paradise_gallery");
+      return cached ? JSON.parse(cached) : [];
+    } catch {
+      return [];
+    }
+  });
+  const [officers, setOfficers] = useState<Officer[]>(() => {
+    try {
+      const cached = localStorage.getItem("paradise_officers");
+      return cached ? JSON.parse(cached) : [];
+    } catch {
+      return [];
+    }
+  });
+  const [contact, setContact] = useState<Contact | null>(() => {
+    try {
+      const cached = localStorage.getItem("paradise_contact");
+      return cached ? JSON.parse(cached) : null;
+    } catch {
+      return null;
+    }
+  });
 
   useEffect(() => {
-    // ── Restore cached data instantly (0ms latency) ──────────────────────────
-    try {
-      const cachedProfile = localStorage.getItem("paradise_profile");
-      if (cachedProfile) setProfile(JSON.parse(cachedProfile));
-
-      const cachedActivities = localStorage.getItem("paradise_activities");
-      if (cachedActivities) setActivities(JSON.parse(cachedActivities));
-
-      const cachedGallery = localStorage.getItem("paradise_gallery");
-      if (cachedGallery) setGallery(JSON.parse(cachedGallery));
-
-      const cachedOfficers = localStorage.getItem("paradise_officers");
-      if (cachedOfficers) setOfficers(JSON.parse(cachedOfficers));
-
-      const cachedContact = localStorage.getItem("paradise_contact");
-      if (cachedContact) setContact(JSON.parse(cachedContact));
-    } catch {
-      /* ignore storage parse errors */
-    }
-
     // ── Fetch fresh data silently in background ──────────────────────────────
     api
       .getProfile()

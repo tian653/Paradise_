@@ -33,7 +33,9 @@ export default function HeroSection({ profile }: HeroSectionProps) {
       ? profile.heroImageUrl
       : null;
 
-  const bgImageUrl = customHeroUrl || "/hero-bg.webp";
+  // While profile is null (loading), do not render template image fallback.
+  // Render template image only if profile is loaded and user has no custom image.
+  const bgImageUrl = profile === null ? null : (customHeroUrl || "/hero-bg.webp");
 
   useEffect(() => {
     if (imgRef.current && imgRef.current.complete) {
@@ -48,17 +50,19 @@ export default function HeroSection({ profile }: HeroSectionProps) {
     <section id="home" className={styles.hero}>
       {/* Background - Clean background without template flash */}
       <div className={styles.heroBg}>
-        <img
-          ref={imgRef}
-          src={bgImageUrl}
-          alt=""
-          className={`${styles.heroBgImg} ${
-            customImgLoaded ? styles.imgVisible : styles.imgHidden
-          }`}
-          loading="eager"
-          decoding="async"
-          onLoad={() => setCustomImgLoaded(true)}
-        />
+        {bgImageUrl ? (
+          <img
+            ref={imgRef}
+            src={bgImageUrl}
+            alt=""
+            className={`${styles.heroBgImg} ${
+              customImgLoaded ? styles.imgVisible : styles.imgHidden
+            }`}
+            loading="eager"
+            decoding="async"
+            onLoad={() => setCustomImgLoaded(true)}
+          />
+        ) : null}
         <div className={styles.overlay} />
       </div>
 
