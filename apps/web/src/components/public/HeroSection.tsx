@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ChevronDown, ArrowRight } from "lucide-react";
+import { ChevronDown, ArrowRight, Sparkles } from "lucide-react";
 import styles from "./HeroSection.module.css";
 import type { SiteSettings } from "../../lib/types";
 
@@ -23,13 +23,16 @@ export default function HeroSection({ profile }: HeroSectionProps) {
     document.getElementById("kegiatan")?.scrollIntoView({ behavior: "smooth" });
   };
 
+  const bgImageUrl = profile?.heroImageUrl || "/hero-bg.png";
+  const taglineText = profile?.tagline && profile.tagline !== "/" ? profile.tagline : "Dairi Horas Njuah Njuah";
+
   return (
     <section id="home" className={styles.hero}>
       {/* Background */}
       <div className={styles.heroBg}>
-        {profile?.heroImageUrl && profile.heroImageUrl.startsWith("http") && (
+        {bgImageUrl && (
           <img
-            src={profile.heroImageUrl}
+            src={bgImageUrl}
             alt=""
             className={styles.heroBgImg}
             onError={(e) => { e.currentTarget.style.display = "none"; }}
@@ -45,8 +48,8 @@ export default function HeroSection({ profile }: HeroSectionProps) {
       {/* Content */}
       <div className={`container ${styles.content} ${loaded ? styles.loaded : ""}`}>
         <div className={styles.badge}>
-          <span>✦</span>
-          <span>Est.2013</span>
+          <Sparkles size={14} className={styles.badgeIcon} />
+          <span>Est. 2013</span>
         </div>
 
         <h1 className={styles.title}>
@@ -54,10 +57,10 @@ export default function HeroSection({ profile }: HeroSectionProps) {
         </h1>
 
         <p className={styles.tagline}>
-          {profile?.tagline || "/"}
+          <span className={styles.taglineDecor} />
+          <span>{taglineText}</span>
+          <span className={styles.taglineDecor} />
         </p>
-
-
 
         <p className={styles.desc}>
           {profile?.shortDescription ||
@@ -70,17 +73,17 @@ export default function HeroSection({ profile }: HeroSectionProps) {
             onClick={scrollToAbout}
             id="hero-btn-about"
           >
-            Tentang Kami
+            <span>Tentang Kami</span>
             <ArrowRight size={18} />
           </button>
 
           <button
-            className={styles.secondaryLink}
+            className={styles.secondaryBtn}
             onClick={scrollToActivities}
             id="hero-btn-activities"
           >
             <span>Lihat Kegiatan</span>
-            <ChevronDown size={16} />
+            <ChevronDown size={18} />
           </button>
         </div>
       </div>
@@ -92,3 +95,4 @@ export default function HeroSection({ profile }: HeroSectionProps) {
     </section>
   );
 }
+

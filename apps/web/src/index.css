@@ -10,17 +10,22 @@
   --color-border: #eceae4;
   --color-border-hover: rgba(28, 28, 28, 0.4);
 
-  /* Brand / Primary */
-  --color-gold: #1c1c1c;
-  --color-gold-light: rgba(28, 28, 28, 0.82);
-  --color-gold-dark: #1c1c1c;
-  --color-gold-muted: rgba(28, 28, 28, 0.04);
+  /* Brand / Primary Accent (Cultural Gold & Region Identity) */
+  --color-accent: #d97706;
+  --color-accent-hover: #b45309;
+  --color-accent-light: rgba(217, 119, 6, 0.12);
+  --color-accent-border: rgba(217, 119, 6, 0.35);
+  --color-accent-glow: rgba(217, 119, 6, 0.25);
+  --color-gold: #d97706;
+  --color-gold-light: #f59e0b;
+  --color-gold-dark: #b45309;
+  --color-gold-muted: rgba(217, 119, 6, 0.1);
 
   /* Text */
   --color-text-primary: #1c1c1c;
   --color-text-secondary: #5f5f5d;
   --color-text-muted: rgba(28, 28, 28, 0.4);
-  --color-text-gold: #1c1c1c;
+  --color-text-gold: #d97706;
 
   /* Status */
   --color-success: #059669;
