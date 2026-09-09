@@ -14,11 +14,23 @@ const authRouter = new Hono();
 
 // POST /api/auth/login
 authRouter.post("/login", async (c) => {
-  console.log("🔵 [1] Login handler started");
+  let body: any = null;
+  try {
+    const rawReq = c.req.raw as any;
+    if (rawReq && rawReq.body) {
+      body = typeof rawReq.body === "string" ? JSON.parse(rawReq.body) : rawReq.body;
+    }
+  } catch {}
 
-  const body = await c.req.json().catch(() => null);
   if (!body) {
-    console.error("❌ Login failed: Invalid JSON body");
+    body = await Promise.race([
+      c.req.json().catch(() => null),
+      new Promise<null>((resolve) => setTimeout(() => resolve(null), 1500)),
+    ]);
+  }
+
+  if (!body) {
+    console.error("❌ Login failed: Invalid or missing JSON body");
     return c.json({ error: "Invalid JSON body" }, 400);
   }
 
