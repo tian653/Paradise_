@@ -1,11 +1,3 @@
-import { config } from "dotenv";
-import { fileURLToPath } from "url";
-import { dirname, resolve } from "path";
-
-config();
-config({ path: resolve(dirname(fileURLToPath(import.meta.url)), "../../.env") });
-config({ path: resolve(dirname(fileURLToPath(import.meta.url)), "../../../../.env") });
-
 import { drizzle } from "drizzle-orm/libsql";
 import { createClient } from "@libsql/client";
 import * as schema from "./schema.js";
