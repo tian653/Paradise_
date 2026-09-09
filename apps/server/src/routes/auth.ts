@@ -14,23 +14,24 @@ const authRouter = new Hono();
 
 // POST /api/auth/login
 authRouter.post("/login", async (c) => {
+  console.log("🔵 [1] Login handler started");
+
   const body = await c.req.json().catch(() => null);
   if (!body) {
     console.error("❌ Login failed: Invalid JSON body");
     return c.json({ error: "Invalid JSON body" }, 400);
   }
+  console.log("🔵 [2] Body parsed");
 
   const { username, password } = body as { username?: string; password?: string };
-
   const cleanUsername = username?.trim();
   const cleanPassword = password?.trim();
-
-  console.log(`🔍 Login attempt for username: "${cleanUsername}"`);
 
   if (!cleanUsername || !cleanPassword) {
     console.warn("⚠️ Username or password empty");
     return c.json({ error: "Username and password are required" }, 400);
   }
+  console.log("🔵 [3] Before DB query");
 
   const admin = (
     await db
@@ -38,26 +39,31 @@ authRouter.post("/login", async (c) => {
       .from(admins)
       .where(eq(sql`lower(${admins.username})`, cleanUsername.toLowerCase()))
   )[0];
+  console.log("🔵 [4] DB query done, found:", !!admin);
 
   if (!admin) {
-    console.warn(`⚠️ User "${cleanUsername}" not found in database`);
-    await bcrypt.compare(cleanPassword, "$2a$12$invalidhashinvalidhashinvalidhashx");
+    console.warn(`⚠️ User "${cleanUsername}" not found`);
+    console.log("🔵 [5a] Before dummy bcrypt.compare");
+    await bcrypt.compare(cleanPassword, "$2b$12$abcdefghijklmnopqrstuuABCDEFGHIJKLMNOPQRSTUVWXYZabcde");
+    console.log("🔵 [5b] After dummy bcrypt.compare");
     return c.json({ error: "Invalid credentials" }, 401);
   }
 
+  console.log("🔵 [6a] Before real bcrypt.compare");
   const isValid = await bcrypt.compare(cleanPassword, admin.passwordHash);
+  console.log("🔵 [6b] After real bcrypt.compare, valid:", isValid);
+
   if (!isValid) {
-    console.warn(`⚠️ Password does not match for user "${cleanUsername}"`);
     return c.json({ error: "Invalid credentials" }, 401);
   }
 
-  console.log(`✅ Login successful for user "${admin.username}"`);
-
+  console.log("🔵 [7] Before jwt.sign");
   const token = jwt.sign(
     { id: admin.id, username: admin.username },
     getJwtSecret(),
     { expiresIn: "7d" }
   );
+  console.log("🔵 [8] After jwt.sign — success");
 
   return c.json({ token, username: admin.username });
 });
