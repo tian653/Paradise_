@@ -187,3 +187,25 @@
     grid-template-columns: 1fr;
   }
 }
+
+.estBadge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 0.2rem 0.65rem;
+  border-radius: 9999px;
+  background: var(--color-gold, #c5a059);
+  color: #000000;
+  display: inline-block;
+}
+
+.estBadgeOutline {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 0.2rem 0.65rem;
+  border-radius: 9999px;
+  border: 1px solid var(--color-gold, #c5a059);
+  color: var(--color-gold, #c5a059);
+  display: inline-block;
+}

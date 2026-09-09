@@ -73,7 +73,6 @@ export default function HeroSection({ profile }: HeroSectionProps) {
 
       {/* Content */}
       <div className={`container ${styles.content} ${loaded ? styles.loaded : ""}`}>
-
         <h1 className={styles.title}>
           {profile?.communityName || "Paradise"}
         </h1>
