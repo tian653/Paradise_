@@ -1,3 +1,4 @@
+import { memo } from "react";
 import styles from "./OfficersSection.module.css";
 import type { Officer } from "../../lib/types";
 
@@ -14,25 +15,49 @@ const AVATAR_GRADIENTS = [
   "linear-gradient(135deg, #1e293b 0%, #475569 100%)",
 ];
 
-function getAvatarStyle(name: string, index: number) {
+function getAvatarBackground(name: string, index: number): string {
   let hash = 0;
   for (let i = 0; i < name.length; i++) {
     hash = name.charCodeAt(i) + ((hash << 5) - hash);
   }
-  const colorIndex = Math.abs(hash + index) % AVATAR_GRADIENTS.length;
-  return { background: AVATAR_GRADIENTS[colorIndex] };
+  return AVATAR_GRADIENTS[Math.abs(hash + index) % AVATAR_GRADIENTS.length];
 }
 
-function isCoreRole(position: string) {
-  const pos = position.toLowerCase();
+const OfficerCard = memo(({ officer, index }: { officer: Officer; index: number }) => {
+  const isCore = /ketua|wakil|sekretaris|bendahara|bph/i.test(officer.position);
+  const bgStyle = officer.photoUrl ? undefined : { background: getAvatarBackground(officer.name, index) };
+
   return (
-    pos.includes("ketua") ||
-    pos.includes("wakil") ||
-    pos.includes("sekretaris") ||
-    pos.includes("bendahara") ||
-    pos.includes("bph")
+    <div
+      className={`${styles.card} ${isCore ? styles.cardCore : ""}`}
+      style={{ animationDelay: `${Math.min(index * 0.05, 0.3)}s` }}
+    >
+      <div className={styles.photoWrap}>
+        {officer.photoUrl ? (
+          <img
+            src={officer.photoUrl}
+            alt={officer.name}
+            className={styles.photo}
+            loading="lazy"
+            decoding="async"
+          />
+        ) : (
+          <div className={styles.photoPlaceholder} style={bgStyle}>
+            <span>{officer.name.charAt(0).toUpperCase()}</span>
+          </div>
+        )}
+      </div>
+      <h3 className={styles.name} title={officer.name}>
+        {officer.name}
+      </h3>
+      <span className={`${styles.position} ${isCore ? styles.positionCore : ""}`}>
+        {officer.position}
+      </span>
+    </div>
   );
-}
+});
+
+OfficerCard.displayName = "OfficerCard";
 
 export default function OfficersSection({ officers }: OfficersSectionProps) {
   return (
@@ -51,54 +76,14 @@ export default function OfficersSection({ officers }: OfficersSectionProps) {
           <p className="text-center text-muted">Belum ada data pengurus.</p>
         ) : (
           <div className={styles.grid}>
-            {officers.map((officer, index) => {
-              const isCore = isCoreRole(officer.position);
-              const isKetua =
-                officer.position.toLowerCase().includes("ketua") &&
-                !officer.position.toLowerCase().includes("wakil");
-
-              return (
-                <div
-                  key={officer.id}
-                  className={`${styles.card} ${isKetua ? styles.cardKetua : isCore ? styles.cardCore : ""}`}
-                  style={{ animationDelay: `${index * 0.08}s` }}
-                >
-                  {isKetua && <div className={styles.ketuaBadgeRibbon}>Top Lead</div>}
-                  <div className={styles.photoWrap}>
-                    {officer.photoUrl ? (
-                      <img
-                        src={officer.photoUrl}
-                        alt={officer.name}
-                        className={styles.photo}
-                        loading="lazy"
-                      />
-                    ) : (
-                      <div
-                        className={styles.photoPlaceholder}
-                        style={getAvatarStyle(officer.name, index)}
-                      >
-                        <span>{officer.name.charAt(0).toUpperCase()}</span>
-                      </div>
-                    )}
-                    <div
-                      className={`${styles.photoRing} ${isCore ? styles.photoRingCore : ""}`}
-                    />
-                  </div>
-                  <h3 className={styles.name} title={officer.name}>
-                    {officer.name}
-                  </h3>
-                  <span
-                    className={`${styles.position} ${isCore ? styles.positionCore : ""}`}
-                  >
-                    {officer.position}
-                  </span>
-                </div>
-              );
-            })}
+            {officers.map((officer, index) => (
+              <OfficerCard key={officer.id} officer={officer} index={index} />
+            ))}
           </div>
         )}
       </div>
     </section>
   );
 }
+
 

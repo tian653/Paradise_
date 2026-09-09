@@ -2,68 +2,47 @@
   background: var(--color-bg-secondary);
 }
 
+/* Flex container with auto-centering on desktop/tablet, 2-column grid on mobile */
 .grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
   gap: var(--space-xl);
   justify-content: center;
-  max-width: 1100px;
+  align-items: stretch;
+  max-width: 1140px;
   margin: 0 auto;
 }
 
 .card {
-  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
   gap: var(--space-sm);
   text-align: center;
-  animation: fadeInUp 0.5s ease backwards;
   padding: var(--space-xl) var(--space-md);
   background: var(--color-bg-card);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-xl);
-  transition: all var(--transition-base);
-  height: 100%;
+  width: 200px;
+  transition: transform var(--transition-base), box-shadow var(--transition-base), border-color var(--transition-base);
+  animation: fadeInUp 0.4s ease backwards;
+  will-change: transform, opacity;
 }
 
 .card:hover {
-  border-color: rgba(28, 28, 28, 0.25);
-  transform: translateY(-4px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-  background: #ffffff;
+  border-color: var(--color-border-hover);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-sm);
+  background: var(--color-surface);
 }
 
 .cardCore {
   border-color: var(--color-accent-border);
-  box-shadow: 0 4px 14px rgba(217, 119, 6, 0.06);
-}
-
-.cardKetua {
-  border: 1.5px solid var(--color-accent);
-  box-shadow: 0 6px 20px rgba(217, 119, 6, 0.15);
-  background: #ffffff;
-}
-
-.ketuaBadgeRibbon {
-  position: absolute;
-  top: -10px;
-  background: var(--color-accent);
-  color: #ffffff;
-  font-size: 0.65rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  padding: 0.2rem 0.75rem;
-  border-radius: var(--radius-full);
-  box-shadow: 0 2px 8px rgba(217, 119, 6, 0.4);
 }
 
 .photoWrap {
   position: relative;
   flex-shrink: 0;
-  margin-top: 0.25rem;
 }
 
 .photo {
@@ -72,8 +51,7 @@
   border-radius: 50%;
   object-fit: cover;
   object-position: center top;
-  border: 2px solid #ffffff;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--color-border);
 }
 
 .photoPlaceholder {
@@ -84,15 +62,10 @@
   align-items: center;
   justify-content: center;
   font-family: var(--font-heading);
-  font-weight: 700;
-  font-size: 2.2rem;
+  font-weight: 600;
+  font-size: 2rem;
   color: #ffffff;
-  border: 2px solid #ffffff;
-  box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.25), 0 4px 14px rgba(0, 0, 0, 0.15);
-}
-
-.photoRing {
-  display: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
 }
 
 .name {
@@ -106,11 +79,10 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
-  min-height: 2.7em;
+  min-height: 2.6em;
   margin-top: 0.25rem;
 }
 
-/* Jabatan */
 .position {
   display: inline-block;
   white-space: nowrap;
@@ -120,7 +92,7 @@
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-full);
-  padding: 0.25rem 0.85rem;
+  padding: 0.25rem 0.8rem;
   margin-top: auto;
   max-width: 100%;
   overflow: hidden;
@@ -135,25 +107,45 @@
 }
 
 @keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(20px); }
+  from { opacity: 0; transform: translateY(16px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
+/* Tablet (641px - 1024px) */
+@media (max-width: 1024px) and (min-width: 641px) {
+  .grid {
+    gap: var(--space-lg);
+  }
+
+  .card {
+    width: 180px;
+    padding: var(--space-lg) var(--space-sm);
+  }
+}
+
+/* Mobile (<640px) */
 @media (max-width: 640px) {
   .grid {
+    display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: var(--space-md);
   }
 
   .card {
-    padding: var(--space-lg) var(--space-sm);
+    width: 100%;
+    padding: var(--space-lg) var(--space-xs);
   }
 
   .photo,
   .photoPlaceholder {
-    width: 84px;
-    height: 84px;
-    font-size: 1.8rem;
+    width: 80px;
+    height: 80px;
+    font-size: 1.75rem;
+  }
+
+  .name {
+    font-size: 0.88rem;
+    min-height: 2.5em;
   }
 
   .position {
@@ -161,4 +153,5 @@
     padding: 0.2rem 0.6rem;
   }
 }
+
 
