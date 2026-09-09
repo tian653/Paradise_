@@ -32,7 +32,7 @@
 }
 
 .imgVisible {
-  opacity: 0.85;
+  opacity: 0.95;
 }
 
 .overlay {
@@ -40,9 +40,9 @@
   inset: 0;
   background: linear-gradient(
     180deg,
-    rgba(15, 23, 42, 0.7) 0%,
-    rgba(15, 23, 42, 0.5) 35%,
-    rgba(15, 23, 42, 0.85) 75%,
+    rgba(15, 23, 42, 0.35) 0%,
+    rgba(15, 23, 42, 0.15) 40%,
+    rgba(15, 23, 42, 0.6) 80%,
     var(--color-bg) 100%
   );
   pointer-events: none;
