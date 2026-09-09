@@ -4,12 +4,12 @@
  */
 export async function compressImage(
   file: File,
-  maxWidth = 1920,
-  maxHeight = 1920,
-  quality = 0.85
+  maxWidth = 1280,
+  maxHeight = 1280,
+  quality = 0.80
 ): Promise<File> {
-  // SVG files and small images (< 400KB) don't need raster compression
-  if (!file.type || file.type === "image/svg+xml" || file.size < 400 * 1024) {
+  // SVG files and small images (< 100KB) don't need raster compression
+  if (!file.type || file.type === "image/svg+xml" || file.size < 100 * 1024) {
     return file;
   }
 

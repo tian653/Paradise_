@@ -26,7 +26,7 @@ export default function HeroSection({ profile }: HeroSectionProps) {
   const bgImageUrl =
     profile?.heroImageUrl && profile.heroImageUrl.trim().length > 5
       ? profile.heroImageUrl
-      : "/hero-bg.png";
+      : "/hero-bg.webp";
   const taglineText =
     profile?.tagline && profile.tagline !== "/" ? profile.tagline : "Dairi Horas Njuah Njuah";
 
@@ -41,8 +41,8 @@ export default function HeroSection({ profile }: HeroSectionProps) {
           loading="eager"
           decoding="async"
           onError={(e) => {
-            if (!e.currentTarget.src.endsWith("/hero-bg.png")) {
-              e.currentTarget.src = "/hero-bg.png";
+            if (!e.currentTarget.src.endsWith("/hero-bg.webp")) {
+              e.currentTarget.src = "/hero-bg.webp";
             }
           }}
         />
