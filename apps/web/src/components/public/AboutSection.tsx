@@ -47,7 +47,6 @@ export default function AboutSection({ profile }: AboutSectionProps) {
 
           {/* History */}
           <div className={styles.card}>
-            <div className={styles.cardIcon}>📖</div>
             <h3 className={styles.cardTitle}>Sejarah</h3>
             <div className={styles.cardText}>
               {historyText.split("\n\n").map((para, i) => (
@@ -61,18 +60,12 @@ export default function AboutSection({ profile }: AboutSectionProps) {
         <div className={styles.vmGrid}>
           {/* Vision */}
           <div className={styles.vmCard}>
-            <div className={styles.vmIcon}>
-              <span>👁</span>
-            </div>
             <h3 className={styles.vmTitle}>Visi</h3>
             <p className={styles.vmText}>{visionText}</p>
           </div>
 
           {/* Mission */}
           <div className={`${styles.vmCard} ${styles.missionCard}`}>
-            <div className={styles.vmIcon}>
-              <span>🎯</span>
-            </div>
             <h3 className={styles.vmTitle}>Misi</h3>
             <ul className={styles.missionList}>
               {missionItems.map((item, i) => (

@@ -1,36 +1,36 @@
 /* ─── Design Tokens ───────────────────────────────────────────────────────── */
 :root {
-  /* Colors — Lovable Theme */
-  --color-bg: #f7f4ed;
-  --color-bg-secondary: #f7f4ed;
-  --color-bg-card: #f7f4ed;
-  --color-bg-glass: rgba(247, 244, 237, 0.85);
-  --color-surface: #eceae4;
-  --color-surface-hover: rgba(28, 28, 28, 0.04);
-  --color-border: #eceae4;
-  --color-border-hover: rgba(28, 28, 28, 0.4);
+  /* Colors — Warm Cream & Muted Gold Palette */
+  --color-bg: #FAF7F0;
+  --color-bg-secondary: #FAF7F0;
+  --color-bg-card: #FAF7F0;
+  --color-bg-glass: rgba(250, 247, 240, 0.88);
+  --color-surface: #f2ede1;
+  --color-surface-hover: rgba(43, 43, 43, 0.04);
+  --color-border: #e8e2d4;
+  --color-border-hover: rgba(43, 43, 43, 0.3);
 
-  /* Brand / Primary Accent (Cultural Gold & Region Identity) */
-  --color-accent: #d97706;
-  --color-accent-hover: #b45309;
-  --color-accent-light: rgba(217, 119, 6, 0.12);
-  --color-accent-border: rgba(217, 119, 6, 0.35);
-  --color-accent-glow: rgba(217, 119, 6, 0.25);
-  --color-gold: #d97706;
-  --color-gold-light: #f59e0b;
-  --color-gold-dark: #b45309;
-  --color-gold-muted: rgba(217, 119, 6, 0.1);
+  /* Brand / Primary Accent (#8B7355) */
+  --color-accent: #8B7355;
+  --color-accent-hover: #756044;
+  --color-accent-light: rgba(139, 115, 85, 0.12);
+  --color-accent-border: rgba(139, 115, 85, 0.35);
+  --color-accent-glow: rgba(139, 115, 85, 0.25);
+  --color-gold: #8B7355;
+  --color-gold-light: #a18868;
+  --color-gold-dark: #756044;
+  --color-gold-muted: rgba(139, 115, 85, 0.12);
 
   /* Text */
-  --color-text-primary: #1c1c1c;
-  --color-text-secondary: #5f5f5d;
-  --color-text-muted: rgba(28, 28, 28, 0.4);
-  --color-text-gold: #d97706;
+  --color-text-primary: #2B2B2B;
+  --color-text-secondary: #555555;
+  --color-text-muted: #8A8A8A;
+  --color-text-gold: #8B7355;
 
   /* Status */
   --color-success: #059669;
   --color-error: #dc2626;
-  --color-warning: #d97706;
+  --color-warning: #8B7355;
 
   /* Typography */
   --font-heading: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
@@ -74,7 +74,7 @@
 
   /* Admin */
   --sidebar-width: 260px;
-  --admin-bg: #f7f4ed;
+  --admin-bg: #FAF7F0;
 }
 
 /* ─── Reset & Base ────────────────────────────────────────────────────────── */
@@ -204,16 +204,18 @@ p {
 }
 
 .btn-primary {
-  background: #1c1c1c;
-  color: #fcfbf8;
-  box-shadow: var(--shadow-gold); /* Inset shadow */
+  background: #8B7355;
+  color: #FAF7F0;
   border-radius: var(--radius-sm);
+  border: 1px solid #8B7355;
 }
 
 .btn-primary:hover {
-  background: rgba(28, 28, 28, 0.82);
+  background: #756044;
+  border-color: #756044;
+  color: #FAF7F0;
   transform: translateY(-1px);
-  box-shadow: var(--shadow-md); /* Focus shadow */
+  box-shadow: var(--shadow-md);
 }
 
 .btn-outline {
