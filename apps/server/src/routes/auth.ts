@@ -15,26 +15,30 @@ const authRouter = new Hono();
 // POST /api/auth/login
 authRouter.post("/login", async (c) => {
   let body: any = null;
+
+  // 1. Try c.req.json()
   try {
-    const rawReq = c.req.raw as any;
-    if (rawReq && rawReq.body) {
-      body = typeof rawReq.body === "string" ? JSON.parse(rawReq.body) : rawReq.body;
-    }
+    body = await c.req.json();
   } catch {}
 
-  if (!body) {
-    body = await Promise.race([
-      c.req.json().catch(() => null),
-      new Promise<null>((resolve) => setTimeout(() => resolve(null), 1500)),
-    ]);
+  // 2. Try c.req.parseBody() if json() was empty/failed
+  if (!body || typeof body !== "object") {
+    try {
+      body = await c.req.parseBody();
+    } catch {}
   }
 
-  if (!body) {
-    console.error("❌ Login failed: Invalid or missing JSON body");
-    return c.json({ error: "Invalid JSON body" }, 400);
+  // 3. Try Vercel pre-parsed raw body if present
+  if (!body || typeof body !== "object") {
+    try {
+      const rawReq = c.req.raw as any;
+      if (rawReq?.body) {
+        body = typeof rawReq.body === "string" ? JSON.parse(rawReq.body) : rawReq.body;
+      }
+    } catch {}
   }
 
-  const { username, password } = body as { username?: string; password?: string };
+  const { username, password } = (body || {}) as { username?: string; password?: string };
   const cleanUsername = username?.trim();
   const cleanPassword = password?.trim();
 
