@@ -35,6 +35,8 @@ export default function HeroSection({ profile }: HeroSectionProps) {
             src={bgImageUrl}
             alt=""
             className={styles.heroBgImg}
+            loading="eager"
+            decoding="async"
             onError={(e) => { e.currentTarget.style.display = "none"; }}
           />
         )}

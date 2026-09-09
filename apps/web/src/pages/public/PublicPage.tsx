@@ -19,21 +19,66 @@ export default function PublicPage() {
   const [contact, setContact] = useState<Contact | null>(null);
 
   useEffect(() => {
-    // ── Restore cached profile instantly to avoid logo flash ──────────────────
-    const cached = localStorage.getItem("paradise_profile");
-    if (cached) {
-      try { setProfile(JSON.parse(cached)); } catch { /* ignore */ }
+    // ── Restore cached data instantly (0ms latency) ──────────────────────────
+    try {
+      const cachedProfile = localStorage.getItem("paradise_profile");
+      if (cachedProfile) setProfile(JSON.parse(cachedProfile));
+
+      const cachedActivities = localStorage.getItem("paradise_activities");
+      if (cachedActivities) setActivities(JSON.parse(cachedActivities));
+
+      const cachedGallery = localStorage.getItem("paradise_gallery");
+      if (cachedGallery) setGallery(JSON.parse(cachedGallery));
+
+      const cachedOfficers = localStorage.getItem("paradise_officers");
+      if (cachedOfficers) setOfficers(JSON.parse(cachedOfficers));
+
+      const cachedContact = localStorage.getItem("paradise_contact");
+      if (cachedContact) setContact(JSON.parse(cachedContact));
+    } catch {
+      /* ignore storage parse errors */
     }
 
-    // Fetch each independently so one endpoint failure never blocks the page render
-    api.getProfile().then((data) => {
-      setProfile(data);
-      localStorage.setItem("paradise_profile", JSON.stringify(data));
-    }).catch(() => {});
-    api.getActivities().then(setActivities).catch(() => {});
-    api.getGallery().then(setGallery).catch(() => {});
-    api.getOfficers().then(setOfficers).catch(() => {});
-    api.getContact().then(setContact).catch(() => {});
+    // ── Fetch fresh data silently in background ──────────────────────────────
+    api
+      .getProfile()
+      .then((data) => {
+        setProfile(data);
+        localStorage.setItem("paradise_profile", JSON.stringify(data));
+      })
+      .catch(() => {});
+
+    api
+      .getActivities()
+      .then((data) => {
+        setActivities(data);
+        localStorage.setItem("paradise_activities", JSON.stringify(data));
+      })
+      .catch(() => {});
+
+    api
+      .getGallery()
+      .then((data) => {
+        setGallery(data);
+        localStorage.setItem("paradise_gallery", JSON.stringify(data));
+      })
+      .catch(() => {});
+
+    api
+      .getOfficers()
+      .then((data) => {
+        setOfficers(data);
+        localStorage.setItem("paradise_officers", JSON.stringify(data));
+      })
+      .catch(() => {});
+
+    api
+      .getContact()
+      .then((data) => {
+        setContact(data);
+        localStorage.setItem("paradise_contact", JSON.stringify(data));
+      })
+      .catch(() => {});
   }, []);
 
   return (

@@ -152,6 +152,8 @@ p {
 
 .section {
   padding: var(--space-4xl) 0;
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 600px;
 }
 
 .section-header {

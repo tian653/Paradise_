@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, memo } from "react";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import styles from "./GallerySection.module.css";
 import type { GalleryItem } from "../../lib/types";
@@ -6,6 +6,40 @@ import type { GalleryItem } from "../../lib/types";
 interface GallerySectionProps {
   gallery: GalleryItem[];
 }
+
+const GalleryCard = memo(({
+  item,
+  index,
+  onSelect,
+}: {
+  item: GalleryItem;
+  index: number;
+  onSelect: (index: number) => void;
+}) => (
+  <div
+    className={styles.item}
+    style={{ animationDelay: `${Math.min(index * 0.05, 0.3)}s` }}
+    onClick={() => onSelect(index)}
+    role="button"
+    tabIndex={0}
+    onKeyDown={(e) => e.key === "Enter" && onSelect(index)}
+    id={`gallery-item-${item.id}`}
+  >
+    <img
+      src={item.imageUrl}
+      alt={item.caption ?? "Gallery photo"}
+      className={styles.img}
+      loading="lazy"
+      decoding="async"
+    />
+    <div className={styles.overlay}>
+      <span className={styles.zoomIcon}>🔍</span>
+      {item.caption && <p className={styles.caption}>{item.caption}</p>}
+    </div>
+  </div>
+));
+
+GalleryCard.displayName = "GalleryCard";
 
 export default function GallerySection({ gallery }: GallerySectionProps) {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
@@ -51,29 +85,12 @@ export default function GallerySection({ gallery }: GallerySectionProps) {
         ) : (
           <div className={styles.grid}>
             {gallery.map((item, index) => (
-              <div
+              <GalleryCard
                 key={item.id}
-                className={styles.item}
-                style={{ animationDelay: `${index * 0.06}s` }}
-                onClick={() => setLightboxIndex(index)}
-                role="button"
-                tabIndex={0}
-                onKeyDown={(e) => e.key === "Enter" && setLightboxIndex(index)}
-                id={`gallery-item-${item.id}`}
-              >
-                <img
-                  src={item.imageUrl}
-                  alt={item.caption ?? "Gallery photo"}
-                  className={styles.img}
-                  loading="lazy"
-                />
-                <div className={styles.overlay}>
-                  <span className={styles.zoomIcon}>🔍</span>
-                  {item.caption && (
-                    <p className={styles.caption}>{item.caption}</p>
-                  )}
-                </div>
-              </div>
+                item={item}
+                index={index}
+                onSelect={setLightboxIndex}
+              />
             ))}
           </div>
         )}

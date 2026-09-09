@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, memo } from "react";
 import { Calendar, X, ExternalLink } from "lucide-react";
 import styles from "./ActivitiesSection.module.css";
 import type { Activity } from "../../lib/types";
@@ -6,6 +6,60 @@ import type { Activity } from "../../lib/types";
 interface ActivitiesSectionProps {
   activities: Activity[];
 }
+
+const ActivityCard = memo(({
+  activity,
+  index,
+  onSelect,
+}: {
+  activity: Activity;
+  index: number;
+  onSelect: (activity: Activity) => void;
+}) => (
+  <div
+    className={styles.card}
+    style={{ animationDelay: `${Math.min(index * 0.06, 0.3)}s` }}
+    onClick={() => onSelect(activity)}
+    role="button"
+    tabIndex={0}
+    onKeyDown={(e) => e.key === "Enter" && onSelect(activity)}
+    id={`activity-card-${activity.id}`}
+  >
+    {/* Image */}
+    <div className={styles.imgWrap}>
+      {activity.imageUrl ? (
+        <img
+          src={activity.imageUrl}
+          alt={activity.name}
+          className={styles.img}
+          loading="lazy"
+          decoding="async"
+        />
+      ) : (
+        <div className={styles.imgPlaceholder}>
+          <span>📸</span>
+        </div>
+      )}
+      <div className={styles.imgOverlay}>
+        <span className={styles.viewBadge}>
+          Lihat Detail <ExternalLink size={12} />
+        </span>
+      </div>
+    </div>
+
+    {/* Content */}
+    <div className={styles.body}>
+      <div className={styles.date}>
+        <Calendar size={13} />
+        <span>{activity.date}</span>
+      </div>
+      <h3 className={styles.name}>{activity.name}</h3>
+      <p className={styles.desc}>{activity.description}</p>
+    </div>
+  </div>
+));
+
+ActivityCard.displayName = "ActivityCard";
 
 export default function ActivitiesSection({ activities }: ActivitiesSectionProps) {
   const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
@@ -27,47 +81,12 @@ export default function ActivitiesSection({ activities }: ActivitiesSectionProps
         ) : (
           <div className={styles.grid}>
             {activities.map((activity, index) => (
-              <div
+              <ActivityCard
                 key={activity.id}
-                className={styles.card}
-                style={{ animationDelay: `${index * 0.08}s` }}
-                onClick={() => setSelectedActivity(activity)}
-                role="button"
-                tabIndex={0}
-                onKeyDown={(e) => e.key === "Enter" && setSelectedActivity(activity)}
-                id={`activity-card-${activity.id}`}
-              >
-                {/* Image */}
-                <div className={styles.imgWrap}>
-                  {activity.imageUrl ? (
-                    <img
-                      src={activity.imageUrl}
-                      alt={activity.name}
-                      className={styles.img}
-                      loading="lazy"
-                    />
-                  ) : (
-                    <div className={styles.imgPlaceholder}>
-                      <span>📸</span>
-                    </div>
-                  )}
-                  <div className={styles.imgOverlay}>
-                    <span className={styles.viewBadge}>
-                      Lihat Detail <ExternalLink size={12} />
-                    </span>
-                  </div>
-                </div>
-
-                {/* Content */}
-                <div className={styles.body}>
-                  <div className={styles.date}>
-                    <Calendar size={13} />
-                    <span>{activity.date}</span>
-                  </div>
-                  <h3 className={styles.name}>{activity.name}</h3>
-                  <p className={styles.desc}>{activity.description}</p>
-                </div>
-              </div>
+                activity={activity}
+                index={index}
+                onSelect={setSelectedActivity}
+              />
             ))}
           </div>
         )}
