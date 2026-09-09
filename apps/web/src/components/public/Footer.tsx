@@ -1,4 +1,3 @@
-import { Heart } from "lucide-react";
 import styles from "./Footer.module.css";
 
 interface FooterProps {
@@ -33,10 +32,7 @@ export default function Footer({
         </div>
 
         <div className={styles.bottom}>
-          <p>
-            © {new Date().getFullYear()} {communityName} Community. Made with{" "}
-            <Heart size={12} className={styles.heart} /> by Paradise
-          </p>
+          <p>© {new Date().getFullYear()} {communityName} Community. All rights reserved.</p>
         </div>
       </div>
     </footer>
