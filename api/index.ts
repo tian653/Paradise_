@@ -36,6 +36,11 @@ api.use(
   })
 );
 
+api.onError((err, c) => {
+  console.error("❌ API Error:", err);
+  return c.json({ error: err?.message || "Internal Server Error" }, 500);
+});
+
 // ── Public Routes ──────────────────────────────────────────────────────────────
 api.route("/profile", profileRouter);
 api.route("/activities", activitiesRouter);
