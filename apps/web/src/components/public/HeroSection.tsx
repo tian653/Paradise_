@@ -9,9 +9,10 @@ interface HeroSectionProps {
 
 export default function HeroSection({ profile }: HeroSectionProps) {
   const [loaded, setLoaded] = useState(false);
+  const [customImgLoaded, setCustomImgLoaded] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => setLoaded(true), 100);
+    const timer = setTimeout(() => setLoaded(true), 50);
     return () => clearTimeout(timer);
   }, []);
 
@@ -23,29 +24,33 @@ export default function HeroSection({ profile }: HeroSectionProps) {
     document.getElementById("kegiatan")?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const bgImageUrl =
-    profile?.heroImageUrl && profile.heroImageUrl.trim().length > 5
+  const customHeroUrl =
+    profile?.heroImageUrl &&
+    profile.heroImageUrl.trim().length > 5 &&
+    profile.heroImageUrl !== "/hero-bg.webp" &&
+    profile.heroImageUrl !== "/hero-bg.png"
       ? profile.heroImageUrl
-      : "/hero-bg.webp";
+      : null;
+
   const taglineText =
     profile?.tagline && profile.tagline !== "/" ? profile.tagline : "Dairi Horas Njuah Njuah";
 
   return (
     <section id="home" className={styles.hero}>
-      {/* Background */}
+      {/* Background - Instant CSS background with custom image crossfade */}
       <div className={styles.heroBg}>
-        <img
-          src={bgImageUrl}
-          alt=""
-          className={styles.heroBgImg}
-          loading="eager"
-          decoding="async"
-          onError={(e) => {
-            if (!e.currentTarget.src.endsWith("/hero-bg.webp")) {
-              e.currentTarget.src = "/hero-bg.webp";
-            }
-          }}
-        />
+        {customHeroUrl ? (
+          <img
+            src={customHeroUrl}
+            alt=""
+            className={`${styles.heroBgImg} ${
+              customImgLoaded ? styles.imgVisible : styles.imgHidden
+            }`}
+            loading="eager"
+            decoding="async"
+            onLoad={() => setCustomImgLoaded(true)}
+          />
+        ) : null}
         <div className={styles.overlay} />
       </div>
 
