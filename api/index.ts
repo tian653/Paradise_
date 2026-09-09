@@ -61,43 +61,77 @@ admin.post("/upload", async (c) => {
       console.error("❌ [Upload] Failed to parse formData:", err);
       return null;
     });
-    if (!formData) return c.json({ error: "Failed to parse form data" }, 400);
+    if (!formData) return c.json({ error: "Gagal memproses form data." }, 400);
 
     const file = formData.get("file") as File | null;
     if (!file) {
       console.warn("⚠️ [Upload] No file found in form data");
-      return c.json({ error: "No file provided" }, 400);
+      return c.json({ error: "Tidak ada file yang diunggah." }, 400);
     }
 
     console.log(`📸 [Upload] File received: name="${file.name}", type="${file.type}", size=${file.size}`);
 
-    const allowedTypes = ["image/jpeg", "image/png", "image/webp", "image/gif", "image/svg+xml"];
-    if (!allowedTypes.includes(file.type)) {
-      console.warn(`⚠️ [Upload] Invalid file type: ${file.type}`);
-      return c.json({ error: `Invalid file type: ${file.type}. Only images are allowed.` }, 400);
+    const allowedMimeTypes = [
+      "image/jpeg",
+      "image/jpg",
+      "image/png",
+      "image/webp",
+      "image/gif",
+      "image/svg+xml",
+      "image/avif",
+      "image/heic",
+      "image/heif",
+      "image/bmp",
+      "image/x-icon",
+      "image/vnd.microsoft.icon",
+      "image/pjpeg",
+      "image/jfif",
+    ];
+    const allowedExtensions = [
+      ".jpg", ".jpeg", ".png", ".webp", ".gif", ".svg", ".avif", ".heic", ".heif", ".bmp", ".ico", ".jfif", ".pjpeg"
+    ];
+
+    const fileType = file.type ? file.type.toLowerCase() : "";
+    const ext = file.name ? file.name.substring(file.name.lastIndexOf(".")).toLowerCase() : "";
+
+    const isImageMime = fileType.startsWith("image/") || allowedMimeTypes.includes(fileType);
+    const isImageExt = allowedExtensions.includes(ext);
+
+    if (!isImageMime && !isImageExt) {
+      console.warn(`⚠️ [Upload] Invalid file type: type="${file.type}", ext="${ext}"`);
+      return c.json({ error: `Tipe file tidak valid (${file.type || ext}). Hanya foto/gambar yang diperbolehkan.` }, 400);
     }
 
-    const maxSize = 5 * 1024 * 1024; // 5MB
+    const maxSize = 10 * 1024 * 1024; // 10MB
     if (file.size > maxSize) {
       console.warn(`⚠️ [Upload] File too large: ${file.size} bytes`);
-      return c.json({ error: "File too large. Max 5MB." }, 400);
+      return c.json({ error: "Ukuran foto terlalu besar. Maksimal 10MB." }, 400);
     }
 
     const buffer = await file.arrayBuffer();
+    const mime = fileType || "image/jpeg";
     const base64Data = Buffer.from(buffer).toString("base64");
-    const dataURI = `data:${file.type};base64,${base64Data}`;
+    const dataURI = `data:${mime};base64,${base64Data}`;
 
-    console.log("📸 [Upload] Uploading to Cloudinary...");
-    const result = await cloudinary.uploader.upload(dataURI, {
-      folder: "paradise_community",
-    });
+    if (
+      process.env.CLOUDINARY_CLOUD_NAME &&
+      process.env.CLOUDINARY_API_KEY &&
+      process.env.CLOUDINARY_API_SECRET
+    ) {
+      console.log("📸 [Upload] Uploading to Cloudinary...");
+      const result = await cloudinary.uploader.upload(dataURI, {
+        folder: "paradise_community",
+      });
+      console.log("✅ [Upload] Cloudinary upload successful:", result.secure_url);
+      return c.json({ url: result.secure_url });
+    }
 
-    console.log("✅ [Upload] Cloudinary upload successful:", result.secure_url);
-    return c.json({ url: result.secure_url });
+    console.warn("⚠️ [Upload] Cloudinary environment variables missing. Returning Data URI.");
+    return c.json({ url: dataURI });
   } catch (error: any) {
     console.error("❌ [Upload] Upload error details:", error);
     return c.json(
-      { error: error?.message || "Failed to upload image" },
+      { error: error?.message || "Gagal mengunggah foto" },
       500
     );
   }

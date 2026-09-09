@@ -82,8 +82,8 @@ export default function AdminActivitiesPage() {
       const { url } = await adminApi.uploadFile(file);
       setForm((prev) => ({ ...prev, imageUrl: url }));
       toast.success("Foto berhasil diupload");
-    } catch {
-      toast.error("Gagal mengupload foto");
+    } catch (err: any) {
+      toast.error(err?.message || "Gagal mengupload foto");
     } finally {
       setUploading(false);
     }

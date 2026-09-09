@@ -32,8 +32,8 @@ export default function AdminGalleryPage() {
       }
       toast.success(`${files.length} foto berhasil diupload!`, { id: toastId });
       load();
-    } catch {
-      toast.error("Gagal mengupload foto", { id: toastId });
+    } catch (err: any) {
+      toast.error(err?.message || "Gagal mengupload foto", { id: toastId });
     }
   };
 

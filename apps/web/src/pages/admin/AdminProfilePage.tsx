@@ -54,8 +54,8 @@ export default function AdminProfilePage() {
       const updated = await adminApi.updateProfile({ [field]: url });
       setProfile(updated);
       toast.success("Foto berhasil diupload!", { id: toastId });
-    } catch {
-      toast.error("Gagal mengupload foto", { id: toastId });
+    } catch (err: any) {
+      toast.error(err?.message || "Gagal mengupload foto", { id: toastId });
     }
   };
 

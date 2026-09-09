@@ -56,7 +56,7 @@ export default function AdminOfficersPage() {
       const { url } = await adminApi.uploadFile(file);
       setForm((prev) => ({ ...prev, photoUrl: url }));
       toast.success("Foto berhasil diupload");
-    } catch { toast.error("Gagal upload foto"); }
+    } catch (err: any) { toast.error(err?.message || "Gagal upload foto"); }
     finally { setUploading(false); }
   };
 

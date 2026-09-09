@@ -111,22 +111,48 @@ admin.post("/upload", async (c) => {
     const file = formData.get("file") as File | null;
 
     if (!file) {
-      return c.json({ error: "No file provided" }, 400);
+      return c.json({ error: "Tidak ada file yang diunggah." }, 400);
     }
 
-    const allowedTypes = ["image/jpeg", "image/png", "image/webp", "image/gif"];
-    if (!allowedTypes.includes(file.type)) {
-      return c.json({ error: "Invalid file type. Only images are allowed." }, 400);
+    const allowedMimeTypes = [
+      "image/jpeg",
+      "image/jpg",
+      "image/png",
+      "image/webp",
+      "image/gif",
+      "image/svg+xml",
+      "image/avif",
+      "image/heic",
+      "image/heif",
+      "image/bmp",
+      "image/x-icon",
+      "image/vnd.microsoft.icon",
+      "image/pjpeg",
+      "image/jfif",
+    ];
+    const allowedExtensions = [
+      ".jpg", ".jpeg", ".png", ".webp", ".gif", ".svg", ".avif", ".heic", ".heif", ".bmp", ".ico", ".jfif", ".pjpeg"
+    ];
+
+    const fileType = file.type ? file.type.toLowerCase() : "";
+    const extFromPath = file.name ? path.extname(file.name).toLowerCase() : "";
+
+    const isImageMime = fileType.startsWith("image/") || allowedMimeTypes.includes(fileType);
+    const isImageExt = allowedExtensions.includes(extFromPath);
+
+    if (!isImageMime && !isImageExt) {
+      return c.json({ error: `Tipe file tidak valid (${file.type || extFromPath}). Hanya foto/gambar yang diperbolehkan.` }, 400);
     }
 
-    const maxSize = 5 * 1024 * 1024; // 5MB
+    const maxSize = 10 * 1024 * 1024; // 10MB
     if (file.size > maxSize) {
-      return c.json({ error: "File too large. Max 5MB." }, 400);
+      return c.json({ error: "Ukuran foto terlalu besar. Maksimal 10MB." }, 400);
     }
 
     const buffer = await file.arrayBuffer();
+    const mime = fileType || "image/jpeg";
     const base64Data = Buffer.from(buffer).toString("base64");
-    const dataURI = `data:${file.type};base64,${base64Data}`;
+    const dataURI = `data:${mime};base64,${base64Data}`;
 
     // 1. Try Cloudinary upload if credentials are provided
     if (
@@ -153,19 +179,25 @@ admin.post("/upload", async (c) => {
 
     const mimeToExt: Record<string, string> = {
       "image/jpeg": ".jpg",
+      "image/jpg": ".jpg",
       "image/png": ".png",
       "image/webp": ".webp",
       "image/gif": ".gif",
+      "image/svg+xml": ".svg",
+      "image/avif": ".avif",
+      "image/heic": ".heic",
+      "image/heif": ".heif",
+      "image/bmp": ".bmp",
     };
-    const ext = mimeToExt[file.type] || (file.name ? path.extname(file.name) : ".jpg") || ".jpg";
-    const filename = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}${ext}`;
+    const finalExt = mimeToExt[fileType] || extFromPath || ".jpg";
+    const filename = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}${finalExt}`;
     const filePath = path.join(UPLOADS_DIR, filename);
 
     fs.writeFileSync(filePath, Buffer.from(buffer));
     return c.json({ url: `/uploads/${filename}` });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Upload error:", error);
-    return c.json({ error: "Failed to upload image" }, 500);
+    return c.json({ error: error?.message || "Gagal mengunggah foto" }, 500);
   }
 });
 
