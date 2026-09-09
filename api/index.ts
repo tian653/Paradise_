@@ -54,6 +54,10 @@ admin.route("/officers", officersRouter);
 admin.route("/contact", contactRouter);
 
 // ── File Upload ────────────────────────────────────────────────────────────────
+admin.get("/upload", (c) => {
+  return c.json({ error: "Method Not Allowed. Gunakan HTTP POST untuk mengunggah file." }, 405);
+});
+
 admin.post("/upload", async (c) => {
   try {
     console.log("📸 [Upload] Upload request received");
