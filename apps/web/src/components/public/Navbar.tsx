@@ -73,10 +73,7 @@ export default function Navbar({ communityName = "Paradise", logoUrl }: NavbarPr
           ) : (
             <div className={styles.logoIcon}>P</div>
           )}
-          <div className={styles.logoBrand}>
-            <span className={styles.logoText}>{communityName}</span>
-            <span className={styles.logoEst}>Est. 2013</span>
-          </div>
+          <span className={styles.logoText}>{communityName}</span>
         </a>
 
         {/* Desktop Nav */}

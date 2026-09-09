@@ -291,11 +291,7 @@ p {
 
 /* ─── Divider ─────────────────────────────────────────────────────────────── */
 .divider {
-  width: 60px;
-  height: 3px;
-  background: linear-gradient(90deg, var(--color-gold), transparent);
-  margin: var(--space-lg) auto;
-  border-radius: var(--radius-full);
+  display: none;
 }
 
 /* ─── Badge ───────────────────────────────────────────────────────────────── */

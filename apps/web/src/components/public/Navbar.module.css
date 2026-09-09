@@ -89,17 +89,17 @@
 }
 
 .logoEst {
-  font-size: 0.8rem;
-  font-weight: 500;
-  letter-spacing: 0.04em;
-  color: var(--color-text-muted);
-  opacity: 0.75;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--color-gold, #c5a059);
   line-height: 1;
+  white-space: nowrap;
 }
 
 .navbar:not(.scrolled) .logoEst {
-  color: rgba(255, 255, 255, 0.7);
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  color: #f59e0b;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
 }
 
 /* ─── Nav Links ─── */
