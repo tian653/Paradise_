@@ -19,9 +19,15 @@ interface AuthContextType {
 // ── Helpers ────────────────────────────────────────────────────────────────────
 function isTokenExpired(token: string): boolean {
   try {
-    const payload = JSON.parse(atob(token.split(".")[1]));
-    // exp is in seconds, Date.now() is in ms
-    return payload.exp * 1000 < Date.now();
+    const parts = token.split(".");
+    if (parts.length < 2) return true;
+    let base64Url = parts[1];
+    let base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    while (base64.length % 4) {
+      base64 += "=";
+    }
+    const payload = JSON.parse(atob(base64));
+    return payload.exp ? payload.exp * 1000 < Date.now() : false;
   } catch {
     return true; // treat malformed tokens as expired
   }
