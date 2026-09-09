@@ -2,7 +2,7 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 import { v2 as cloudinary } from "cloudinary";
-import { handle } from "@hono/node-server/vercel";
+import { handle } from "hono/vercel";
 
 import authRouter from "../apps/server/src/routes/auth.js";
 import profileRouter from "../apps/server/src/routes/profile.js";
