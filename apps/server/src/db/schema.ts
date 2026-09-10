@@ -31,6 +31,7 @@ export const activities = sqliteTable("activities", {
 export const gallery = sqliteTable("gallery", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   imageUrl: text("image_url").notNull(),
+  type: text("type").notNull().default("image"),
   caption: text("caption"),
   sortOrder: integer("sort_order").notNull().default(0),
   createdAt: text("created_at").notNull().default(sql`(datetime('now'))`),

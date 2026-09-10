@@ -131,7 +131,7 @@ admin.post("/upload", async (c) => {
       return c.json({ error: "Tidak ada file yang diunggah." }, 400);
     }
 
-    const allowedMimeTypes = [
+    const allowedImageMimeTypes = [
       "image/jpeg",
       "image/jpg",
       "image/png",
@@ -147,27 +147,45 @@ admin.post("/upload", async (c) => {
       "image/pjpeg",
       "image/jfif",
     ];
-    const allowedExtensions = [
+    const allowedVideoMimeTypes = [
+      "video/mp4",
+      "video/webm",
+      "video/ogg",
+      "video/quicktime",
+      "video/x-msvideo",
+      "video/x-matroska",
+      "video/3gpp",
+      "video/m4v",
+    ];
+    const allowedImageExtensions = [
       ".jpg", ".jpeg", ".png", ".webp", ".gif", ".svg", ".avif", ".heic", ".heif", ".bmp", ".ico", ".jfif", ".pjpeg"
+    ];
+    const allowedVideoExtensions = [
+      ".mp4", ".webm", ".mov", ".avi", ".mkv", ".ogv", ".3gp", ".m4v"
     ];
 
     const fileType = file.type ? file.type.toLowerCase() : "";
     const extFromPath = file.name ? path.extname(file.name).toLowerCase() : "";
 
-    const isImageMime = fileType.startsWith("image/") || allowedMimeTypes.includes(fileType);
-    const isImageExt = allowedExtensions.includes(extFromPath);
+    const isImageMime = fileType.startsWith("image/") || allowedImageMimeTypes.includes(fileType);
+    const isImageExt = allowedImageExtensions.includes(extFromPath);
+    const isVideoMime = fileType.startsWith("video/") || allowedVideoMimeTypes.includes(fileType);
+    const isVideoExt = allowedVideoExtensions.includes(extFromPath);
 
-    if (!isImageMime && !isImageExt) {
-      return c.json({ error: `Tipe file tidak valid (${file.type || extFromPath}). Hanya foto/gambar yang diperbolehkan.` }, 400);
+    const isImage = isImageMime || isImageExt;
+    const isVideo = isVideoMime || isVideoExt;
+
+    if (!isImage && !isVideo) {
+      return c.json({ error: `Tipe file tidak valid (${file.type || extFromPath}). Hanya gambar dan video yang diperbolehkan.` }, 400);
     }
 
-    const maxSize = 10 * 1024 * 1024; // 10MB
+    const maxSize = isVideo ? 50 * 1024 * 1024 : 10 * 1024 * 1024; // 50MB for video, 10MB for image
     if (file.size > maxSize) {
-      return c.json({ error: "Ukuran foto terlalu besar. Maksimal 10MB." }, 400);
+      return c.json({ error: `Ukuran file terlalu besar. Maksimal ${isVideo ? "50MB untuk video" : "10MB untuk foto"}.` }, 400);
     }
 
     const buffer = await file.arrayBuffer();
-    const mime = fileType || "image/jpeg";
+    const mime = fileType || (isVideo ? "video/mp4" : "image/jpeg");
     const base64Data = Buffer.from(buffer).toString("base64");
     const dataURI = `data:${mime};base64,${base64Data}`;
 
@@ -180,6 +198,7 @@ admin.post("/upload", async (c) => {
       try {
         const uploadResult = await cloudinary.uploader.upload(dataURI, {
           folder: "paradise_community",
+          resource_type: "auto",
         });
         if (uploadResult && uploadResult.secure_url) {
           return c.json({ url: uploadResult.secure_url });
@@ -205,8 +224,16 @@ admin.post("/upload", async (c) => {
       "image/heic": ".heic",
       "image/heif": ".heif",
       "image/bmp": ".bmp",
+      "video/mp4": ".mp4",
+      "video/webm": ".webm",
+      "video/ogg": ".ogv",
+      "video/quicktime": ".mov",
+      "video/x-msvideo": ".avi",
+      "video/x-matroska": ".mkv",
+      "video/3gpp": ".3gp",
+      "video/m4v": ".m4v",
     };
-    const finalExt = mimeToExt[fileType] || extFromPath || ".jpg";
+    const finalExt = mimeToExt[fileType] || extFromPath || (isVideo ? ".mp4" : ".jpg");
     const filename = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}${finalExt}`;
     const filePath = path.join(UPLOADS_DIR, filename);
 
@@ -214,7 +241,7 @@ admin.post("/upload", async (c) => {
     return c.json({ url: `/uploads/${filename}` });
   } catch (error: any) {
     console.error("Upload error:", error);
-    return c.json({ error: error?.message || "Gagal mengunggah foto" }, 500);
+    return c.json({ error: error?.message || "Gagal mengunggah file" }, 500);
   }
 });
 

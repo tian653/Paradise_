@@ -14,14 +14,26 @@ galleryRouter.get("/", async (c) => {
   return c.json(rows);
 });
 
+function detectMediaType(url: string, typeInput?: string): "image" | "video" {
+  if (typeInput === "video" || typeInput === "image") return typeInput;
+  const videoExts = [".mp4", ".webm", ".mov", ".mkv", ".avi", ".ogv", ".3gp", ".m4v"];
+  const lowerUrl = (url || "").toLowerCase();
+  if (videoExts.some((ext) => lowerUrl.includes(ext)) || lowerUrl.includes("/video/upload/")) {
+    return "video";
+  }
+  return "image";
+}
+
 // POST /api/admin/gallery
 galleryRouter.post("/", async (c) => {
   const body = await c.req.json();
-  const { imageUrl, caption, sortOrder } = body;
+  const { imageUrl, caption, sortOrder, type } = body;
 
   if (!imageUrl) {
     return c.json({ error: "imageUrl is required" }, 400);
   }
+
+  const mediaType = detectMediaType(imageUrl, type);
 
   let finalSortOrder = typeof sortOrder === "number" && sortOrder > 0 ? sortOrder : undefined;
   if (!finalSortOrder) {
@@ -37,6 +49,7 @@ galleryRouter.post("/", async (c) => {
     .insert(gallery)
     .values({
       imageUrl,
+      type: mediaType,
       caption: caption ?? null,
       sortOrder: finalSortOrder,
     })
@@ -49,7 +62,7 @@ galleryRouter.post("/", async (c) => {
 galleryRouter.put("/:id", async (c) => {
   const id = parseInt(c.req.param("id"));
   const body = await c.req.json();
-  const { imageUrl, caption, sortOrder } = body;
+  const { imageUrl, caption, sortOrder, type } = body;
 
   const existing = (await db
     .select()
@@ -60,10 +73,14 @@ galleryRouter.put("/:id", async (c) => {
     return c.json({ error: "Gallery item not found" }, 404);
   }
 
+  const nextUrl = imageUrl !== undefined ? imageUrl : existing.imageUrl;
+  const mediaType = type ? detectMediaType(nextUrl, type) : (imageUrl !== undefined ? detectMediaType(nextUrl) : existing.type);
+
   const updated = await db
     .update(gallery)
     .set({
       ...(imageUrl !== undefined && { imageUrl }),
+      ...(mediaType !== undefined && { type: mediaType }),
       ...(caption !== undefined && { caption }),
       ...(sortOrder !== undefined && { sortOrder }),
     })

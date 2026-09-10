@@ -1,11 +1,17 @@
 import { useState, useEffect, useCallback, memo } from "react";
-import { X, ChevronLeft, ChevronRight } from "lucide-react";
+import { X, ChevronLeft, ChevronRight, Video, Play } from "lucide-react";
 import styles from "./GallerySection.module.css";
 import type { GalleryItem } from "../../lib/types";
 
 interface GallerySectionProps {
   gallery: GalleryItem[];
 }
+
+const isVideoItem = (item: GalleryItem) => {
+  if (item.type === "video") return true;
+  const url = (item.imageUrl || "").toLowerCase();
+  return [".mp4", ".webm", ".mov", ".mkv", ".avi", ".ogv", ".3gp", ".m4v"].some((ext) => url.includes(ext)) || url.includes("/video/upload/");
+};
 
 const GalleryCard = memo(({
   item,
@@ -15,29 +21,48 @@ const GalleryCard = memo(({
   item: GalleryItem;
   index: number;
   onSelect: (index: number) => void;
-}) => (
-  <div
-    className={styles.item}
-    style={{ animationDelay: `${Math.min(index * 0.05, 0.3)}s` }}
-    onClick={() => onSelect(index)}
-    role="button"
-    tabIndex={0}
-    onKeyDown={(e) => e.key === "Enter" && onSelect(index)}
-    id={`gallery-item-${item.id}`}
-  >
-    <img
-      src={item.imageUrl}
-      alt={item.caption ?? "Gallery photo"}
-      className={styles.img}
-      loading="lazy"
-      decoding="async"
-    />
-    <div className={styles.overlay}>
-      <span className={styles.zoomIcon}>🔍</span>
-      {item.caption && <p className={styles.caption}>{item.caption}</p>}
+}) => {
+  const isVideo = isVideoItem(item);
+  return (
+    <div
+      className={styles.item}
+      style={{ animationDelay: `${Math.min(index * 0.05, 0.3)}s` }}
+      onClick={() => onSelect(index)}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => e.key === "Enter" && onSelect(index)}
+      id={`gallery-item-${item.id}`}
+    >
+      {isVideo && (
+        <span className={styles.videoBadge}>
+          <Video size={12} /> Video
+        </span>
+      )}
+      {isVideo ? (
+        <video
+          src={item.imageUrl}
+          className={styles.img}
+          muted
+          preload="metadata"
+        />
+      ) : (
+        <img
+          src={item.imageUrl}
+          alt={item.caption ?? "Gallery item"}
+          className={styles.img}
+          loading="lazy"
+          decoding="async"
+        />
+      )}
+      <div className={styles.overlay}>
+        <span className={styles.zoomIcon}>
+          {isVideo ? <Play size={28} fill="currentColor" /> : "🔍"}
+        </span>
+        {item.caption && <p className={styles.caption}>{item.caption}</p>}
+      </div>
     </div>
-  </div>
-));
+  );
+});
 
 GalleryCard.displayName = "GalleryCard";
 
@@ -76,12 +101,12 @@ export default function GallerySection({ gallery }: GallerySectionProps) {
           <h2 className="section-title">Momen Bersama</h2>
           <div className="divider" />
           <p className="section-subtitle">
-            Kumpulan foto yang mengabadikan cerita dan kenangan Paradise
+            Kumpulan foto dan video yang mengabadikan cerita dan kenangan Paradise
           </p>
         </div>
 
         {gallery.length === 0 ? (
-          <p className="text-center text-muted">Belum ada foto.</p>
+          <p className="text-center text-muted">Belum ada koleksi galeri.</p>
         ) : (
           <div className={styles.grid}>
             {gallery.map((item, index) => (
@@ -122,7 +147,7 @@ export default function GallerySection({ gallery }: GallerySectionProps) {
                   e.stopPropagation();
                   handlePrev();
                 }}
-                aria-label="Foto sebelumnya"
+                aria-label="Item sebelumnya"
                 id="gallery-lightbox-prev"
               >
                 <ChevronLeft size={28} />
@@ -134,7 +159,7 @@ export default function GallerySection({ gallery }: GallerySectionProps) {
                   e.stopPropagation();
                   handleNext();
                 }}
-                aria-label="Foto selanjutnya"
+                aria-label="Item selanjutnya"
                 id="gallery-lightbox-next"
               >
                 <ChevronRight size={28} />
@@ -146,11 +171,21 @@ export default function GallerySection({ gallery }: GallerySectionProps) {
             className={styles.lightboxContent}
             onClick={(e) => e.stopPropagation()}
           >
-            <img
-              src={currentItem.imageUrl}
-              alt={currentItem.caption ?? "Gallery photo"}
-              className={styles.lightboxImg}
-            />
+            {isVideoItem(currentItem) ? (
+              <video
+                src={currentItem.imageUrl}
+                controls
+                autoPlay
+                className={styles.lightboxImg}
+                style={{ maxHeight: "75vh", width: "auto" }}
+              />
+            ) : (
+              <img
+                src={currentItem.imageUrl}
+                alt={currentItem.caption ?? "Gallery photo"}
+                className={styles.lightboxImg}
+              />
+            )}
             <div className={styles.lightboxMeta}>
               {currentItem.caption && (
                 <p className={styles.lightboxCaption}>{currentItem.caption}</p>

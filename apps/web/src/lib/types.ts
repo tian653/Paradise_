@@ -27,6 +27,7 @@ export interface Activity {
 export interface GalleryItem {
   id: number;
   imageUrl: string;
+  type?: "image" | "video";
   caption: string | null;
   sortOrder: number;
   createdAt: string;
