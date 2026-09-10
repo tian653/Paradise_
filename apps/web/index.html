@@ -3,8 +3,6 @@
 
 <head>
   <meta charset="UTF-8" />
-  <link rel="icon" type="image/png" href="/logo.png" />
-  <link rel="apple-touch-icon" href="/logo.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="google-site-verification" content="google89d464a7d95167ce" />
   
@@ -16,19 +14,36 @@
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://dairi-paradise.vercel.app/" />
 
-  <!-- Open Graph / Facebook / WhatsApp -->
+  <!-- Icons & Favicon for Google Search Snippets & Browsers -->
+  <link rel="icon" type="image/png" href="/logo.png" />
+  <link rel="shortcut icon" type="image/png" href="/logo.png" />
+  <link rel="apple-touch-icon" href="/logo.png" />
+  <link rel="image_src" href="https://dairi-paradise.vercel.app/logo.png" />
+
+  <!-- Direct Image & Thumbnail Meta Tags for Google Crawlers -->
+  <meta name="image" content="https://dairi-paradise.vercel.app/logo.png" />
+  <meta name="thumbnail" content="https://dairi-paradise.vercel.app/logo.png" />
+
+  <!-- Open Graph / Facebook / WhatsApp / Social Media -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://dairi-paradise.vercel.app/" />
+  <meta property="og:site_name" content="Paradise Semarang" />
   <meta property="og:title" content="Paradise - Persatuan Anak Rantau Dairi Di Semarang" />
   <meta property="og:description" content="Wadah mahasiswa asal Kabupaten Dairi di Kota Semarang untuk membangun kebersamaan, solidaritas, dan kekeluargaan." />
   <meta property="og:image" content="https://dairi-paradise.vercel.app/logo.png" />
+  <meta property="og:image:secure_url" content="https://dairi-paradise.vercel.app/logo.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:alt" content="Logo Official Paradise - Persatuan Anak Rantau Dairi Di Semarang" />
+  <meta property="og:logo" content="https://dairi-paradise.vercel.app/logo.png" />
 
-  <!-- Twitter -->
-  <meta property="twitter:card" content="summary_large_image" />
-  <meta property="twitter:url" content="https://dairi-paradise.vercel.app/" />
-  <meta property="twitter:title" content="Paradise - Persatuan Anak Rantau Dairi Di Semarang" />
-  <meta property="twitter:description" content="Wadah mahasiswa asal Kabupaten Dairi di Kota Semarang untuk membangun kebersamaan, solidaritas, dan kekeluargaan." />
-  <meta property="twitter:image" content="https://dairi-paradise.vercel.app/logo.png" />
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="https://dairi-paradise.vercel.app/" />
+  <meta name="twitter:title" content="Paradise - Persatuan Anak Rantau Dairi Di Semarang" />
+  <meta name="twitter:description" content="Wadah mahasiswa asal Kabupaten Dairi di Kota Semarang untuk membangun kebersamaan, solidaritas, dan kekeluargaan." />
+  <meta name="twitter:image" content="https://dairi-paradise.vercel.app/logo.png" />
+  <meta name="twitter:image:src" content="https://dairi-paradise.vercel.app/logo.png" />
+  <meta name="twitter:image:alt" content="Logo Official Paradise - Persatuan Anak Rantau Dairi Di Semarang" />
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -37,17 +52,33 @@
     href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Inter:wght@300;400;500;600&display=swap"
     rel="stylesheet" />
 
-  <!-- JSON-LD Structured Data Schema for Google Knowledge Panel -->
+  <!-- JSON-LD Structured Data Schema for Google Knowledge Panel & Organization Logo -->
   <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Organization",
-      "name": "Paradise Community",
-      "alternateName": "Persatuan Anak Rantau Dairi Di Semarang",
-      "url": "https://dairi-paradise.vercel.app/",
-      "logo": "https://dairi-paradise.vercel.app/logo.png",
-      "description": "Wadah mahasiswa asal Kabupaten Dairi di Kota Semarang untuk membangun kebersamaan, solidaritas, dan kekeluargaan."
-    }
+    [
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Paradise",
+        "alternateName": ["Persatuan Anak Rantau Dairi Di Semarang", "Paradise Dairi", "Paradise Semarang"],
+        "url": "https://dairi-paradise.vercel.app/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://dairi-paradise.vercel.app/logo.png"
+        },
+        "image": "https://dairi-paradise.vercel.app/logo.png",
+        "description": "Wadah mahasiswa asal Kabupaten Dairi di Kota Semarang untuk membangun kebersamaan, solidaritas, dan kekeluargaan.",
+        "sameAs": [
+          "https://www.instagram.com/dairiparadise_/"
+        ]
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Paradise - Persatuan Anak Rantau Dairi Di Semarang",
+        "url": "https://dairi-paradise.vercel.app/",
+        "image": "https://dairi-paradise.vercel.app/logo.png"
+      }
+    ]
   </script>
 </head>
 
