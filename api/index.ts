@@ -94,7 +94,7 @@ admin.post("/upload", async (c) => {
 
     console.log(`📸 [Upload] File received: name="${file.name}", type="${file.type}", size=${file.size}`);
 
-    const allowedMimeTypes = [
+    const allowedImageMimeTypes = [
       "image/jpeg",
       "image/jpg",
       "image/png",
@@ -110,29 +110,47 @@ admin.post("/upload", async (c) => {
       "image/pjpeg",
       "image/jfif",
     ];
-    const allowedExtensions = [
+    const allowedVideoMimeTypes = [
+      "video/mp4",
+      "video/webm",
+      "video/ogg",
+      "video/quicktime",
+      "video/x-msvideo",
+      "video/x-matroska",
+      "video/3gpp",
+      "video/m4v",
+    ];
+    const allowedImageExtensions = [
       ".jpg", ".jpeg", ".png", ".webp", ".gif", ".svg", ".avif", ".heic", ".heif", ".bmp", ".ico", ".jfif", ".pjpeg"
+    ];
+    const allowedVideoExtensions = [
+      ".mp4", ".webm", ".mov", ".avi", ".mkv", ".ogv", ".3gp", ".m4v"
     ];
 
     const fileType = file.type ? file.type.toLowerCase() : "";
     const ext = file.name ? file.name.substring(file.name.lastIndexOf(".")).toLowerCase() : "";
 
-    const isImageMime = fileType.startsWith("image/") || allowedMimeTypes.includes(fileType);
-    const isImageExt = allowedExtensions.includes(ext);
+    const isImageMime = fileType.startsWith("image/") || allowedImageMimeTypes.includes(fileType);
+    const isImageExt = allowedImageExtensions.includes(ext);
+    const isVideoMime = fileType.startsWith("video/") || allowedVideoMimeTypes.includes(fileType);
+    const isVideoExt = allowedVideoExtensions.includes(ext);
 
-    if (!isImageMime && !isImageExt) {
+    const isImage = isImageMime || isImageExt;
+    const isVideo = isVideoMime || isVideoExt;
+
+    if (!isImage && !isVideo) {
       console.warn(`⚠️ [Upload] Invalid file type: type="${file.type}", ext="${ext}"`);
-      return c.json({ error: `Tipe file tidak valid (${file.type || ext}). Hanya foto/gambar yang diperbolehkan.` }, 400);
+      return c.json({ error: `Tipe file tidak valid (${file.type || ext}). Hanya gambar dan video yang diperbolehkan.` }, 400);
     }
 
-    const maxSize = 10 * 1024 * 1024; // 10MB
+    const maxSize = isVideo ? 50 * 1024 * 1024 : 10 * 1024 * 1024; // 50MB for video, 10MB for image
     if (file.size > maxSize) {
       console.warn(`⚠️ [Upload] File too large: ${file.size} bytes`);
-      return c.json({ error: "Ukuran foto terlalu besar. Maksimal 10MB." }, 400);
+      return c.json({ error: `Ukuran file terlalu besar. Maksimal ${isVideo ? "50MB untuk video" : "10MB untuk foto"}.` }, 400);
     }
 
     const buffer = await file.arrayBuffer();
-    const mime = fileType || "image/jpeg";
+    const mime = fileType || (isVideo ? "video/mp4" : "image/jpeg");
     const base64Data = Buffer.from(buffer).toString("base64");
     const dataURI = `data:${mime};base64,${base64Data}`;
 
@@ -145,6 +163,7 @@ admin.post("/upload", async (c) => {
         console.log("📸 [Upload] Uploading to Cloudinary...");
         const result = await cloudinary.uploader.upload(dataURI, {
           folder: "paradise_community",
+          resource_type: "auto",
         });
         if (result && result.secure_url) {
           console.log("✅ [Upload] Cloudinary upload successful:", result.secure_url);
@@ -160,7 +179,7 @@ admin.post("/upload", async (c) => {
   } catch (error: any) {
     console.error("❌ [Upload] Upload error details:", error);
     return c.json(
-      { error: error?.message || "Gagal mengunggah foto" },
+      { error: error?.message || "Gagal mengunggah file" },
       500
     );
   }

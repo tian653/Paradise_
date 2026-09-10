@@ -33,6 +33,7 @@ const createTables = async () => {
     CREATE TABLE IF NOT EXISTS gallery (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       image_url TEXT NOT NULL,
+      type TEXT NOT NULL DEFAULT 'image',
       caption TEXT,
       sort_order INTEGER NOT NULL DEFAULT 0,
       created_at TEXT NOT NULL DEFAULT (datetime('now'))
@@ -63,6 +64,14 @@ const createTables = async () => {
       created_at TEXT NOT NULL DEFAULT (datetime('now'))
     );
   `);
+
+  try {
+    await client.execute("ALTER TABLE gallery ADD COLUMN type TEXT NOT NULL DEFAULT 'image';");
+    console.log("✅ Added type column to gallery table");
+  } catch (err: any) {
+    // Column may already exist
+    console.log("ℹ️ Note on gallery.type column:", err?.message || err);
+  }
 
   console.log("✅ Tables created successfully");
 };
