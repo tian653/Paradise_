@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { Upload, Save } from "lucide-react";
+import { Upload, Save, Info } from "lucide-react";
 import toast from "react-hot-toast";
 import { adminApi } from "../../lib/api";
 import type { SiteSettings } from "../../lib/types";
@@ -12,13 +12,12 @@ export default function AdminProfilePage() {
   const [saving, setSaving] = useState(false);
   const [cropState, setCropState] = useState<{
     files: File[];
-    field: "logoUrl" | "heroImageUrl";
+    field: "logoUrl";
     aspect: AspectRatioOption;
     title: string;
   } | null>(null);
 
   const logoInputRef = useRef<HTMLInputElement>(null);
-  const heroInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     adminApi
@@ -51,15 +50,15 @@ export default function AdminProfilePage() {
 
   const handleSelectFile = (
     e: React.ChangeEvent<HTMLInputElement>,
-    field: "logoUrl" | "heroImageUrl"
+    field: "logoUrl"
   ) => {
     const file = e.target.files?.[0];
     if (!file) return;
     setCropState({
       files: [file],
       field,
-      aspect: field === "logoUrl" ? "1:1" : "16:9",
-      title: field === "logoUrl" ? "Potong Logo Komunitas" : "Potong Foto Hero",
+      aspect: "1:1",
+      title: "Potong Logo Komunitas",
     });
     e.target.value = "";
   };
@@ -110,69 +109,33 @@ export default function AdminProfilePage() {
         </button>
       </div>
 
-      <div className={styles.gridTwo}>
-        {/* Logo upload */}
-        <div className={styles.card}>
-          <h3 className={styles.cardTitle}>Logo Komunitas</h3>
-          <div className={styles.uploadWrap}>
-            {profile.logoUrl ? (
-              <img src={profile.logoUrl} alt="Logo" className={styles.logoPreview} />
-            ) : (
-              <div className={styles.uploadPlaceholder}>
-                <Upload size={24} />
-                <span>Belum ada logo</span>
-              </div>
-            )}
-            <button
-              className="btn btn-outline btn-sm"
-              onClick={() => logoInputRef.current?.click()}
-              id="profile-upload-logo"
-            >
-              <Upload size={14} />
-              Upload Logo
-            </button>
-            <input
-              ref={logoInputRef}
-              type="file"
-              accept="image/*"
-              style={{ display: "none" }}
-              onChange={(e) => handleSelectFile(e, "logoUrl")}
-            />
-          </div>
-        </div>
-
-        {/* Hero image upload */}
-        <div className={styles.card}>
-          <h3 className={styles.cardTitle}>Foto Hero (Background)</h3>
-          <div className={styles.uploadWrap}>
-            {profile.heroImageUrl ? (
-              <img
-                src={profile.heroImageUrl}
-                alt="Hero"
-                className={styles.heroPreview}
-              />
-            ) : (
-              <div className={styles.uploadPlaceholder}>
-                <Upload size={24} />
-                <span>Belum ada foto hero</span>
-              </div>
-            )}
-            <button
-              className="btn btn-outline btn-sm"
-              onClick={() => heroInputRef.current?.click()}
-              id="profile-upload-hero"
-            >
-              <Upload size={14} />
-              Upload Foto Hero
-            </button>
-            <input
-              ref={heroInputRef}
-              type="file"
-              accept="image/*"
-              style={{ display: "none" }}
-              onChange={(e) => handleSelectFile(e, "heroImageUrl")}
-            />
-          </div>
+      {/* Logo Upload */}
+      <div className={styles.card}>
+        <h3 className={styles.cardTitle}>Logo Komunitas</h3>
+        <div className={styles.uploadWrap}>
+          {profile.logoUrl ? (
+            <img src={profile.logoUrl} alt="Logo" className={styles.logoPreview} />
+          ) : (
+            <div className={styles.uploadPlaceholder}>
+              <Upload size={24} />
+              <span>Belum ada logo</span>
+            </div>
+          )}
+          <button
+            className="btn btn-outline btn-sm"
+            onClick={() => logoInputRef.current?.click()}
+            id="profile-upload-logo"
+          >
+            <Upload size={14} />
+            Upload Logo
+          </button>
+          <input
+            ref={logoInputRef}
+            type="file"
+            accept="image/*"
+            style={{ display: "none" }}
+            onChange={(e) => handleSelectFile(e, "logoUrl")}
+          />
         </div>
       </div>
 
@@ -204,52 +167,47 @@ export default function AdminProfilePage() {
         </div>
 
         <div className="form-group">
-          <label className="form-label">Deskripsi Singkat</label>
+          <label className="form-label">Sejarah Singkat</label>
           <textarea
             name="shortDescription"
             className="form-textarea"
             value={profile.shortDescription || ""}
             onChange={handleChange}
-            placeholder="Deskripsi singkat yang muncul di hero section"
+            placeholder="Deskripsi singkat yang muncul di hero section (jika sejarah tidak diisi)"
             rows={3}
             id="profile-short-description"
           />
+          <span className="form-hint">
+            <Info size={12} style={{ display: "inline", marginRight: 4 }} />
+            Ditampilkan di hero section sebagai fallback jika kolom Sejarah kosong
+          </span>
         </div>
       </div>
 
-      {/* About */}
+      {/* History */}
       <div className={styles.card}>
-        <h3 className={styles.cardTitle}>Tentang Paradise</h3>
+        <h3 className={styles.cardTitle}>Sejarah</h3>
         <div className="form-group">
-          <label className="form-label">Deskripsi Lengkap</label>
-          <textarea
-            name="about"
-            className="form-textarea"
-            value={profile.about || ""}
-            onChange={handleChange}
-            placeholder="Tulis deskripsi lengkap komunitas..."
-            rows={6}
-            id="profile-about"
-          />
-          <span className="form-hint">Pisahkan paragraf dengan baris kosong</span>
-        </div>
-        <div className="form-group">
-          <label className="form-label">Sejarah</label>
+          <label className="form-label">Sejarah Komunitas</label>
           <textarea
             name="history"
             className="form-textarea"
             value={profile.history || ""}
             onChange={handleChange}
-            placeholder="Tulis sejarah komunitas..."
+            placeholder="Tulis sejarah berdirinya komunitas Paradise..."
             rows={6}
             id="profile-history"
           />
+          <span className="form-hint">
+            <Info size={12} style={{ display: "inline", marginRight: 4 }} />
+            Ditampilkan sebagai teks utama di hero section
+          </span>
         </div>
       </div>
 
       {/* Vision & Mission */}
       <div className={styles.card}>
-        <h3 className={styles.cardTitle}>Visi & Misi</h3>
+        <h3 className={styles.cardTitle}>Visi &amp; Misi</h3>
         <div className="form-group">
           <label className="form-label">Visi</label>
           <textarea
@@ -261,6 +219,10 @@ export default function AdminProfilePage() {
             rows={3}
             id="profile-vision"
           />
+          <span className="form-hint">
+            <Info size={12} style={{ display: "inline", marginRight: 4 }} />
+            Ditampilkan di section About Us
+          </span>
         </div>
         <div className="form-group">
           <label className="form-label">Misi</label>
@@ -269,12 +231,13 @@ export default function AdminProfilePage() {
             className="form-textarea"
             value={profile.mission || ""}
             onChange={handleChange}
-            placeholder="Tulis tiap poin misi di baris baru. Contoh:&#10;1. Poin misi pertama&#10;2. Poin misi kedua"
+            placeholder={"Tulis tiap poin misi di baris baru. Contoh:\n1. Poin misi pertama\n2. Poin misi kedua"}
             rows={8}
             id="profile-mission"
           />
           <span className="form-hint">
-            Tulis tiap poin di baris baru. Format: "1. Poin misi"
+            <Info size={12} style={{ display: "inline", marginRight: 4 }} />
+            Tulis tiap poin di baris baru. Format: "1. Poin misi" — ditampilkan di section About Us
           </span>
         </div>
       </div>
