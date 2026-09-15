@@ -73,6 +73,14 @@ const createTables = async () => {
     console.log("ℹ️ Note on gallery.type column:", err?.message || err);
   }
 
+  try {
+    await client.execute("ALTER TABLE contact ADD COLUMN address TEXT;");
+    console.log("✅ Added address column to contact table");
+  } catch (err: any) {
+    // Column may already exist
+    console.log("ℹ️ Note on contact.address column:", err?.message || err);
+  }
+
   console.log("✅ Tables created successfully");
 };
 
