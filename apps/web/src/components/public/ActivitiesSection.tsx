@@ -70,10 +70,6 @@ export default function ActivitiesSection({ activities }: ActivitiesSectionProps
         <div className="section-header">
           <div className="section-label">Activities</div>
           <h2 className="section-title">What We Do</h2>
-          <div className="divider" />
-          <p className="section-subtitle">
-            Various activities that strengthen our bonds and encourage mutual growth
-          </p>
         </div>
 
         {activities.length === 0 ? (

@@ -24,7 +24,7 @@
   height: 100%;
   object-fit: cover;
   object-position: center;
-  transition: opacity 0.4s ease-out;
+  transition: opacity 1.5s ease-in-out;
 }
 
 .imgHidden {
@@ -41,8 +41,8 @@
   background: linear-gradient(
     180deg,
     rgba(15, 23, 42, 0.65) 0%,
-    rgba(15, 23, 42, 0.45) 45%,
-    rgba(15, 23, 42, 0.8) 80%,
+    rgba(15, 23, 42, 0.3) 45%,
+    rgba(15, 23, 42, 0.85) 90%,
     var(--color-bg) 100%
   );
   pointer-events: none;

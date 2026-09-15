@@ -28,42 +28,49 @@ export default function HeroSection({ profile }: HeroSectionProps) {
   const DEFAULT_HERO_IMAGE =
     "https://res.cloudinary.com/tmndf3jh/image/upload/v1788935209/paradise_community/kou4tdutrjn39jwwzgpv.jpg";
 
-  const customHeroUrl =
+  // The 3 hero photos from assets
+  const HERO_IMAGES = [
+    "/hero-bg.jpg",
+    "/hero-bg.png",
+    "/hero-bg.webp",
+  ];
+
+  if (
     profile?.heroImageUrl &&
     profile.heroImageUrl.trim().length > 5 &&
-    profile.heroImageUrl !== "/hero-bg.webp" &&
-    profile.heroImageUrl !== "/hero-bg.png"
-      ? profile.heroImageUrl
-      : DEFAULT_HERO_IMAGE;
+    !HERO_IMAGES.includes(profile.heroImageUrl)
+  ) {
+    HERO_IMAGES.unshift(profile.heroImageUrl); // custom image first
+  }
 
-  const bgImageUrl = customHeroUrl;
+  const [currentImgIndex, setCurrentImgIndex] = useState(0);
 
   useEffect(() => {
-    if (imgRef.current && imgRef.current.complete) {
-      setCustomImgLoaded(true);
-    }
-  }, [bgImageUrl]);
+    const timer = setInterval(() => {
+      setCurrentImgIndex((prev) => (prev + 1) % HERO_IMAGES.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [HERO_IMAGES.length]);
 
   const taglineText =
     profile?.tagline && profile.tagline !== "/" ? profile.tagline : "Dairi Horas Njuah Njuah";
 
   return (
     <section id="home" className={styles.hero}>
-      {/* Background - Clean background without template flash */}
+      {/* Background Slider */}
       <div className={styles.heroBg}>
-        {bgImageUrl ? (
+        {HERO_IMAGES.map((url, idx) => (
           <img
-            ref={imgRef}
-            src={bgImageUrl}
+            key={url}
+            src={url}
             alt=""
             className={`${styles.heroBgImg} ${
-              customImgLoaded ? styles.imgVisible : styles.imgHidden
+              idx === currentImgIndex ? styles.imgVisible : styles.imgHidden
             }`}
-            loading="eager"
+            loading={idx === 0 ? "eager" : "lazy"}
             decoding="async"
-            onLoad={() => setCustomImgLoaded(true)}
           />
-        ) : null}
+        ))}
         <div className={styles.overlay} />
       </div>
 
@@ -79,9 +86,7 @@ export default function HeroSection({ profile }: HeroSectionProps) {
         </h1>
 
         <p className={styles.tagline}>
-          <span className={styles.taglineDecor} />
           <span>{taglineText}</span>
-          <span className={styles.taglineDecor} />
         </p>
 
         <p className={styles.desc}>
@@ -95,17 +100,8 @@ export default function HeroSection({ profile }: HeroSectionProps) {
             onClick={scrollToAbout}
             id="hero-btn-about"
           >
-            <span>About Us</span>
+            <span>Explore Paradise</span>
             <ArrowRight size={18} />
-          </button>
-
-          <button
-            className={styles.secondaryBtn}
-            onClick={scrollToActivities}
-            id="hero-btn-activities"
-          >
-            <span>Our Activities</span>
-            <ChevronDown size={18} />
           </button>
         </div>
       </div>

@@ -102,18 +102,12 @@ export default function GallerySection({ gallery }: GallerySectionProps) {
   useEffect(() => {
     if (!isLightboxOpen) return;
 
-    const scrollY = window.scrollY;
-    document.body.style.position = "fixed";
-    document.body.style.top = `-${scrollY}px`;
-    document.body.style.width = "100%";
+    // Use a simpler approach to prevent scroll jump
+    const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
 
     return () => {
-      document.body.style.position = "";
-      document.body.style.top = "";
-      document.body.style.width = "";
-      document.body.style.overflow = "";
-      window.scrollTo(0, scrollY);
+      document.body.style.overflow = originalOverflow;
     };
   }, [isLightboxOpen]);
 
@@ -127,8 +121,8 @@ export default function GallerySection({ gallery }: GallerySectionProps) {
     if (touchStartX.current === null || touchStartY.current === null) return;
     const dx = e.changedTouches[0].clientX - touchStartX.current;
     const dy = e.changedTouches[0].clientY - touchStartY.current;
-    // Only swipe horizontally if it's more horizontal than vertical
-    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+    // Make horizontal swipe more sensitive and tolerant of vertical drift
+    if (Math.abs(dx) > 35 && Math.abs(dx) > Math.abs(dy) * 0.6) {
       if (dx < 0) handleNext();
       else handlePrev();
     }
