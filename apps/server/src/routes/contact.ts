@@ -20,7 +20,7 @@ contactRouter.get("/", async (c) => {
 // PUT /api/admin/contact
 contactRouter.put("/", async (c) => {
   const body = await c.req.json();
-  const { instagram, whatsapp, email, additional } = body;
+  const { instagram, whatsapp, email, address, additional } = body;
 
   const existing = (await db.select().from(contact))[0];
 
@@ -32,6 +32,7 @@ contactRouter.put("/", async (c) => {
         instagram: instagram ?? null,
         whatsapp: whatsapp ?? null,
         email: email ?? null,
+        address: address ?? "Kota Semarang, Jawa Tengah",
         additional: additionalStr,
       });
   } else {
@@ -40,6 +41,7 @@ contactRouter.put("/", async (c) => {
         ...(instagram !== undefined && { instagram }),
         ...(whatsapp !== undefined && { whatsapp }),
         ...(email !== undefined && { email }),
+        ...(address !== undefined && { address }),
         ...(additional !== undefined && { additional: additionalStr }),
         updatedAt: new Date().toISOString(),
       })

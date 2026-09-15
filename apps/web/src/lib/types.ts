@@ -47,6 +47,7 @@ export interface Contact {
   instagram: string | null;
   whatsapp: string | null;
   email: string | null;
+  address: string | null;
   additional: AdditionalLink[];
   updatedAt: string;
 }

@@ -13,11 +13,11 @@ interface FooterProps {
 export default function Footer({
   communityName = "Paradise",
   tagline = "Dairi Horas Njuah Njuah",
-  shortDescription = "Wadah mahasiswa asal Kabupaten Dairi di Kota Semarang untuk membangun kebersamaan, solidaritas, dan kekeluargaan.",
   logoUrl,
   contact,
 }: FooterProps) {
   const year = new Date().getFullYear();
+  const addressText = contact?.address || "Kota Semarang, Jawa Tengah";
 
   return (
     <footer className={styles.footer}>
@@ -39,12 +39,15 @@ export default function Footer({
                 {tagline && <p className={styles.tagline}>{tagline}</p>}
               </div>
             </div>
-            {shortDescription && (
-              <p className={styles.desc}>{shortDescription}</p>
+            {addressText && (
+              <p className={styles.desc} style={{ display: "flex", gap: "0.5rem", alignItems: "flex-start" }}>
+                <MapPin size={16} style={{ flexShrink: 0, marginTop: "0.15rem" }} />
+                <span>{addressText}</span>
+              </p>
             )}
 
             {/* Social icons */}
-            <div className={styles.socials}>
+            <div className={styles.socials} style={{ marginTop: "0.5rem" }}>
               {contact?.instagram && (
                 <a
                   href={`https://instagram.com/${contact.instagram.replace(/^@/, "")}`}
@@ -134,7 +137,7 @@ export default function Footer({
               )}
               <li className={styles.contactItem}>
                 <MapPin size={15} className={styles.contactIcon} />
-                <span className={styles.contactText}>Kota Semarang, Jawa Tengah</span>
+                <span className={styles.contactText}>{addressText}</span>
               </li>
               {contact?.additional?.map((link) => (
                 <li key={link.url} className={styles.contactItem}>

@@ -94,17 +94,32 @@ export default function AdminContactPage() {
             <span className="form-hint">Format: 628xxxxxxxxx (tanpa + atau spasi)</span>
           </div>
         </div>
-        <div className="form-group">
-          <label className="form-label">Email</label>
-          <input
-            name="email"
-            type="email"
-            className="form-input"
-            value={contact?.email ?? ""}
-            onChange={handleChange}
-            placeholder="paradisecommunity@gmail.com"
-            id="contact-email"
-          />
+        <div className={styles.gridTwo}>
+          <div className="form-group">
+            <label className="form-label">Email</label>
+            <input
+              name="email"
+              type="email"
+              className="form-input"
+              value={contact?.email ?? ""}
+              onChange={handleChange}
+              placeholder="paradisecommunity@gmail.com"
+              id="contact-email"
+            />
+          </div>
+          <div className="form-group">
+            <label className="form-label">Alamat Lengkap</label>
+            <input
+              name="address"
+              type="text"
+              className="form-input"
+              value={contact?.address ?? ""}
+              onChange={handleChange}
+              placeholder="Kota Semarang, Jawa Tengah"
+              id="contact-address"
+            />
+            <span className="form-hint">Akan ditampilkan di bagian bawah footer</span>
+          </div>
         </div>
       </div>
 
