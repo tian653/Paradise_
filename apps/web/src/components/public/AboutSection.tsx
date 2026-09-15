@@ -6,12 +6,6 @@ interface AboutSectionProps {
 }
 
 export default function AboutSection({ profile }: AboutSectionProps) {
-  const aboutText =
-    profile?.about ||
-    "Paradise Community adalah wadah mahasiswa yang berkomitmen membangun persaudaraan, kreativitas, dan pengembangan diri bersama.";
-  const historyText =
-    profile?.history ||
-    "Didirikan sejak tahun 2013, Paradise berawal dari perkumpulan mahasiswa yang berinisiatif menciptakan ruang berkembang bersama.";
   const visionText =
     profile?.vision ||
     "Menjadi komunitas mahasiswa yang unggul, berkarakter, berbudaya, dan berdampak positif bagi masyarakat.";
@@ -29,31 +23,8 @@ export default function AboutSection({ profile }: AboutSectionProps) {
         {/* Section Header */}
         <div className="section-header">
           <div className="section-label">About Us</div>
-          <h2 className="section-title">Get to Know Paradise</h2>
+          <h2 className="section-title">Vision & Mission</h2>
           <div className="divider" />
-        </div>
-
-        {/* About Grid */}
-        <div className={styles.grid}>
-          {/* About Text */}
-          <div className={styles.aboutText}>
-            <h3 className={styles.subTitle}>Siapa Kami</h3>
-            <div className={styles.textBlock}>
-              {aboutText.split("\n\n").map((para, i) => (
-                <p key={i}>{para}</p>
-              ))}
-            </div>
-          </div>
-
-          {/* History */}
-          <div className={styles.card}>
-            <h3 className={styles.cardTitle}>Sejarah</h3>
-            <div className={styles.cardText}>
-              {historyText.split("\n\n").map((para, i) => (
-                <p key={i}>{para}</p>
-              ))}
-            </div>
-          </div>
         </div>
 
         {/* Vision & Mission */}

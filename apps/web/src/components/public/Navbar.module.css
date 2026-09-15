@@ -100,9 +100,9 @@
 }
 
 .navbar:not(.scrolled) .logoEst {
-  color: #ffffff;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
-  opacity: 0.85;
+  color: var(--color-text-primary);
+  text-shadow: none;
+  opacity: 0.75;
 }
 
 /* ─── Nav Links ─── */

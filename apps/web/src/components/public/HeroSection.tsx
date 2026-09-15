@@ -34,7 +34,6 @@ export default function HeroSection({ profile }: HeroSectionProps) {
           </div>
 
           <h1 className={styles.title}>
-            <span className={styles.titleSub}>KOMUNITAS :</span>
             <span className={styles.titleMain}>{communityName}</span>
           </h1>
 
