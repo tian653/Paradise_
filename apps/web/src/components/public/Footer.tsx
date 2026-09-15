@@ -156,7 +156,6 @@ export default function Footer({
         {/* ── Bottom bar ── */}
         <div className={styles.bottom}>
           <p>© {year} {communityName} Community. All rights reserved.</p>
-          <p className={styles.bottomRight}>EST. 2013 · Semarang, Jawa Tengah</p>
         </div>
       </div>
     </footer>
