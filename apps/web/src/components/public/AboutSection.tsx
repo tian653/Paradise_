@@ -28,8 +28,8 @@ export default function AboutSection({ profile }: AboutSectionProps) {
       <div className="container">
         {/* Section Header */}
         <div className="section-header">
-          <div className="section-label">About Us</div>
-          <h2 className="section-title">Get to Know Paradise</h2>
+          <div className="section-label">Tentang Kami</div>
+          <h2 className="section-title">Mengenal Paradise</h2>
           <div className="divider" />
         </div>
 
@@ -37,7 +37,7 @@ export default function AboutSection({ profile }: AboutSectionProps) {
         <div className={styles.grid}>
           {/* About Text */}
           <div className={styles.aboutText}>
-            <h3 className={styles.subTitle}>Who We Are</h3>
+            <h3 className={styles.subTitle}>Siapa Kami</h3>
             <div className={styles.textBlock}>
               {aboutText.split("\n\n").map((para, i) => (
                 <p key={i}>{para}</p>
@@ -47,7 +47,7 @@ export default function AboutSection({ profile }: AboutSectionProps) {
 
           {/* History */}
           <div className={styles.card}>
-            <h3 className={styles.cardTitle}>History</h3>
+            <h3 className={styles.cardTitle}>Sejarah</h3>
             <div className={styles.cardText}>
               {historyText.split("\n\n").map((para, i) => (
                 <p key={i}>{para}</p>
@@ -60,13 +60,13 @@ export default function AboutSection({ profile }: AboutSectionProps) {
         <div className={styles.vmGrid}>
           {/* Vision */}
           <div className={styles.vmCard}>
-            <h3 className={styles.vmTitle}>Vision</h3>
+            <h3 className={styles.vmTitle}>Visi</h3>
             <p className={styles.vmText}>{visionText}</p>
           </div>
 
           {/* Mission */}
           <div className={`${styles.vmCard} ${styles.missionCard}`}>
-            <h3 className={styles.vmTitle}>Mission</h3>
+            <h3 className={styles.vmTitle}>Misi</h3>
             <ul className={styles.missionList}>
               {missionItems.map((item, i) => (
                 <li key={i} className={styles.missionItem}>

@@ -137,16 +137,16 @@ export default function GallerySection({ gallery }: GallerySectionProps) {
     <section id="galeri" className={`section ${styles.section}`}>
       <div className="container">
         <div className="section-header">
-          <div className="section-label">Gallery</div>
-          <h2 className="section-title">Our Moments</h2>
+          <div className="section-label">Galeri</div>
+          <h2 className="section-title">Momen Kami</h2>
           <div className="divider" />
           <p className="section-subtitle">
-            A collection of photos and videos capturing the stories and memories of Paradise
+            Koleksi foto dan video kenangan Paradise
           </p>
         </div>
 
         {gallery.length === 0 ? (
-          <p className="text-center text-muted">Gallery collection is empty.</p>
+          <p className="text-center text-muted">Koleksi galeri masih kosong.</p>
         ) : (
           <div className={styles.grid}>
             {gallery.map((item, index) => (

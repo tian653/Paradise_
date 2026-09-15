@@ -71,16 +71,16 @@ export default function ContactSection({ contact }: ContactSectionProps) {
     <section id="kontak" className={`section ${styles.section}`}>
       <div className="container">
         <div className="section-header">
-          <div className="section-label">Contact</div>
-          <h2 className="section-title">Get in Touch</h2>
+          <div className="section-label">Kontak</div>
+          <h2 className="section-title">Hubungi Kami</h2>
           <div className="divider" />
           <p className="section-subtitle">
-            Want to know more? Feel free to reach out to us.
+            Ingin tahu lebih banyak? Silakan hubungi kami.
           </p>
         </div>
 
         {items.length === 0 ? (
-          <p className="text-center text-muted">Contact information is not available yet.</p>
+          <p className="text-center text-muted">Informasi kontak belum tersedia.</p>
         ) : (
           <div className={styles.cards}>
             {items.map((item) => (

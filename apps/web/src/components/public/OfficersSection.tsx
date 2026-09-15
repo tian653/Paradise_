@@ -64,16 +64,16 @@ export default function OfficersSection({ officers }: OfficersSectionProps) {
     <section id="kepengurusan" className={`section ${styles.section}`}>
       <div className="container">
         <div className="section-header">
-          <div className="section-label">Team</div>
-          <h2 className="section-title">Paradise Team</h2>
+          <div className="section-label">Pengurus</div>
+          <h2 className="section-title">Tim Paradise</h2>
           <div className="divider" />
           <p className="section-subtitle">
-            Meet the people behind Paradise
+            Struktur dan anggota pengurus Paradise
           </p>
         </div>
 
         {officers.length === 0 ? (
-          <p className="text-center text-muted">No team members data available yet.</p>
+          <p className="text-center text-muted">Belum ada data anggota pengurus.</p>
         ) : (
           <div className={styles.grid}>
             {officers.map((officer, index) => (
