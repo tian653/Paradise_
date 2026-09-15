@@ -167,19 +167,19 @@ export default function AdminProfilePage() {
         </div>
 
         <div className="form-group">
-          <label className="form-label">Sejarah Singkat</label>
+          <label className="form-label">Deskripsi Singkat (Footer)</label>
           <textarea
             name="shortDescription"
             className="form-textarea"
             value={profile.shortDescription || ""}
             onChange={handleChange}
-            placeholder="Deskripsi singkat yang muncul di hero section (jika sejarah tidak diisi)"
+            placeholder="Deskripsi singkat tentang komunitas..."
             rows={3}
             id="profile-short-description"
           />
           <span className="form-hint">
             <Info size={12} style={{ display: "inline", marginRight: 4 }} />
-            Ditampilkan di hero section sebagai fallback jika kolom Sejarah kosong
+            Ditampilkan di bagian bawah website (Footer) dan sebagai fallback di Hero section.
           </span>
         </div>
       </div>
