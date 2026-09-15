@@ -6,20 +6,36 @@ import {
   Users,
   Phone,
   User,
-  TrendingUp,
-  ArrowRight,
-  LayoutDashboard,
+  ArrowUpRight,
+  Sparkles,
+  CheckCircle2,
+  ExternalLink,
 } from "lucide-react";
 import { adminApi } from "../../lib/api";
 import styles from "./DashboardPage.module.css";
 
+function useClock() {
+  const [time, setTime] = useState(new Date());
+  useEffect(() => {
+    const id = setInterval(() => setTime(new Date()), 1000);
+    return () => clearInterval(id);
+  }, []);
+  return time;
+}
+
+function getGreeting() {
+  const h = new Date().getHours();
+  if (h < 11) return "Selamat Pagi";
+  if (h < 15) return "Selamat Siang";
+  if (h < 18) return "Selamat Sore";
+  return "Selamat Malam";
+}
+
 export default function DashboardPage() {
-  const [stats, setStats] = useState({
-    activities: 0,
-    gallery: 0,
-    officers: 0,
-  });
+  const now = useClock();
+  const [stats, setStats] = useState({ activities: 0, gallery: 0, officers: 0 });
   const [loading, setLoading] = useState(true);
+  const username = localStorage.getItem("paradise_username") || "Admin";
 
   useEffect(() => {
     Promise.all([
@@ -37,14 +53,26 @@ export default function DashboardPage() {
       .finally(() => setLoading(false));
   }, []);
 
+  const timeStr = now.toLocaleTimeString("id-ID", {
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  });
+  const dateStr = now.toLocaleDateString("id-ID", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+
   const statCards = [
     {
       label: "Kegiatan",
       value: stats.activities,
       icon: Calendar,
-      color: "#f59e0b",
-      bg: "rgba(245,158,11,0.1)",
-      desc: "Total kegiatan terdaftar",
+      color: "var(--color-gold, #f59e0b)",
+      bg: "rgba(245,158,11,0.12)",
+      desc: "Program terdaftar",
       link: "/admin/activities",
     },
     {
@@ -52,8 +80,8 @@ export default function DashboardPage() {
       value: stats.gallery,
       icon: Images,
       color: "#60a5fa",
-      bg: "rgba(96,165,250,0.1)",
-      desc: "Foto yang diunggah",
+      bg: "rgba(96,165,250,0.12)",
+      desc: "Foto diunggah",
       link: "/admin/gallery",
     },
     {
@@ -61,34 +89,86 @@ export default function DashboardPage() {
       value: stats.officers,
       icon: Users,
       color: "#34d399",
-      bg: "rgba(52,211,153,0.1)",
-      desc: "Anggota kepengurusan",
+      bg: "rgba(52,211,153,0.12)",
+      desc: "Anggota aktif",
       link: "/admin/officers",
     },
   ];
 
   const quickActions = [
-    { label: "Edit Profil", icon: User, to: "/admin/profile", desc: "Nama, tagline, visi, misi" },
-    { label: "Tambah Kegiatan", icon: Calendar, to: "/admin/activities", desc: "Buat kegiatan baru" },
-    { label: "Upload Foto", icon: Images, to: "/admin/gallery", desc: "Tambah ke galeri" },
-    { label: "Data Pengurus", icon: Users, to: "/admin/officers", desc: "Kelola kepengurusan" },
-    { label: "Update Kontak", icon: Phone, to: "/admin/contact", desc: "Instagram, WhatsApp, Email" },
+    {
+      label: "Profil Komunitas",
+      icon: User,
+      to: "/admin/profile",
+      desc: "Logo, tagline, sejarah, visi & misi",
+      color: "var(--color-gold, #f59e0b)",
+    },
+    {
+      label: "Kegiatan",
+      icon: Calendar,
+      to: "/admin/activities",
+      desc: "Tambah atau kelola program kegiatan",
+      color: "#60a5fa",
+    },
+    {
+      label: "Galeri Foto",
+      icon: Images,
+      to: "/admin/gallery",
+      desc: "Upload dan atur foto komunitas",
+      color: "#f472b6",
+    },
+    {
+      label: "Kepengurusan",
+      icon: Users,
+      to: "/admin/officers",
+      desc: "Kelola daftar pengurus periode ini",
+      color: "#34d399",
+    },
+    {
+      label: "Informasi Kontak",
+      icon: Phone,
+      to: "/admin/contact",
+      desc: "Instagram, WhatsApp, Email, Alamat",
+      color: "#a78bfa",
+    },
+  ];
+
+  const tips = [
+    "Gunakan menu Profil untuk ubah nama, tagline, visi, misi, dan sejarah",
+    "Upload foto di Galeri agar website terlihat lebih hidup dan menarik",
+    "Pastikan kontak selalu diperbarui agar pengunjung bisa menghubungi kita",
+    "Tambahkan kegiatan terbaru agar website selalu fresh dan relevan",
   ];
 
   return (
     <div className={styles.page}>
-      {/* Header */}
-      <div className={styles.header}>
-        <div className={styles.headerIcon}>
-          <LayoutDashboard size={20} />
+
+      {/* ── Hero Greeting ─────────────────────────────────────────────── */}
+      <div className={styles.heroCard}>
+        <div className={styles.heroLeft}>
+          <div className={styles.heroGreeting}>
+            <Sparkles size={16} className={styles.heroSpark} />
+            <span>{getGreeting()}, {username}!</span>
+          </div>
+          <h1 className={styles.heroTitle}>Admin Panel <span className={styles.heroHighlight}>Paradise</span></h1>
+          <p className={styles.heroSub}>Kelola website komunitas dari sini. Semua perubahan langsung tampil di halaman publik.</p>
+          <a
+            href="/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.heroCta}
+          >
+            <ExternalLink size={14} />
+            Lihat Website
+          </a>
         </div>
-        <div>
-          <h1 className={styles.title}>Dashboard</h1>
-          <p className={styles.subtitle}>Selamat datang kembali di Admin Panel Paradise 👋</p>
+        <div className={styles.heroRight}>
+          <div className={styles.clock}>{timeStr}</div>
+          <div className={styles.clockDate}>{dateStr}</div>
         </div>
       </div>
 
-      {/* Stats */}
+      {/* ── Stats ─────────────────────────────────────────────────────── */}
       <div className={styles.statsGrid}>
         {statCards.map((stat) => (
           <NavLink key={stat.label} to={stat.link} className={styles.statCard}>
@@ -96,54 +176,61 @@ export default function DashboardPage() {
               <div className={styles.statIcon} style={{ background: stat.bg, color: stat.color }}>
                 <stat.icon size={22} />
               </div>
-              <TrendingUp size={14} className={styles.statTrend} />
+              <ArrowUpRight size={15} className={styles.statArrow} />
             </div>
-            <div className={styles.statValue}>
+            <div className={styles.statValue} style={{ color: loading ? "transparent" : undefined }}>
               {loading ? <span className={styles.skeleton} /> : stat.value}
             </div>
             <div className={styles.statLabel}>{stat.label}</div>
             <div className={styles.statDesc}>{stat.desc}</div>
+            <div className={styles.statBar}>
+              <div
+                className={styles.statBarFill}
+                style={{ width: loading ? "0%" : `${Math.min((stat.value / 20) * 100, 100)}%`, background: stat.color }}
+              />
+            </div>
           </NavLink>
         ))}
       </div>
 
-      {/* Quick Actions */}
+      {/* ── Quick Actions ──────────────────────────────────────────────── */}
       <div className={styles.section}>
         <div className={styles.sectionHeader}>
-          <h2 className={styles.sectionTitle}>Aksi Cepat</h2>
-          <p className={styles.sectionSub}>Pintasan menu yang sering digunakan</p>
+          <h2 className={styles.sectionTitle}>Kelola Website</h2>
+          <p className={styles.sectionSub}>Pilih bagian yang ingin diperbarui</p>
         </div>
         <div className={styles.actionsGrid}>
           {quickActions.map((action) => (
             <NavLink key={action.to} to={action.to} className={styles.actionCard}>
-              <div className={styles.actionIcon}>
-                <action.icon size={18} />
+              <div className={styles.actionIcon} style={{ background: `${action.color}18`, color: action.color }}>
+                <action.icon size={20} />
               </div>
               <div className={styles.actionInfo}>
                 <span className={styles.actionLabel}>{action.label}</span>
                 <span className={styles.actionDesc}>{action.desc}</span>
               </div>
-              <ArrowRight size={15} className={styles.actionArrow} />
+              <ArrowUpRight size={16} className={styles.actionArrow} />
             </NavLink>
           ))}
         </div>
       </div>
 
-      {/* Info Box */}
-      <div className={styles.infoBox}>
-        <div className={styles.infoHeader}>
-          <span className={styles.infoDot} />
-          <span className={styles.infoTitle}>Panduan Pengelolaan</span>
+      {/* ── Tips ──────────────────────────────────────────────────────── */}
+      <div className={styles.tipsBox}>
+        <div className={styles.tipsHeader}>
+          <span className={styles.tipsBadge}>Tips</span>
+          <span className={styles.tipsTitle}>Panduan Pengelolaan</span>
         </div>
-        <ul className={styles.infoList}>
-          <li>Gunakan menu <strong>Profil</strong> untuk mengubah nama, tagline, visi, misi, dan sejarah komunitas</li>
-          <li>Tambah atau edit kegiatan di menu <strong>Kegiatan</strong></li>
-          <li>Upload foto ke <strong>Galeri</strong> untuk ditampilkan di website</li>
-          <li>Kelola daftar pengurus di menu <strong>Kepengurusan</strong></li>
-          <li>Update link Instagram, WhatsApp, dan Email di menu <strong>Kontak</strong></li>
+        <ul className={styles.tipsList}>
+          {tips.map((tip) => (
+            <li key={tip} className={styles.tipsItem}>
+              <CheckCircle2 size={15} className={styles.tipsIcon} />
+              <span>{tip}</span>
+            </li>
+          ))}
         </ul>
       </div>
+
     </div>
   );
 }
-
