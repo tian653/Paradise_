@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, memo } from "react";
+import { useState, useEffect, useCallback, useRef, memo } from "react";
 import { X, ChevronLeft, ChevronRight, Video, Play } from "lucide-react";
 import styles from "./GallerySection.module.css";
 import type { GalleryItem } from "../../lib/types";
@@ -69,6 +69,10 @@ GalleryCard.displayName = "GalleryCard";
 export default function GallerySection({ gallery }: GallerySectionProps) {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
+  // Touch/swipe support
+  const touchStartX = useRef<number | null>(null);
+  const touchStartY = useRef<number | null>(null);
+
   const handlePrev = useCallback(() => {
     if (lightboxIndex === null || gallery.length <= 1) return;
     setLightboxIndex((prev) => (prev! > 0 ? prev! - 1 : gallery.length - 1));
@@ -79,19 +83,67 @@ export default function GallerySection({ gallery }: GallerySectionProps) {
     setLightboxIndex((prev) => (prev! < gallery.length - 1 ? prev! + 1 : 0));
   }, [lightboxIndex, gallery.length]);
 
+  const closeLightbox = useCallback(() => setLightboxIndex(null), []);
+
+  // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (lightboxIndex === null) return;
-      if (e.key === "Escape") setLightboxIndex(null);
+      if (e.key === "Escape") closeLightbox();
       if (e.key === "ArrowLeft") handlePrev();
       if (e.key === "ArrowRight") handleNext();
     };
-
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [lightboxIndex, handlePrev, handleNext]);
+  }, [lightboxIndex, handlePrev, handleNext, closeLightbox]);
+
+  // Lock body scroll when lightbox is open
+  useEffect(() => {
+    if (lightboxIndex !== null) {
+      const scrollY = window.scrollY;
+      document.body.style.position = "fixed";
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = "100%";
+      document.body.style.overflow = "hidden";
+    } else {
+      const scrollY = document.body.style.top;
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.width = "";
+      document.body.style.overflow = "";
+      if (scrollY) {
+        window.scrollTo(0, -parseInt(scrollY || "0", 10));
+      }
+    }
+    return () => {
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.width = "";
+      document.body.style.overflow = "";
+    };
+  }, [lightboxIndex]);
+
+  // Touch swipe handlers
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null || touchStartY.current === null) return;
+    const dx = e.changedTouches[0].clientX - touchStartX.current;
+    const dy = e.changedTouches[0].clientY - touchStartY.current;
+    // Only swipe horizontally if it's more horizontal than vertical
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+      if (dx < 0) handleNext();
+      else handlePrev();
+    }
+    touchStartX.current = null;
+    touchStartY.current = null;
+  };
 
   const currentItem = lightboxIndex !== null ? gallery[lightboxIndex] : null;
+  const isCurrentVideo = currentItem ? isVideoItem(currentItem) : false;
 
   return (
     <section id="galeri" className={`section ${styles.section}`}>
@@ -125,78 +177,88 @@ export default function GallerySection({ gallery }: GallerySectionProps) {
       {currentItem && (
         <div
           className={styles.lightbox}
-          onClick={() => setLightboxIndex(null)}
+          onClick={closeLightbox}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
           role="dialog"
           aria-modal="true"
+          aria-label="Galeri foto"
           id="gallery-lightbox"
         >
+          {/* Close button */}
           <button
             className={styles.lightboxClose}
-            onClick={() => setLightboxIndex(null)}
+            onClick={closeLightbox}
             aria-label="Tutup galeri"
             id="gallery-lightbox-close"
           >
-            <X size={22} />
+            <X size={20} />
           </button>
 
+          {/* Counter top */}
           {gallery.length > 1 && (
-            <>
-              <button
-                className={`${styles.navBtn} ${styles.prevBtn}`}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handlePrev();
-                }}
-                aria-label="Item sebelumnya"
-                id="gallery-lightbox-prev"
-              >
-                <ChevronLeft size={28} />
-              </button>
-
-              <button
-                className={`${styles.navBtn} ${styles.nextBtn}`}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleNext();
-                }}
-                aria-label="Item selanjutnya"
-                id="gallery-lightbox-next"
-              >
-                <ChevronRight size={28} />
-              </button>
-            </>
+            <div className={styles.counterTop}>
+              {lightboxIndex! + 1} / {gallery.length}
+            </div>
           )}
 
+          {/* Prev button */}
+          {gallery.length > 1 && (
+            <button
+              className={`${styles.navBtn} ${styles.prevBtn}`}
+              onClick={(e) => { e.stopPropagation(); handlePrev(); }}
+              aria-label="Item sebelumnya"
+              id="gallery-lightbox-prev"
+            >
+              <ChevronLeft size={24} />
+            </button>
+          )}
+
+          {/* Content */}
           <div
             className={styles.lightboxContent}
             onClick={(e) => e.stopPropagation()}
           >
-            {isVideoItem(currentItem) ? (
+            {isCurrentVideo ? (
               <video
+                key={currentItem.imageUrl}
                 src={currentItem.imageUrl}
                 controls
                 autoPlay
-                className={styles.lightboxImg}
-                style={{ maxHeight: "75vh", width: "auto" }}
+                playsInline
+                className={styles.lightboxMedia}
               />
             ) : (
               <img
+                key={currentItem.imageUrl}
                 src={currentItem.imageUrl}
                 alt={currentItem.caption ?? "Gallery photo"}
-                className={styles.lightboxImg}
+                className={styles.lightboxMedia}
               />
             )}
-            <div className={styles.lightboxMeta}>
-              {currentItem.caption && (
-                <p className={styles.lightboxCaption}>{currentItem.caption}</p>
-              )}
-              {gallery.length > 1 && (
-                <span className={styles.counter}>
-                  {lightboxIndex! + 1} / {gallery.length}
-                </span>
-              )}
-            </div>
+            {currentItem.caption && (
+              <p className={styles.lightboxCaption}>{currentItem.caption}</p>
+            )}
           </div>
+
+          {/* Next button */}
+          {gallery.length > 1 && (
+            <button
+              className={`${styles.navBtn} ${styles.nextBtn}`}
+              onClick={(e) => { e.stopPropagation(); handleNext(); }}
+              aria-label="Item selanjutnya"
+              id="gallery-lightbox-next"
+            >
+              <ChevronRight size={24} />
+            </button>
+          )}
+
+          {/* Swipe hint on mobile */}
+          {gallery.length > 1 && (
+            <div className={styles.swipeHint}>
+              Geser untuk navigasi
+            </div>
+          )}
         </div>
       )}
     </section>
