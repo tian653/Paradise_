@@ -1,16 +1,16 @@
 .hero {
   position: relative;
-  min-height: 88vh;
+  min-height: 82vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: calc(var(--navbar-height) + 2.5rem) 0 var(--space-4xl) 0;
+  padding: calc(var(--navbar-height) + 3rem) 0 var(--space-3xl) 0;
   background: var(--color-bg);
 }
 
 .inner {
   display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
+  grid-template-columns: 1.15fr 0.85fr;
   align-items: center;
   gap: 3.5rem;
   width: 100%;
@@ -54,7 +54,7 @@
 }
 
 .titleMain {
-  font-size: clamp(2.8rem, 6vw, 4.5rem);
+  font-size: clamp(3rem, 6.5vw, 4.75rem);
   font-weight: 800;
   color: var(--color-accent, #8B7355);
   letter-spacing: -0.02em;
@@ -74,7 +74,7 @@
   color: var(--color-text-secondary);
   line-height: 1.75;
   margin-bottom: 2rem;
-  max-width: 620px;
+  max-width: 640px;
 }
 
 .actions {
@@ -105,54 +105,29 @@
   color: #ffffff;
 }
 
-/* Right Logo Column */
+/* Right Logo Column (Centered Seamless Logo) */
 .logoCol {
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 100%;
 }
 
 .logoFrame {
-  width: 280px;
-  height: 280px;
+  width: 100%;
+  max-width: 360px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #ffffff;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-xl);
-  padding: 2rem;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+  padding: 1rem;
 }
 
 .logoImg {
-  max-width: 100%;
-  max-height: 100%;
+  width: 100%;
+  max-width: 340px;
+  max-height: 380px;
   object-fit: contain;
-}
-
-/* Scroll indicator */
-.scrollDown {
-  position: absolute;
-  bottom: 1.5rem;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: 1px solid var(--color-border);
-  background: #ffffff;
-  color: var(--color-text-secondary);
-  cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-}
-
-.scrollDown:hover {
-  border-color: var(--color-accent, #8B7355);
-  color: var(--color-accent, #8B7355);
+  filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.08));
 }
 
 /* Responsive */
@@ -173,8 +148,7 @@
   }
 
   .logoFrame {
-    width: 200px;
-    height: 200px;
-    padding: 1.5rem;
+    max-width: 240px;
+    padding: 0;
   }
 }

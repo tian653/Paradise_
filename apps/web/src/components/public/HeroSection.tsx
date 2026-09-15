@@ -1,4 +1,4 @@
-import { ArrowRight, ChevronDown } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import styles from "./HeroSection.module.css";
 import type { SiteSettings } from "../../lib/types";
 
@@ -17,7 +17,7 @@ export default function HeroSection({ profile }: HeroSectionProps) {
   const historyText =
     profile?.history ||
     profile?.shortDescription ||
-    "Persatuan Anak Rantau Dairi (PARADISE) di Kota Semarang didirikan sejak tahun 2013 sebagai wadah mahasiswa asal Kabupaten Dairi untuk mempererat persaudaraan, kebersamaan, dan pengembangan diri bersama.";
+    "PARADISE berawal dari semangat mahasiswa asal Kabupaten Dairi di Kota Semarang untuk membangun sebuah wadah kebersamaan dan kekeluargaan. Sejak berdiri, PARADISE terus berkembang sebagai tempat berkumpul, berorganisasi, dan mempererat hubungan antarmahasiswa Dairi sekaligus menjaga hubungan dengan daerah asal.";
 
   const logoUrl =
     profile?.logoUrl && profile.logoUrl.startsWith("http")
@@ -54,7 +54,7 @@ export default function HeroSection({ profile }: HeroSectionProps) {
           </div>
         </div>
 
-        {/* Right Side: Big Paradise Logo */}
+        {/* Right Side: Centered Seamless Logo */}
         <div className={styles.logoCol}>
           <div className={styles.logoFrame}>
             <img
@@ -68,16 +68,6 @@ export default function HeroSection({ profile }: HeroSectionProps) {
           </div>
         </div>
       </div>
-
-      {/* Scroll Down Button */}
-      <button
-        className={styles.scrollDown}
-        onClick={scrollToAbout}
-        aria-label="Scroll down"
-        id="hero-scroll-down"
-      >
-        <ChevronDown size={22} />
-      </button>
     </section>
   );
 }
