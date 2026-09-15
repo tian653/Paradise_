@@ -30,7 +30,7 @@ export default function HeroSection({ profile }: HeroSectionProps) {
         {/* Left Side: History & Intro */}
         <div className={styles.textContent}>
           <div className={styles.labelWrap}>
-            <span className={styles.label}>EST. 2013 · DAIRI SEMARANG</span>
+            <span className={styles.label}>DAIRI SEMARANG</span>
           </div>
 
           <h1 className={styles.title}>

@@ -54,10 +54,11 @@
 }
 
 .titleMain {
-  font-size: clamp(3rem, 6.5vw, 4.75rem);
+  font-size: clamp(3.2rem, 7vw, 5.25rem);
   font-weight: 800;
-  color: var(--color-accent, #8B7355);
-  letter-spacing: -0.02em;
+  color: var(--color-text-primary, #1c1c1c);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
   line-height: 1.05;
 }
 

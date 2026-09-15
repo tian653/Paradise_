@@ -75,7 +75,6 @@ export default function Navbar({ communityName = "Paradise", logoUrl }: NavbarPr
           )}
           <div className={styles.logoBrand}>
             <span className={styles.logoText}>{communityName}</span>
-            <span className={styles.logoEst}>EST. 2013</span>
           </div>
         </a>
 
