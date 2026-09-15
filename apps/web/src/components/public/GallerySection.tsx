@@ -143,16 +143,16 @@ export default function GallerySection({ gallery }: GallerySectionProps) {
     <section id="galeri" className={`section ${styles.section}`}>
       <div className="container">
         <div className="section-header">
-          <div className="section-label">Galeri</div>
-          <h2 className="section-title">Momen Bersama</h2>
+          <div className="section-label">Gallery</div>
+          <h2 className="section-title">Our Moments</h2>
           <div className="divider" />
           <p className="section-subtitle">
-            Kumpulan foto dan video yang mengabadikan cerita dan kenangan Paradise
+            A collection of photos and videos capturing the stories and memories of Paradise
           </p>
         </div>
 
         {gallery.length === 0 ? (
-          <p className="text-center text-muted">Belum ada koleksi galeri.</p>
+          <p className="text-center text-muted">Gallery collection is empty.</p>
         ) : (
           <div className={styles.grid}>
             {gallery.map((item, index) => (
@@ -183,7 +183,7 @@ export default function GallerySection({ gallery }: GallerySectionProps) {
           <button
             className={styles.lightboxClose}
             onClick={closeLightbox}
-            aria-label="Tutup galeri"
+            aria-label="Close gallery"
             id="gallery-lightbox-close"
           >
             <X size={20} />
@@ -201,7 +201,7 @@ export default function GallerySection({ gallery }: GallerySectionProps) {
             <button
               className={`${styles.navBtn} ${styles.prevBtn}`}
               onClick={(e) => { e.stopPropagation(); handlePrev(); }}
-              aria-label="Item sebelumnya"
+              aria-label="Previous"
               id="gallery-lightbox-prev"
             >
               <ChevronLeft size={24} />
@@ -240,7 +240,7 @@ export default function GallerySection({ gallery }: GallerySectionProps) {
             <button
               className={`${styles.navBtn} ${styles.nextBtn}`}
               onClick={(e) => { e.stopPropagation(); handleNext(); }}
-              aria-label="Item selanjutnya"
+              aria-label="Next"
               id="gallery-lightbox-next"
             >
               <ChevronRight size={24} />
@@ -250,7 +250,7 @@ export default function GallerySection({ gallery }: GallerySectionProps) {
           {/* Swipe hint on mobile */}
           {gallery.length > 1 && (
             <div className={styles.swipeHint}>
-              Geser untuk navigasi
+              Swipe to navigate
             </div>
           )}
         </div>

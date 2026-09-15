@@ -95,7 +95,7 @@ export default function HeroSection({ profile }: HeroSectionProps) {
             onClick={scrollToAbout}
             id="hero-btn-about"
           >
-            <span>Tentang Kami</span>
+            <span>About Us</span>
             <ArrowRight size={18} />
           </button>
 
@@ -104,7 +104,7 @@ export default function HeroSection({ profile }: HeroSectionProps) {
             onClick={scrollToActivities}
             id="hero-btn-activities"
           >
-            <span>Lihat Kegiatan</span>
+            <span>Our Activities</span>
             <ChevronDown size={18} />
           </button>
         </div>

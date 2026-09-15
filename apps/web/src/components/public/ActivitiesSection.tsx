@@ -42,7 +42,7 @@ const ActivityCard = memo(({
       )}
       <div className={styles.imgOverlay}>
         <span className={styles.viewBadge}>
-          Lihat Detail <ExternalLink size={12} />
+          View Details <ExternalLink size={12} />
         </span>
       </div>
     </div>
@@ -68,16 +68,16 @@ export default function ActivitiesSection({ activities }: ActivitiesSectionProps
     <section id="kegiatan" className={`section ${styles.section}`}>
       <div className="container">
         <div className="section-header">
-          <div className="section-label">Kegiatan</div>
-          <h2 className="section-title">Apa yang Kami Lakukan</h2>
+          <div className="section-label">Activities</div>
+          <h2 className="section-title">What We Do</h2>
           <div className="divider" />
           <p className="section-subtitle">
-            Berbagai kegiatan yang mempererat persaudaraan dan mendorong pertumbuhan bersama
+            Various activities that strengthen our bonds and encourage mutual growth
           </p>
         </div>
 
         {activities.length === 0 ? (
-          <p className="text-center text-muted">Belum ada kegiatan.</p>
+          <p className="text-center text-muted">No activities yet.</p>
         ) : (
           <div className={styles.grid}>
             {activities.map((activity, index) => (
@@ -108,7 +108,7 @@ export default function ActivitiesSection({ activities }: ActivitiesSectionProps
             <button
               className={styles.modalClose}
               onClick={() => setSelectedActivity(null)}
-              aria-label="Tutup detail kegiatan"
+              aria-label="Close details"
               id="activity-modal-close"
             >
               <X size={20} />

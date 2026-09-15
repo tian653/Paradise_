@@ -75,23 +75,25 @@
 
 .logoBrand {
   display: flex;
-  align-items: baseline;
-  gap: 0.45rem;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0.15rem;
 }
 
 .logoText {
   font-family: var(--font-heading);
-  font-weight: 600;
-  font-size: 1.75rem;
+  font-weight: 700;
+  font-size: 1.45rem;
   color: var(--color-text-primary);
-  letter-spacing: -0.9px;
+  letter-spacing: -0.6px;
   line-height: 1;
 }
 
 .logoEst {
-  font-size: 0.85rem;
-  font-weight: 600;
-  letter-spacing: 0.05em;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
   color: var(--color-gold, #c5a059);
   line-height: 1;
   white-space: nowrap;
@@ -100,30 +102,6 @@
 .navbar:not(.scrolled) .logoEst {
   color: #f59e0b;
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
-}
-
-/* ─── Breadcrumb ─── */
-.breadcrumb {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  color: var(--color-text-muted);
-  white-space: nowrap;
-  user-select: none;
-  transition: color var(--transition-base);
-}
-
-.breadcrumbDot {
-  opacity: 0.45;
-  font-size: 0.9em;
-}
-
-.navbar:not(.scrolled) .breadcrumb {
-  color: rgba(255, 255, 255, 0.65);
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
 }
 
 /* ─── Nav Links ─── */
@@ -241,10 +219,6 @@
 
   .hamburger {
     display: block;
-  }
-
-  .breadcrumb {
-    display: none;
   }
 }
 

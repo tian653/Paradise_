@@ -4,11 +4,11 @@ import styles from "./Navbar.module.css";
 
 const NAV_LINKS = [
   { label: "Home", href: "#home" },
-  { label: "Tentang", href: "#tentang" },
-  { label: "Kegiatan", href: "#kegiatan" },
-  { label: "Galeri", href: "#galeri" },
-  { label: "Kepengurusan", href: "#kepengurusan" },
-  { label: "Kontak", href: "#kontak" },
+  { label: "About Us", href: "#tentang" },
+  { label: "Activities", href: "#kegiatan" },
+  { label: "Gallery", href: "#galeri" },
+  { label: "Team", href: "#kepengurusan" },
+  { label: "Contact", href: "#kontak" },
 ];
 
 interface NavbarProps {
@@ -73,17 +73,11 @@ export default function Navbar({ communityName = "Paradise", logoUrl }: NavbarPr
           ) : (
             <div className={styles.logoIcon}>P</div>
           )}
-          <span className={styles.logoText}>{communityName}</span>
+          <div className={styles.logoBrand}>
+            <span className={styles.logoText}>{communityName}</span>
+            <span className={styles.logoEst}>EST. 2013</span>
+          </div>
         </a>
-
-        {/* Breadcrumb EST */}
-        <span className={styles.breadcrumb} aria-hidden="true">
-          EST. 2013
-          <span className={styles.breadcrumbDot}>·</span>
-          {communityName.toUpperCase()}
-          <span className={styles.breadcrumbDot}>·</span>
-          SEMARANG
-        </span>
 
         {/* Desktop Nav */}
         <ul className={styles.navLinks}>
