@@ -25,52 +25,25 @@ export default function HeroSection({ profile }: HeroSectionProps) {
     document.getElementById("kegiatan")?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const DEFAULT_HERO_IMAGE =
-    "https://res.cloudinary.com/tmndf3jh/image/upload/v1788935209/paradise_community/kou4tdutrjn39jwwzgpv.jpg";
-
-  // The 3 hero photos from assets
-  const HERO_IMAGES = [
-    "/hero-bg.jpg",
-    "/hero-bg.png",
-    "/hero-bg.webp",
-  ];
-
-  if (
-    profile?.heroImageUrl &&
-    profile.heroImageUrl.trim().length > 5 &&
-    !HERO_IMAGES.includes(profile.heroImageUrl)
-  ) {
-    HERO_IMAGES.unshift(profile.heroImageUrl); // custom image first
-  }
-
-  const [currentImgIndex, setCurrentImgIndex] = useState(0);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentImgIndex((prev) => (prev + 1) % HERO_IMAGES.length);
-    }, 5000);
-    return () => clearInterval(timer);
-  }, [HERO_IMAGES.length]);
+  const heroBgImage =
+    profile?.heroImageUrl && profile.heroImageUrl.trim().length > 5
+      ? profile.heroImageUrl
+      : "/hero-bg.jpg";
 
   const taglineText =
     profile?.tagline && profile.tagline !== "/" ? profile.tagline : "Dairi Horas Njuah Njuah";
 
   return (
     <section id="home" className={styles.hero}>
-      {/* Background Slider */}
+      {/* Background Image */}
       <div className={styles.heroBg}>
-        {HERO_IMAGES.map((url, idx) => (
-          <img
-            key={url}
-            src={url}
-            alt=""
-            className={`${styles.heroBgImg} ${
-              idx === currentImgIndex ? styles.imgVisible : styles.imgHidden
-            }`}
-            loading={idx === 0 ? "eager" : "lazy"}
-            decoding="async"
-          />
-        ))}
+        <img
+          src={heroBgImage}
+          alt=""
+          className={`${styles.heroBgImg} ${styles.imgVisible}`}
+          loading="eager"
+          decoding="async"
+        />
         <div className={styles.overlay} />
       </div>
 
