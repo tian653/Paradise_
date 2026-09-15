@@ -1,85 +1,264 @@
 .page {
-  min-height: 100vh;
-  background: var(--admin-bg);
+  min-height: 100dvh;
+  background: #0f172a;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: var(--space-xl);
+  padding: 1.5rem;
   position: relative;
   overflow: hidden;
+  font-family: var(--font-body);
 }
 
-.page::before {
-  content: '';
+.glowOrb1 {
   position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle at 30% 40%, rgba(201, 148, 10, 0.06) 0%, transparent 50%),
-              radial-gradient(circle at 70% 60%, rgba(201, 148, 10, 0.04) 0%, transparent 50%);
+  top: -15%;
+  left: -10%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(139, 115, 85, 0.28) 0%, transparent 70%);
+  filter: blur(80px);
+  pointer-events: none;
+}
+
+.glowOrb2 {
+  position: absolute;
+  bottom: -20%;
+  right: -10%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(201, 148, 10, 0.2) 0%, transparent 70%);
+  filter: blur(90px);
   pointer-events: none;
 }
 
 .card {
   width: 100%;
-  max-width: 400px;
-  background: var(--color-bg-card);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-xl);
-  padding: var(--space-2xl);
+  max-width: 420px;
+  background: rgba(30, 41, 59, 0.75);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 1.5rem;
+  padding: 2.5rem 2rem;
   position: relative;
-  z-index: 1;
+  z-index: 10;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .logoWrap {
   text-align: center;
-  margin-bottom: var(--space-2xl);
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.logoIcon {
-  width: 48px;
-  height: 48px;
-  background: #1c1c1c;
-  border-radius: var(--radius-md);
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #fbbf24;
+  background: rgba(251, 191, 36, 0.12);
+  border: 1px solid rgba(251, 191, 36, 0.25);
+  padding: 0.3rem 0.75rem;
+  border-radius: 9999px;
+  margin-bottom: 1.25rem;
+}
+
+.logoBadge {
+  width: 64px;
+  height: 64px;
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-bottom: 1rem;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.logoImg {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+}
+
+.logoFallback {
   font-family: var(--font-heading);
-  font-weight: 600;
-  font-size: 1.5rem;
-  color: #fcfbf8;
-  margin: 0 auto var(--space-md);
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #ffffff;
 }
 
 .title {
-  font-size: 1.6rem;
+  font-family: var(--font-heading);
+  font-size: 1.75rem;
   font-weight: 800;
-  color: var(--color-text-primary);
-  margin-bottom: var(--space-xs);
+  color: #ffffff;
+  margin-bottom: 0.35rem;
+  letter-spacing: -0.02em;
 }
 
 .subtitle {
   font-size: 0.875rem;
-  color: var(--color-text-muted);
+  color: #9ca3af;
+  line-height: 1.4;
 }
 
 .form {
   display: flex;
   flex-direction: column;
+  gap: 1.25rem;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #d1d5db;
+}
+
+.inputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.inputIcon {
+  position: absolute;
+  left: 1rem;
+  color: #6b7280;
+  pointer-events: none;
+  transition: color 0.2s ease;
+}
+
+.input {
+  width: 100%;
+  padding: 0.85rem 1rem 0.85rem 2.75rem;
+  background: rgba(15, 23, 42, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 0.75rem;
+  font-size: 0.95rem;
+  color: #ffffff;
+  outline: none;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.input:focus {
+  border-color: #8B7355;
+  background: rgba(15, 23, 42, 0.9);
+  box-shadow: 0 0 0 3px rgba(139, 115, 85, 0.3);
+}
+
+.inputWrapper:focus-within .inputIcon {
+  color: #fbbf24;
+}
+
+.input::placeholder {
+  color: #6b7280;
+}
+
+.togglePassword {
+  position: absolute;
+  right: 0.75rem;
+  background: none;
+  border: none;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 0.35rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.375rem;
+  transition: color 0.2s ease;
+}
+
+.togglePassword:hover {
+  color: #d1d5db;
+}
+
+.submitBtn {
+  width: 100%;
+  padding: 0.9rem;
+  background: linear-gradient(135deg, #8B7355 0%, #756044 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 0.75rem;
+  font-size: 1rem;
+  font-weight: 700;
+  font-family: var(--font-heading);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(139, 115, 85, 0.35);
+}
+
+.submitBtn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(139, 115, 85, 0.5);
+  background: linear-gradient(135deg, #9a8161 0%, #856d4f 100%);
+}
+
+.submitBtn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.submitBtn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.backWrap {
+  margin-top: 1.75rem;
+  text-align: center;
 }
 
 .backLink {
-  text-align: center;
-  margin-top: var(--space-lg);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
   font-size: 0.875rem;
+  color: #9ca3af;
+  text-decoration: none;
+  transition: all 0.2s ease;
 }
 
-.link {
-  color: var(--color-text-muted);
-  transition: color var(--transition-fast);
-}
-
-.link:hover {
-  color: var(--color-gold);
+.backLink:hover {
+  color: #fbbf24;
+  transform: translateX(-2px);
 }

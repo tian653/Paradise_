@@ -95,16 +95,17 @@
   font-size: 0.6rem;
   font-weight: 700;
   letter-spacing: 0.18em;
-  color: var(--color-accent, #8B7355);
+  color: var(--color-text-primary);
   line-height: 1;
   white-space: nowrap;
   text-transform: uppercase;
-  opacity: 0.9;
+  opacity: 0.75;
 }
 
 .navbar:not(.scrolled) .logoEst {
-  color: #fbbf24;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+  color: #ffffff;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
+  opacity: 0.85;
 }
 
 /* ─── Nav Links ─── */
