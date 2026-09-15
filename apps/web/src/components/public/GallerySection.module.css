@@ -85,24 +85,25 @@
 .lightbox {
   position: fixed;
   inset: 0;
-  z-index: 9999;
-  background: rgba(0, 0, 0, 0.95);
+  z-index: 999999;
+  background: rgba(0, 0, 0, 0.96);
   display: flex;
   align-items: center;
   justify-content: center;
   animation: fadeIn 0.2s ease;
-  /* safe area for notch/home bar */
-  padding: env(safe-area-inset-top, 0) env(safe-area-inset-right, 0)
-    env(safe-area-inset-bottom, 0) env(safe-area-inset-left, 0);
+  padding: 4rem 1rem 3rem 1rem;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   touch-action: pan-y pinch-zoom;
+  box-sizing: border-box;
 }
 
 /* ── Close Button ────────────────────────────── */
 .lightboxClose {
-  position: absolute;
+  position: fixed;
   top: max(1rem, env(safe-area-inset-top, 1rem));
   right: max(1rem, env(safe-area-inset-right, 1rem));
-  z-index: 10010;
+  z-index: 1000000;
   width: 44px;
   height: 44px;
   border-radius: 50%;
@@ -115,7 +116,6 @@
   justify-content: center;
   cursor: pointer;
   transition: all var(--transition-fast);
-  /* bigger tap target on touch */
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -127,11 +127,11 @@
 
 /* ── Counter (top-center) ────────────────────── */
 .counterTop {
-  position: absolute;
+  position: fixed;
   top: max(1.1rem, env(safe-area-inset-top, 1.1rem));
   left: 50%;
   transform: translateX(-50%);
-  z-index: 10010;
+  z-index: 1000000;
   font-size: 0.82rem;
   color: rgba(255, 255, 255, 0.75);
   background: rgba(255, 255, 255, 0.12);
@@ -145,10 +145,10 @@
 
 /* ── Nav Buttons ─────────────────────────────── */
 .navBtn {
-  position: absolute;
+  position: fixed;
   top: 50%;
   transform: translateY(-50%);
-  z-index: 10005;
+  z-index: 1000000;
   width: 48px;
   height: 48px;
   border-radius: 50%;
@@ -188,18 +188,17 @@
   align-items: center;
   gap: 0.75rem;
   position: relative;
-  z-index: 10000;
-  /* leave room for nav buttons & close */
-  max-width: min(85vw, 1200px);
-  max-height: calc(100dvh - 8rem);
+  z-index: 1000000;
+  max-width: min(90vw, 1200px);
   width: 100%;
-  padding: 0 3.5rem; /* space for side nav buttons */
+  margin: auto;
+  padding: 0 3.5rem;
   box-sizing: border-box;
 }
 
 .lightboxMedia {
   max-width: 100%;
-  max-height: calc(100dvh - 10rem);
+  max-height: calc(100dvh - 8rem);
   width: auto;
   height: auto;
   object-fit: contain;

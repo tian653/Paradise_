@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef, memo } from "react";
+import { createPortal } from "react-dom";
 import { X, ChevronLeft, ChevronRight, Video, Play } from "lucide-react";
 import styles from "./GallerySection.module.css";
 import type { GalleryItem } from "../../lib/types";
@@ -162,93 +163,95 @@ export default function GallerySection({ gallery }: GallerySectionProps) {
       </div>
 
       {/* Lightbox */}
-      {currentItem && (
-        <div
-          className={styles.lightbox}
-          onClick={closeLightbox}
-          onTouchStart={handleTouchStart}
-          onTouchEnd={handleTouchEnd}
-          role="dialog"
-          aria-modal="true"
-          aria-label="Galeri foto"
-          id="gallery-lightbox"
-        >
-          {/* Close button */}
-          <button
-            className={styles.lightboxClose}
-            onClick={closeLightbox}
-            aria-label="Close gallery"
-            id="gallery-lightbox-close"
-          >
-            <X size={20} />
-          </button>
-
-          {/* Counter top */}
-          {gallery.length > 1 && (
-            <div className={styles.counterTop}>
-              {lightboxIndex! + 1} / {gallery.length}
-            </div>
-          )}
-
-          {/* Prev button */}
-          {gallery.length > 1 && (
-            <button
-              className={`${styles.navBtn} ${styles.prevBtn}`}
-              onClick={(e) => { e.stopPropagation(); handlePrev(); }}
-              aria-label="Previous"
-              id="gallery-lightbox-prev"
-            >
-              <ChevronLeft size={24} />
-            </button>
-          )}
-
-          {/* Content */}
+      {currentItem &&
+        createPortal(
           <div
-            className={styles.lightboxContent}
-            onClick={(e) => e.stopPropagation()}
+            className={styles.lightbox}
+            onClick={closeLightbox}
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Galeri foto"
+            id="gallery-lightbox"
           >
-            {isCurrentVideo ? (
-              <video
-                key={currentItem.imageUrl}
-                src={currentItem.imageUrl}
-                controls
-                autoPlay
-                playsInline
-                className={styles.lightboxMedia}
-              />
-            ) : (
-              <img
-                key={currentItem.imageUrl}
-                src={currentItem.imageUrl}
-                alt={currentItem.caption ?? "Gallery photo"}
-                className={styles.lightboxMedia}
-              />
-            )}
-            {currentItem.caption && (
-              <p className={styles.lightboxCaption}>{currentItem.caption}</p>
-            )}
-          </div>
-
-          {/* Next button */}
-          {gallery.length > 1 && (
+            {/* Close button */}
             <button
-              className={`${styles.navBtn} ${styles.nextBtn}`}
-              onClick={(e) => { e.stopPropagation(); handleNext(); }}
-              aria-label="Next"
-              id="gallery-lightbox-next"
+              className={styles.lightboxClose}
+              onClick={closeLightbox}
+              aria-label="Close gallery"
+              id="gallery-lightbox-close"
             >
-              <ChevronRight size={24} />
+              <X size={20} />
             </button>
-          )}
 
-          {/* Swipe hint on mobile */}
-          {gallery.length > 1 && (
-            <div className={styles.swipeHint}>
-              Swipe to navigate
+            {/* Counter top */}
+            {gallery.length > 1 && (
+              <div className={styles.counterTop}>
+                {lightboxIndex! + 1} / {gallery.length}
+              </div>
+            )}
+
+            {/* Prev button */}
+            {gallery.length > 1 && (
+              <button
+                className={`${styles.navBtn} ${styles.prevBtn}`}
+                onClick={(e) => { e.stopPropagation(); handlePrev(); }}
+                aria-label="Previous"
+                id="gallery-lightbox-prev"
+              >
+                <ChevronLeft size={24} />
+              </button>
+            )}
+
+            {/* Content */}
+            <div
+              className={styles.lightboxContent}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {isCurrentVideo ? (
+                <video
+                  key={currentItem.imageUrl}
+                  src={currentItem.imageUrl}
+                  controls
+                  autoPlay
+                  playsInline
+                  className={styles.lightboxMedia}
+                />
+              ) : (
+                <img
+                  key={currentItem.imageUrl}
+                  src={currentItem.imageUrl}
+                  alt={currentItem.caption ?? "Gallery photo"}
+                  className={styles.lightboxMedia}
+                />
+              )}
+              {currentItem.caption && (
+                <p className={styles.lightboxCaption}>{currentItem.caption}</p>
+              )}
             </div>
-          )}
-        </div>
-      )}
+
+            {/* Next button */}
+            {gallery.length > 1 && (
+              <button
+                className={`${styles.navBtn} ${styles.nextBtn}`}
+                onClick={(e) => { e.stopPropagation(); handleNext(); }}
+                aria-label="Next"
+                id="gallery-lightbox-next"
+              >
+                <ChevronRight size={24} />
+              </button>
+            )}
+
+            {/* Swipe hint on mobile */}
+            {gallery.length > 1 && (
+              <div className={styles.swipeHint}>
+                Swipe to navigate
+              </div>
+            )}
+          </div>,
+          document.body
+        )}
     </section>
   );
 }
