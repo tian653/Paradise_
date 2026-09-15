@@ -128,7 +128,14 @@
   max-width: 340px;
   max-height: 380px;
   object-fit: contain;
-  filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.08));
+  opacity: 0.8;
+  filter: blur(1.5px) drop-shadow(0 8px 20px rgba(0, 0, 0, 0.06));
+  transition: all 0.3s ease;
+}
+
+.logoImg:hover {
+  opacity: 1;
+  filter: blur(0px) drop-shadow(0 12px 28px rgba(0, 0, 0, 0.1));
 }
 
 /* Responsive */
