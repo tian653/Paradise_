@@ -76,6 +76,15 @@ export default function Navbar({ communityName = "Paradise", logoUrl }: NavbarPr
           <span className={styles.logoText}>{communityName}</span>
         </a>
 
+        {/* Breadcrumb EST */}
+        <span className={styles.breadcrumb} aria-hidden="true">
+          EST. 2013
+          <span className={styles.breadcrumbDot}>·</span>
+          {communityName.toUpperCase()}
+          <span className={styles.breadcrumbDot}>·</span>
+          SEMARANG
+        </span>
+
         {/* Desktop Nav */}
         <ul className={styles.navLinks}>
           {NAV_LINKS.map((link) => {

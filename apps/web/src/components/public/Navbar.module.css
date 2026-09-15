@@ -102,6 +102,30 @@
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
 }
 
+/* ─── Breadcrumb ─── */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+  user-select: none;
+  transition: color var(--transition-base);
+}
+
+.breadcrumbDot {
+  opacity: 0.45;
+  font-size: 0.9em;
+}
+
+.navbar:not(.scrolled) .breadcrumb {
+  color: rgba(255, 255, 255, 0.65);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+}
+
 /* ─── Nav Links ─── */
 .navLinks {
   display: flex;
@@ -217,6 +241,10 @@
 
   .hamburger {
     display: block;
+  }
+
+  .breadcrumb {
+    display: none;
   }
 }
 
