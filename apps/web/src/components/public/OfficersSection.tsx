@@ -1,5 +1,5 @@
 import { memo } from "react";
-import { Crown, UserCheck } from "lucide-react";
+import { ShieldCheck, UserCheck } from "lucide-react";
 import styles from "./OfficersSection.module.css";
 import type { Officer } from "../../lib/types";
 
@@ -30,13 +30,6 @@ const OfficerCard = memo(({ officer, index }: { officer: Officer; index: number 
       className={`${styles.card} ${isCore ? styles.cardCore : ""}`}
       style={{ animationDelay: `${Math.min(index * 0.05, 0.3)}s` }}
     >
-      {isCore && (
-        <div className={styles.coreTag}>
-          <Crown size={11} />
-          <span>BPH</span>
-        </div>
-      )}
-
       <div className={`${styles.photoWrap} ${isCore ? styles.photoWrapCore : ""}`}>
         {officer.photoUrl ? (
           <img
@@ -94,7 +87,7 @@ export default function OfficersSection({ officers }: OfficersSectionProps) {
             {coreOfficers.length > 0 && (
               <div className={styles.groupBlock}>
                 <div className={styles.groupHeader}>
-                  <Crown size={15} className={styles.groupIcon} />
+                  <ShieldCheck size={15} className={styles.groupIcon} />
                   <span>Badan Pengurus Harian (BPH)</span>
                 </div>
                 <div className={styles.grid}>
