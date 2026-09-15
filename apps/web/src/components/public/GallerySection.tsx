@@ -98,30 +98,24 @@ export default function GallerySection({ gallery }: GallerySectionProps) {
   }, [lightboxIndex, handlePrev, handleNext, closeLightbox]);
 
   // Lock body scroll when lightbox is open
+  const isLightboxOpen = lightboxIndex !== null;
   useEffect(() => {
-    if (lightboxIndex !== null) {
-      const scrollY = window.scrollY;
-      document.body.style.position = "fixed";
-      document.body.style.top = `-${scrollY}px`;
-      document.body.style.width = "100%";
-      document.body.style.overflow = "hidden";
-    } else {
-      const scrollY = document.body.style.top;
-      document.body.style.position = "";
-      document.body.style.top = "";
-      document.body.style.width = "";
-      document.body.style.overflow = "";
-      if (scrollY) {
-        window.scrollTo(0, -parseInt(scrollY || "0", 10));
-      }
-    }
+    if (!isLightboxOpen) return;
+
+    const scrollY = window.scrollY;
+    document.body.style.position = "fixed";
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.width = "100%";
+    document.body.style.overflow = "hidden";
+
     return () => {
       document.body.style.position = "";
       document.body.style.top = "";
       document.body.style.width = "";
       document.body.style.overflow = "";
+      window.scrollTo(0, scrollY);
     };
-  }, [lightboxIndex]);
+  }, [isLightboxOpen]);
 
   // Touch swipe handlers
   const handleTouchStart = (e: React.TouchEvent) => {
