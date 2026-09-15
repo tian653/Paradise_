@@ -3,6 +3,17 @@ import { Instagram, MessageCircle, Mail, Copy, Check } from "lucide-react";
 import styles from "./ContactSection.module.css";
 import type { Contact } from "../../lib/types";
 
+interface ContactItem {
+  key: string;
+  href: string;
+  icon: React.ReactNode;
+  iconClass: string;
+  label: string;
+  value: string;
+  copyText: string | null;
+  id: string;
+}
+
 interface ContactSectionProps {
   contact: Contact | null;
 }
@@ -18,18 +29,21 @@ export default function ContactSection({ contact }: ContactSectionProps) {
     setTimeout(() => setCopiedKey(null), 2000);
   };
 
-  const items = [
-    contact?.instagram && {
+  const items: ContactItem[] = [];
+  if (contact?.instagram) {
+    items.push({
       key: "ig",
       href: `https://instagram.com/${contact.instagram.replace(/^@/, "")}`,
       icon: <Instagram size={22} />,
       iconClass: styles.iconInstagram,
       label: "Instagram",
       value: `@${contact.instagram.replace(/^@/, "")}`,
-      copyText: null as string | null,
+      copyText: null,
       id: "contact-instagram",
-    },
-    contact?.whatsapp && {
+    });
+  }
+  if (contact?.whatsapp) {
+    items.push({
       key: "wa",
       href: `https://wa.me/${contact.whatsapp.replace(/\D/g, "")}`,
       icon: <MessageCircle size={22} />,
@@ -38,8 +52,10 @@ export default function ContactSection({ contact }: ContactSectionProps) {
       value: contact.whatsapp,
       copyText: contact.whatsapp,
       id: "contact-whatsapp",
-    },
-    contact?.email && {
+    });
+  }
+  if (contact?.email) {
+    items.push({
       key: "email",
       href: `mailto:${contact.email}`,
       icon: <Mail size={22} />,
@@ -48,8 +64,8 @@ export default function ContactSection({ contact }: ContactSectionProps) {
       value: contact.email,
       copyText: contact.email,
       id: "contact-email",
-    },
-  ].filter(Boolean) as NonNullable<(typeof items)[number]>[];
+    });
+  }
 
   return (
     <section id="kontak" className={`section ${styles.section}`}>
