@@ -116,11 +116,11 @@ export default function PublicPage() {
 
   useEffect(() => {
     if (profile?.logoUrl) {
-      const link = (document.querySelector("link[rel*='icon']") || document.createElement("link")) as HTMLLinkElement;
-      link.type = "image/png";
-      link.rel = "icon";
-      link.href = profile.logoUrl;
-      document.getElementsByTagName("head")[0].appendChild(link);
+      // Update existing favicon element(s) instead of appending new ones
+      const links = document.querySelectorAll("link[rel*='icon']");
+      links.forEach((el) => {
+        (el as HTMLLinkElement).href = profile.logoUrl!;
+      });
     }
   }, [profile?.logoUrl]);
 
