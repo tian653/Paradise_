@@ -2,50 +2,47 @@
   background: var(--color-bg);
 }
 
+/* ── Card row ─────────────────────────────────── */
 .cards {
   display: flex;
-  flex-wrap: wrap;
   justify-content: center;
-  gap: var(--space-lg);
-  max-width: 960px;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  max-width: 700px;
   margin: 0 auto;
 }
 
-.contactCard {
-  flex: 1 1 280px;
-  max-width: 340px;
+.card {
+  flex: 1 1 190px;
+  max-width: 220px;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: var(--space-lg);
-  padding: var(--space-lg) var(--space-xl);
+  gap: var(--space-sm);
+  padding: var(--space-lg) var(--space-md);
   background: var(--color-bg-card);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-xl);
   text-decoration: none;
   transition: all var(--transition-base);
   position: relative;
-  overflow: hidden;
 }
 
-.contactCard::before {
-  display: none;
-}
-
-.contactCard:hover {
+.card:hover {
   border-color: var(--color-border-hover);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-sm);
-  background: var(--color-surface);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
 }
 
-.icon {
-  flex-shrink: 0;
-  width: 56px;
-  height: 56px;
+/* ── Icon ─────────────────────────────────────── */
+.iconWrap {
+  width: 52px;
+  height: 52px;
   border-radius: var(--radius-lg);
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 .iconInstagram {
@@ -63,99 +60,81 @@
   color: #fcfbf8;
 }
 
-.iconExtra {
-  background: var(--color-surface);
-  color: var(--color-text-primary);
-}
-
+/* ── Info ─────────────────────────────────────── */
 .info {
-  flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 0.2rem;
+  align-items: center;
+  gap: 0.15rem;
   min-width: 0;
+  width: 100%;
 }
 
-.platform {
-  font-size: 0.78rem;
-  font-weight: 600;
+.label {
+  font-size: 0.72rem;
+  font-weight: 700;
   color: var(--color-text-muted);
-  letter-spacing: 0.05em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
 .value {
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   font-weight: 600;
   color: var(--color-text-primary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  max-width: 100%;
+  text-align: center;
 }
 
-.actionsGroup {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
+/* ── Copy button ──────────────────────────────── */
 .copyBtn {
-  width: 30px;
-  height: 30px;
+  position: absolute;
+  top: 0.6rem;
+  right: 0.6rem;
+  width: 28px;
+  height: 28px;
   border-radius: var(--radius-sm);
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  color: var(--color-text-secondary);
+  color: var(--color-text-muted);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: all var(--transition-fast);
+  opacity: 0;
+}
+
+.card:hover .copyBtn {
+  opacity: 1;
 }
 
 .copyBtn:hover {
   background: #1c1c1c;
-  color: #ffffff;
+  color: #fff;
   border-color: #1c1c1c;
-  transform: scale(1.08);
 }
 
 .checkIcon {
-  color: var(--color-success);
+  color: var(--color-success, #16a34a);
 }
 
-.copiedBadge {
-  position: absolute;
-  top: 0.5rem;
-  right: 0.75rem;
-  background: #1c1c1c;
-  color: #ffffff;
-  font-size: 0.75rem;
-  font-weight: 600;
-  padding: 0.2rem 0.6rem;
-  border-radius: var(--radius-full);
-  animation: popIn 0.2s ease;
-  box-shadow: var(--shadow-sm);
-}
-
-@keyframes popIn {
-  from { opacity: 0; transform: scale(0.8); }
-  to { opacity: 1; transform: scale(1); }
-}
-
-.arrow {
-  flex-shrink: 0;
-  color: var(--color-text-muted);
-  transition: all var(--transition-fast);
-}
-
-.contactCard:hover .arrow {
-  color: var(--color-text-primary);
-  transform: translateX(3px);
-}
-
+/* ── Responsive ───────────────────────────────── */
 @media (max-width: 540px) {
-  .contactCard {
-    padding: var(--space-md) var(--space-lg);
+  .cards {
+    gap: var(--space-sm);
+  }
+
+  .card {
+    flex: 1 1 140px;
+    max-width: 100%;
+    padding: var(--space-md);
+  }
+
+  .copyBtn {
+    opacity: 1; /* always visible on touch */
   }
 }

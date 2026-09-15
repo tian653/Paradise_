@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Instagram, MessageCircle, Mail, ExternalLink, Copy, Check } from "lucide-react";
+import { Instagram, MessageCircle, Mail, Copy, Check } from "lucide-react";
 import styles from "./ContactSection.module.css";
 import type { Contact } from "../../lib/types";
 
@@ -10,13 +10,46 @@ interface ContactSectionProps {
 export default function ContactSection({ contact }: ContactSectionProps) {
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
 
-  const copyToClipboard = (text: string, key: string, e: React.MouseEvent) => {
+  const copy = (text: string, key: string, e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     navigator.clipboard.writeText(text);
     setCopiedKey(key);
     setTimeout(() => setCopiedKey(null), 2000);
   };
+
+  const items = [
+    contact?.instagram && {
+      key: "ig",
+      href: `https://instagram.com/${contact.instagram.replace(/^@/, "")}`,
+      icon: <Instagram size={22} />,
+      iconClass: styles.iconInstagram,
+      label: "Instagram",
+      value: `@${contact.instagram.replace(/^@/, "")}`,
+      copyText: null as string | null,
+      id: "contact-instagram",
+    },
+    contact?.whatsapp && {
+      key: "wa",
+      href: `https://wa.me/${contact.whatsapp.replace(/\D/g, "")}`,
+      icon: <MessageCircle size={22} />,
+      iconClass: styles.iconWhatsapp,
+      label: "WhatsApp",
+      value: contact.whatsapp,
+      copyText: contact.whatsapp,
+      id: "contact-whatsapp",
+    },
+    contact?.email && {
+      key: "email",
+      href: `mailto:${contact.email}`,
+      icon: <Mail size={22} />,
+      iconClass: styles.iconEmail,
+      label: "Email",
+      value: contact.email,
+      copyText: contact.email,
+      id: "contact-email",
+    },
+  ].filter(Boolean) as NonNullable<(typeof items)[number]>[];
 
   return (
     <section id="kontak" className={`section ${styles.section}`}>
@@ -30,108 +63,42 @@ export default function ContactSection({ contact }: ContactSectionProps) {
           </p>
         </div>
 
-        <div className={styles.cards}>
-          {contact?.instagram && (
-            <a
-              href={`https://instagram.com/${contact.instagram.replace("@", "")}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.contactCard}
-              id="contact-instagram"
-            >
-              <div className={`${styles.icon} ${styles.iconInstagram}`}>
-                <Instagram size={28} />
-              </div>
-              <div className={styles.info}>
-                <span className={styles.platform}>Instagram</span>
-                <span className={styles.value}>{contact.instagram}</span>
-              </div>
-              <ExternalLink size={16} className={styles.arrow} />
-            </a>
-          )}
-
-          {contact?.whatsapp && (
-            <a
-              href={`https://wa.me/${contact.whatsapp.replace(/\D/g, "")}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.contactCard}
-              id="contact-whatsapp"
-            >
-              <div className={`${styles.icon} ${styles.iconWhatsapp}`}>
-                <MessageCircle size={28} />
-              </div>
-              <div className={styles.info}>
-                <span className={styles.platform}>WhatsApp</span>
-                <span className={styles.value}>+{contact.whatsapp}</span>
-              </div>
-              <div className={styles.actionsGroup}>
-                <button
-                  onClick={(e) => copyToClipboard(`+${contact.whatsapp}`, "wa", e)}
-                  className={styles.copyBtn}
-                  title="Salin nomor WhatsApp"
-                  aria-label="Salin nomor WhatsApp"
-                >
-                  {copiedKey === "wa" ? <Check size={15} className={styles.checkIcon} /> : <Copy size={15} />}
-                </button>
-                <ExternalLink size={16} className={styles.arrow} />
-              </div>
-              {copiedKey === "wa" && <span className={styles.copiedBadge}>Tersalin! ✓</span>}
-            </a>
-          )}
-
-          {contact?.email && (
-            <a
-              href={`mailto:${contact.email}`}
-              className={styles.contactCard}
-              id="contact-email"
-            >
-              <div className={`${styles.icon} ${styles.iconEmail}`}>
-                <Mail size={28} />
-              </div>
-              <div className={styles.info}>
-                <span className={styles.platform}>Email</span>
-                <span className={styles.value}>{contact.email}</span>
-              </div>
-              <div className={styles.actionsGroup}>
-                <button
-                  onClick={(e) => copyToClipboard(contact.email || "", "email", e)}
-                  className={styles.copyBtn}
-                  title="Salin alamat email"
-                  aria-label="Salin alamat email"
-                >
-                  {copiedKey === "email" ? <Check size={15} className={styles.checkIcon} /> : <Copy size={15} />}
-                </button>
-                <ExternalLink size={16} className={styles.arrow} />
-              </div>
-              {copiedKey === "email" && <span className={styles.copiedBadge}>Tersalin! ✓</span>}
-            </a>
-          )}
-
-          {contact?.additional?.map((link, i) => (
-            <a
-              key={i}
-              href={link.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.contactCard}
-              id={`contact-additional-${i}`}
-            >
-              <div className={`${styles.icon} ${styles.iconExtra}`}>
-                <ExternalLink size={28} />
-              </div>
-              <div className={styles.info}>
-                <span className={styles.platform}>{link.label}</span>
-                <span className={styles.value}>{link.url}</span>
-              </div>
-              <ExternalLink size={16} className={styles.arrow} />
-            </a>
-          ))}
-
-          {!contact?.instagram && !contact?.whatsapp && !contact?.email && (
-            <p className="text-center text-muted">Informasi kontak belum tersedia.</p>
-          )}
-        </div>
+        {items.length === 0 ? (
+          <p className="text-center text-muted">Informasi kontak belum tersedia.</p>
+        ) : (
+          <div className={styles.cards}>
+            {items.map((item) => (
+              <a
+                key={item.key}
+                href={item.href}
+                target={item.href.startsWith("mailto") ? undefined : "_blank"}
+                rel="noopener noreferrer"
+                className={styles.card}
+                id={item.id}
+              >
+                <div className={`${styles.iconWrap} ${item.iconClass}`}>
+                  {item.icon}
+                </div>
+                <div className={styles.info}>
+                  <span className={styles.label}>{item.label}</span>
+                  <span className={styles.value}>{item.value}</span>
+                </div>
+                {item.copyText && (
+                  <button
+                    className={styles.copyBtn}
+                    onClick={(e) => copy(item.copyText!, item.key, e)}
+                    title={`Salin ${item.label}`}
+                    aria-label={`Salin ${item.label}`}
+                  >
+                    {copiedKey === item.key
+                      ? <Check size={14} className={styles.checkIcon} />
+                      : <Copy size={14} />}
+                  </button>
+                )}
+              </a>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );
