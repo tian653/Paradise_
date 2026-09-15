@@ -147,10 +147,10 @@ export default function ImageCropperModal({
     const vpWidth = viewportRef.current?.clientWidth || 440;
     const vpHeight = viewportRef.current?.clientHeight || 300;
 
-    // Initial scale to fit image in viewport
+    // Initial scale to fit image in viewport (matches the CSS maxWidth/maxHeight 90%)
     const scaleToFit = Math.min(
-      vpWidth / imgElement.naturalWidth,
-      vpHeight / imgElement.naturalHeight
+      (vpWidth * 0.9) / imgElement.naturalWidth,
+      (vpHeight * 0.9) / imgElement.naturalHeight
     );
     const baseWidth = imgElement.naturalWidth * scaleToFit;
     const baseHeight = imgElement.naturalHeight * scaleToFit;
@@ -172,6 +172,15 @@ export default function ImageCropperModal({
 
     // We render image on canvas transform:
     ctx.save();
+    
+    // Fill transparent background with white if outputting JPEG
+    const isTransparentFormat = ["image/png", "image/webp", "image/gif"].includes(currentFile.type);
+    const outputType = isTransparentFormat ? "image/png" : "image/jpeg";
+    
+    if (outputType === "image/jpeg") {
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
 
     // Map crop window coordinates to target canvas coordinates
     ctx.scale(targetWidth / cropBox.width, targetHeight / cropBox.height);
@@ -191,8 +200,6 @@ export default function ImageCropperModal({
     ctx.restore();
 
     return new Promise<File>((resolve) => {
-      const outputType =
-        currentFile.type === "image/png" ? "image/png" : "image/jpeg";
       canvas.toBlob(
         async (blob) => {
           if (!blob) {
