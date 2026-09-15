@@ -12,12 +12,8 @@ export default function HeroSection({ profile }: HeroSectionProps) {
   };
 
   const communityName = profile?.communityName || "Paradise";
-  const taglineText =
-    profile?.tagline && profile.tagline !== "/" ? profile.tagline : "Dairi Horas Njuah Njuah";
-  const historyText =
-    profile?.history ||
-    profile?.shortDescription ||
-    "PARADISE berawal dari semangat mahasiswa asal Kabupaten Dairi di Kota Semarang untuk membangun sebuah wadah kebersamaan dan kekeluargaan. Sejak berdiri, PARADISE terus berkembang sebagai tempat berkumpul, berorganisasi, dan mempererat hubungan antarmahasiswa Dairi sekaligus menjaga hubungan dengan daerah asal.";
+  const taglineText = profile?.tagline && profile.tagline !== "/" ? profile.tagline : "";
+  const historyText = profile?.history || profile?.shortDescription || "";
 
   const displayImg =
     profile?.heroImageUrl && profile.heroImageUrl.startsWith("http")

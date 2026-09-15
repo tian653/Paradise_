@@ -4,12 +4,13 @@ import { contact } from "../db/schema.js";
 import { eq } from "drizzle-orm";
 
 const contactRouter = new Hono();
+const contactAdminRouter = new Hono();
 
-// GET /api/contact
+// GET /api/contact  (public)
 contactRouter.get("/", async (c) => {
   const row = (await db.select().from(contact))[0];
   if (!row) {
-    return c.json({ instagram: null, whatsapp: null, email: null, additional: [] });
+    return c.json({ id: 0, instagram: null, whatsapp: null, email: null, address: null, additional: [], updatedAt: "" });
   }
   return c.json({
     ...row,
@@ -17,8 +18,20 @@ contactRouter.get("/", async (c) => {
   });
 });
 
-// PUT /api/admin/contact
-contactRouter.put("/", async (c) => {
+// GET /api/admin/contact  (protected)
+contactAdminRouter.get("/", async (c) => {
+  const row = (await db.select().from(contact))[0];
+  if (!row) {
+    return c.json({ id: 0, instagram: null, whatsapp: null, email: null, address: null, additional: [], updatedAt: "" });
+  }
+  return c.json({
+    ...row,
+    additional: JSON.parse(row.additional ?? "[]"),
+  });
+});
+
+// PUT /api/admin/contact  (protected)
+contactAdminRouter.put("/", async (c) => {
   const body = await c.req.json();
   const { instagram, whatsapp, email, address, additional } = body;
 
@@ -29,20 +42,20 @@ contactRouter.put("/", async (c) => {
   if (!existing) {
     await db.insert(contact)
       .values({
-        instagram: instagram ?? null,
-        whatsapp: whatsapp ?? null,
-        email: email ?? null,
-        address: address ?? "Kota Semarang, Jawa Tengah",
+        instagram: instagram || null,
+        whatsapp: whatsapp || null,
+        email: email || null,
+        address: address || null,
         additional: additionalStr,
       });
   } else {
     await db.update(contact)
       .set({
-        ...(instagram !== undefined && { instagram }),
-        ...(whatsapp !== undefined && { whatsapp }),
-        ...(email !== undefined && { email }),
-        ...(address !== undefined && { address }),
-        ...(additional !== undefined && { additional: additionalStr }),
+        instagram: instagram || null,
+        whatsapp: whatsapp || null,
+        email: email || null,
+        address: address || null,
+        additional: additionalStr,
         updatedAt: new Date().toISOString(),
       })
       .where(eq(contact.id, existing.id));
@@ -55,4 +68,5 @@ contactRouter.put("/", async (c) => {
   });
 });
 
+export { contactRouter, contactAdminRouter };
 export default contactRouter;

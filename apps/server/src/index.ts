@@ -21,7 +21,7 @@ import profileRouter from "./routes/profile.js";
 import activitiesRouter from "./routes/activities.js";
 import galleryRouter from "./routes/gallery.js";
 import officersRouter from "./routes/officers.js";
-import contactRouter from "./routes/contact.js";
+import { contactRouter, contactAdminRouter } from "./routes/contact.js";
 import { authMiddleware } from "./middleware/auth.js";
 
 // ── Startup Validation ─────────────────────────────────────────────────────────
@@ -102,7 +102,7 @@ admin.route("/profile", profileRouter);
 admin.route("/activities", activitiesRouter);
 admin.route("/gallery", galleryRouter);
 admin.route("/officers", officersRouter);
-admin.route("/contact", contactRouter);
+admin.route("/contact", contactAdminRouter);
 
 // ── File Upload Endpoint ───────────────────────────────────────────────────────
 admin.get("/upload", (c) => {

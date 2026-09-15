@@ -14,18 +14,14 @@ import FloatingActions from "../../components/public/FloatingActions";
 const DEFAULT_PROFILE: SiteSettings = {
   id: 1,
   communityName: "Paradise",
-  tagline: "Dairi Horas Njuah Njuah",
-  shortDescription:
-    "Wadah mahasiswa asal Kabupaten Dairi di Kota Semarang untuk membangun kebersamaan, solidaritas, dan kekeluargaan.",
-  about:
-    "PARADISE merupakan organisasi mahasiswa asal Kabupaten Dairi yang berada di Kota Semarang.",
+  tagline: "",
+  shortDescription: "",
+  about: "",
   history: "",
   vision: "",
   mission: "",
-  logoUrl:
-    "https://res.cloudinary.com/tmndf3jh/image/upload/v1788931337/paradise_community/dq41wqyxuwemivwvcp9w.png",
-  heroImageUrl:
-    "https://res.cloudinary.com/tmndf3jh/image/upload/v1788935209/paradise_community/kou4tdutrjn39jwwzgpv.jpg",
+  logoUrl: null,
+  heroImageUrl: null,
   updatedAt: new Date().toISOString(),
 };
 

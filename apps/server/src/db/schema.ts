@@ -53,7 +53,7 @@ export const contact = sqliteTable("contact", {
   instagram: text("instagram"),
   whatsapp: text("whatsapp"),
   email: text("email"),
-  address: text("address").default("Kota Semarang, Jawa Tengah"),
+  address: text("address"),
   additional: text("additional").default("[]"),
   updatedAt: text("updated_at").notNull().default(sql`(datetime('now'))`),
 });

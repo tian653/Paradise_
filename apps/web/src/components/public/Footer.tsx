@@ -12,12 +12,12 @@ interface FooterProps {
 
 export default function Footer({
   communityName = "Paradise",
-  tagline = "Dairi Horas Njuah Njuah",
+  tagline = "",
   logoUrl,
   contact,
 }: FooterProps) {
   const year = new Date().getFullYear();
-  const addressText = contact?.address || "Kota Semarang, Jawa Tengah";
+  const addressText = contact?.address || "";
 
   return (
     <footer className={styles.footer}>
