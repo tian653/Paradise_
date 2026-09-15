@@ -8,14 +8,7 @@ interface HeroSectionProps {
 }
 
 export default function HeroSection({ profile }: HeroSectionProps) {
-  const [loaded, setLoaded] = useState(false);
-  const [customImgLoaded, setCustomImgLoaded] = useState(false);
-  const imgRef = useRef<HTMLImageElement>(null);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setLoaded(true), 50);
-    return () => clearTimeout(timer);
-  }, []);
+  const [loaded, setLoaded] = useState(true);
 
   const scrollToAbout = () => {
     document.getElementById("tentang")?.scrollIntoView({ behavior: "smooth" });

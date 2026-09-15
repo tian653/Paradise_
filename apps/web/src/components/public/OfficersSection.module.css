@@ -57,15 +57,13 @@
   border-radius: var(--radius-xl);
   width: 210px;
   position: relative;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: border-color var(--transition-base), box-shadow var(--transition-base);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-  animation: fadeInUp 0.4s ease backwards;
 }
 
 .card:hover {
   border-color: var(--color-accent, #8B7355);
-  transform: translateY(-4px);
-  box-shadow: 0 12px 28px rgba(139, 115, 85, 0.12);
+  box-shadow: 0 8px 20px rgba(139, 115, 85, 0.1);
   background: #ffffff;
 }
 
@@ -98,15 +96,10 @@
   padding: 3px;
   border-radius: 50%;
   background: transparent;
-  transition: transform 0.25s ease;
 }
 
 .photoWrapCore {
   background: linear-gradient(135deg, #8B7355 0%, #d97706 100%);
-}
-
-.card:hover .photoWrap {
-  transform: scale(1.05);
 }
 
 .photo {
