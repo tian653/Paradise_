@@ -121,21 +121,6 @@
   align-items: center;
   justify-content: center;
   padding: 2rem 1.5rem;
-  position: relative;
-}
-
-/* Gradient mask overlay on the logo */
-.logoFrame::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(
-    ellipse 70% 60% at 50% 50%,
-    transparent 40%,
-    var(--color-bg, #ffffff) 100%
-  );
-  pointer-events: none;
-  z-index: 1;
 }
 
 .logoImg {
@@ -143,18 +128,14 @@
   max-width: 340px;
   max-height: 380px;
   object-fit: contain;
-  opacity: 0.82;
-  filter: blur(1px) drop-shadow(0 6px 18px rgba(139, 115, 85, 0.15));
+  opacity: 1;
+  filter: drop-shadow(0 8px 24px rgba(139, 115, 85, 0.18));
   transition: all 0.35s ease;
-  position: relative;
-  z-index: 0;
-  /* Subtle warm gradient tint via mix-blend-mode */
-  mix-blend-mode: multiply;
 }
 
 .logoImg:hover {
-  opacity: 1;
-  filter: blur(0px) drop-shadow(0 12px 32px rgba(139, 115, 85, 0.22));
+  filter: drop-shadow(0 12px 32px rgba(139, 115, 85, 0.28));
+  transform: scale(1.02);
 }
 
 /* Responsive */
