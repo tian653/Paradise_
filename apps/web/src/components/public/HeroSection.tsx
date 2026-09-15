@@ -19,10 +19,12 @@ export default function HeroSection({ profile }: HeroSectionProps) {
     profile?.shortDescription ||
     "PARADISE berawal dari semangat mahasiswa asal Kabupaten Dairi di Kota Semarang untuk membangun sebuah wadah kebersamaan dan kekeluargaan. Sejak berdiri, PARADISE terus berkembang sebagai tempat berkumpul, berorganisasi, dan mempererat hubungan antarmahasiswa Dairi sekaligus menjaga hubungan dengan daerah asal.";
 
-  const logoUrl =
-    profile?.logoUrl && profile.logoUrl.startsWith("http")
-      ? profile.logoUrl
-      : "/logo.png";
+  const displayImg =
+    profile?.heroImageUrl && profile.heroImageUrl.startsWith("http")
+      ? profile.heroImageUrl
+      : (profile?.logoUrl && profile.logoUrl.startsWith("http")
+          ? profile.logoUrl
+          : "/logo.png");
 
   return (
     <section id="home" className={styles.hero}>
@@ -57,8 +59,8 @@ export default function HeroSection({ profile }: HeroSectionProps) {
         <div className={styles.logoCol}>
           <div className={styles.logoFrame}>
             <img
-              src={logoUrl}
-              alt="Logo Paradise"
+              src={displayImg}
+              alt="Hero Image"
               className={styles.logoImg}
               onError={(e) => {
                 e.currentTarget.src = "/logo.png";

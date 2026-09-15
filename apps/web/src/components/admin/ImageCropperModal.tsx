@@ -144,14 +144,16 @@ export default function ImageCropperModal({
     canvas.height = targetHeight;
 
     // Viewport dimensions
+    // Viewport dimensions
     const vpWidth = viewportRef.current?.clientWidth || 440;
     const vpHeight = viewportRef.current?.clientHeight || 300;
 
-    // Initial scale to fit image in viewport (matches the CSS maxWidth/maxHeight 90%)
-    const scaleToFit = Math.min(
-      (vpWidth * 0.9) / imgElement.naturalWidth,
-      (vpHeight * 0.9) / imgElement.naturalHeight
-    );
+    // Get the actual rendered size of the image in the browser (ignoring CSS transforms)
+    const imgDOM = document.getElementById("crop-target-image") as HTMLImageElement;
+    if (!imgDOM) return currentFile;
+
+    const scaleToFit = imgDOM.clientWidth / imgElement.naturalWidth;
+
     const baseWidth = imgElement.naturalWidth * scaleToFit;
     const baseHeight = imgElement.naturalHeight * scaleToFit;
 
@@ -295,6 +297,7 @@ export default function ImageCropperModal({
           >
             {imgElement && (
               <img
+                id="crop-target-image"
                 src={imageSrc}
                 alt="Preview to crop"
                 className={styles.imagePreview}

@@ -12,12 +12,13 @@ export default function AdminProfilePage() {
   const [saving, setSaving] = useState(false);
   const [cropState, setCropState] = useState<{
     files: File[];
-    field: "logoUrl";
+    field: "logoUrl" | "heroImageUrl";
     aspect: AspectRatioOption;
     title: string;
   } | null>(null);
 
   const logoInputRef = useRef<HTMLInputElement>(null);
+  const heroInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     adminApi
@@ -50,15 +51,15 @@ export default function AdminProfilePage() {
 
   const handleSelectFile = (
     e: React.ChangeEvent<HTMLInputElement>,
-    field: "logoUrl"
+    field: "logoUrl" | "heroImageUrl"
   ) => {
     const file = e.target.files?.[0];
     if (!file) return;
     setCropState({
       files: [file],
       field,
-      aspect: "1:1",
-      title: "Potong Logo Komunitas",
+      aspect: field === "heroImageUrl" ? "4:3" : "1:1",
+      title: field === "heroImageUrl" ? "Potong Foto Samping" : "Potong Logo Komunitas",
     });
     e.target.value = "";
   };
@@ -135,6 +136,36 @@ export default function AdminProfilePage() {
             accept="image/*"
             style={{ display: "none" }}
             onChange={(e) => handleSelectFile(e, "logoUrl")}
+          />
+        </div>
+      </div>
+
+      {/* Hero Image Upload */}
+      <div className={styles.card}>
+        <h3 className={styles.cardTitle}>Foto Hero (Samping)</h3>
+        <div className={styles.uploadWrap}>
+          {profile.heroImageUrl ? (
+            <img src={profile.heroImageUrl} alt="Hero" className={styles.logoPreview} style={{ borderRadius: "12px", objectFit: "cover" }} />
+          ) : (
+            <div className={styles.uploadPlaceholder}>
+              <Upload size={24} />
+              <span>Belum ada foto hero</span>
+            </div>
+          )}
+          <button
+            className="btn btn-outline btn-sm"
+            onClick={() => heroInputRef.current?.click()}
+            id="profile-upload-hero"
+          >
+            <Upload size={14} />
+            Upload Foto Samping
+          </button>
+          <input
+            ref={heroInputRef}
+            type="file"
+            accept="image/*"
+            style={{ display: "none" }}
+            onChange={(e) => handleSelectFile(e, "heroImageUrl")}
           />
         </div>
       </div>

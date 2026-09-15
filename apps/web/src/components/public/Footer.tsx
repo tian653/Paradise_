@@ -135,10 +135,6 @@ export default function Footer({
                   </a>
                 </li>
               )}
-              <li className={styles.contactItem}>
-                <MapPin size={15} className={styles.contactIcon} />
-                <span className={styles.contactText}>{addressText}</span>
-              </li>
               {contact?.additional?.map((link) => (
                 <li key={link.url} className={styles.contactItem}>
                   <ExternalLink size={15} className={styles.contactIcon} />
