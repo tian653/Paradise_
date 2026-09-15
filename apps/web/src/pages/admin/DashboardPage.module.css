@@ -2,27 +2,45 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-xl);
+  max-width: 900px;
 }
 
+/* ─── Header ─────────────────────────────────────────── */
 .header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
   padding-bottom: var(--space-lg);
   border-bottom: 1px solid var(--color-border);
 }
 
+.headerIcon {
+  width: 44px;
+  height: 44px;
+  background: var(--color-gold-muted, rgba(245,200,66,0.12));
+  color: var(--color-gold, #f59e0b);
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
 .title {
-  font-size: 1.75rem;
+  font-size: 1.6rem;
   font-weight: 800;
   color: var(--color-text-primary);
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.15rem;
+  line-height: 1.2;
 }
 
 .subtitle {
-  font-size: 0.9rem;
+  font-size: 0.875rem;
   color: var(--color-text-muted);
 }
 
-/* Stats */
-.stats {
+/* ─── Stats Grid ──────────────────────────────────────── */
+.statsGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: var(--space-lg);
@@ -34,19 +52,29 @@
   border-radius: var(--radius-xl);
   padding: var(--space-xl);
   display: flex;
-  align-items: center;
-  gap: var(--space-lg);
-  transition: all var(--transition-base);
+  flex-direction: column;
+  gap: 0.4rem;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 .statCard:hover {
   border-color: var(--color-border-hover);
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.statTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
 }
 
 .statIcon {
-  width: 52px;
-  height: 52px;
+  width: 44px;
+  height: 44px;
   border-radius: var(--radius-lg);
   display: flex;
   align-items: center;
@@ -54,70 +82,216 @@
   flex-shrink: 0;
 }
 
-.statInfo {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
+.statTrend {
+  color: var(--color-text-muted);
+  opacity: 0.5;
 }
 
 .statValue {
   font-family: var(--font-heading);
-  font-size: 2rem;
+  font-size: 2.4rem;
   font-weight: 800;
   color: var(--color-text-primary);
   line-height: 1;
 }
 
 .statLabel {
-  font-size: 0.85rem;
-  color: var(--color-text-muted);
-  font-weight: 500;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
 }
 
-/* Info box */
+.statDesc {
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+}
+
+/* Skeleton loading */
+.skeleton {
+  display: block;
+  width: 60px;
+  height: 2.4rem;
+  background: linear-gradient(
+    90deg,
+    var(--color-border) 25%,
+    var(--color-surface) 50%,
+    var(--color-border) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+  border-radius: var(--radius-sm);
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ─── Section ─────────────────────────────────────────── */
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+}
+
+.sectionTitle {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.sectionSub {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+/* ─── Quick Actions Grid ──────────────────────────────── */
+.actionsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-sm);
+}
+
+.actionCard {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  padding: 0.875rem 1rem;
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  text-decoration: none;
+  transition: all 0.18s ease;
+}
+
+.actionCard:hover {
+  border-color: var(--color-gold, #f59e0b);
+  background: var(--color-gold-muted, rgba(245,200,66,0.06));
+  transform: translateX(2px);
+}
+
+.actionCard:hover .actionArrow {
+  color: var(--color-gold, #f59e0b);
+  transform: translateX(3px);
+}
+
+.actionIcon {
+  width: 36px;
+  height: 36px;
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-secondary);
+  flex-shrink: 0;
+}
+
+.actionInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.actionLabel {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.actionDesc {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.actionArrow {
+  color: var(--color-text-muted);
+  transition: all 0.18s ease;
+  flex-shrink: 0;
+}
+
+/* ─── Info Box ────────────────────────────────────────── */
 .infoBox {
   background: var(--color-bg-card);
   border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-gold, #f59e0b);
   border-radius: var(--radius-xl);
   padding: var(--space-xl);
 }
 
-.infoBox h3 {
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--color-text-primary);
+.infoHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
   margin-bottom: var(--space-md);
 }
 
-.infoBox ul {
+.infoDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-gold, #f59e0b);
+  flex-shrink: 0;
+}
+
+.infoTitle {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.infoList {
   list-style: none;
   display: flex;
   flex-direction: column;
   gap: var(--space-sm);
+  padding: 0;
+  margin: 0;
 }
 
-.infoBox li {
-  font-size: 0.875rem;
+.infoList li {
+  font-size: 0.855rem;
   color: var(--color-text-secondary);
-  padding-left: var(--space-lg);
+  padding-left: 1.25rem;
   position: relative;
   line-height: 1.6;
 }
 
-.infoBox li::before {
+.infoList li::before {
   content: '→';
   position: absolute;
   left: 0;
-  color: var(--color-gold);
+  color: var(--color-gold, #f59e0b);
+  font-size: 0.75rem;
+  top: 2px;
 }
 
-.infoBox strong {
+.infoList strong {
   color: var(--color-text-primary);
   font-weight: 600;
 }
 
+/* ─── Responsive ──────────────────────────────────────── */
 @media (max-width: 768px) {
-  .stats {
+  .statsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .actionsGrid {
     grid-template-columns: 1fr;
   }
 }
+
+@media (max-width: 480px) {
+  .statsGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
