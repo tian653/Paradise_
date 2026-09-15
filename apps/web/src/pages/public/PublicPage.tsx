@@ -142,8 +142,10 @@ export default function PublicPage() {
 
       <Footer
         communityName={profile?.communityName}
+        tagline={profile?.tagline}
         shortDescription={profile?.shortDescription}
         logoUrl={profile?.logoUrl}
+        contact={contact}
       />
 
       <FloatingActions whatsapp={contact?.whatsapp} />
