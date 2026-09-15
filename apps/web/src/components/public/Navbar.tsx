@@ -3,12 +3,12 @@ import { Menu, X } from "lucide-react";
 import styles from "./Navbar.module.css";
 
 const NAV_LINKS = [
-  { label: "Beranda", href: "#home" },
-  { label: "Tentang Kami", href: "#tentang" },
-  { label: "Kegiatan", href: "#kegiatan" },
-  { label: "Galeri", href: "#galeri" },
-  { label: "Pengurus", href: "#kepengurusan" },
-  { label: "Kontak", href: "#kontak" },
+  { label: "Home", href: "#home" },
+  { label: "About Us", href: "#tentang" },
+  { label: "Activities", href: "#kegiatan" },
+  { label: "Gallery", href: "#galeri" },
+  { label: "Team", href: "#kepengurusan" },
+  { label: "Contact", href: "#kontak" },
 ];
 
 interface NavbarProps {

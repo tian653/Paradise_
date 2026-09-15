@@ -137,8 +137,8 @@ export default function GallerySection({ gallery }: GallerySectionProps) {
     <section id="galeri" className={`section ${styles.section}`}>
       <div className="container">
         <div className="section-header">
-          <div className="section-label">Galeri</div>
-          <h2 className="section-title">Momen Kami</h2>
+          <div className="section-label">Gallery</div>
+          <h2 className="section-title">Our Moments</h2>
           <div className="divider" />
           <p className="section-subtitle">
             Koleksi foto dan video kenangan Paradise
