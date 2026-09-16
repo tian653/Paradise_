@@ -40,10 +40,10 @@ export default function Footer({
               </div>
             </div>
             {addressText && (
-              <p className={styles.desc} style={{ display: "flex", gap: "0.5rem", alignItems: "flex-start" }}>
-                <MapPin size={16} style={{ flexShrink: 0, marginTop: "0.15rem" }} />
+              <div className={styles.desc}>
+                <MapPin size={16} style={{ flexShrink: 0, marginTop: "0.2rem" }} />
                 <span>{addressText}</span>
-              </p>
+              </div>
             )}
 
             {/* Social icons */}

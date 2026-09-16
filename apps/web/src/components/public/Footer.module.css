@@ -65,16 +65,14 @@
 }
 
 .desc {
-  font-size: 0.88rem;
+  font-size: 0.9rem;
   color: var(--color-text-muted);
-  line-height: 1.7;
-  max-width: 340px;
-  margin: 0;
-  display: -webkit-box;
-  -webkit-line-clamp: 4;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  line-height: 1.6;
+  max-width: 380px;
+  margin: 0.5rem 0;
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start;
 }
 
 /* Social icons */
@@ -177,7 +175,7 @@
   padding: var(--space-md) 0;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   gap: var(--space-md);
   flex-wrap: wrap;
 }
