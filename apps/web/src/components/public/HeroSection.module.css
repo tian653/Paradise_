@@ -37,10 +37,13 @@
 }
 
 .label {
-  font-size: 0.78rem;
-  font-weight: 700;
+  font-size: 0.8rem;
+  font-weight: 800;
   letter-spacing: 0.25em;
-  color: var(--color-accent, #8B7355);
+  color: #4a331e;
+  background: rgba(139, 115, 85, 0.15);
+  padding: 0.4rem 1.2rem;
+  border-radius: 999px;
   text-transform: uppercase;
 }
 
@@ -83,7 +86,7 @@
 .desc {
   font-size: clamp(1rem, 1.5vw, 1.15rem);
   color: #374151;
-  line-height: 1.8;
+  line-height: 1.9;
   margin-bottom: 2rem;
   max-width: 580px;
 }
@@ -105,17 +108,17 @@
   font-weight: 600;
   font-size: 0.95rem;
   color: #FAF7F0;
-  background: linear-gradient(135deg, #8B7355 0%, #756044 100%);
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
   border: none;
-  box-shadow: 0 4px 14px rgba(139, 115, 85, 0.35);
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.25);
   cursor: pointer;
   transition: all var(--transition-base);
 }
 
 .btnDetail:hover {
-  background: linear-gradient(135deg, #756044 0%, #604e37 100%);
+  background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(139, 115, 85, 0.45);
+  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.35);
   color: #ffffff;
 }
 

@@ -45,19 +45,12 @@
   flex-shrink: 0;
 }
 
-.iconInstagram {
-  background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
-  color: white;
-}
-
-.iconWhatsapp {
-  background: #25D366;
-  color: white;
-}
-
+.iconInstagram,
+.iconWhatsapp,
 .iconEmail {
-  background: #1c1c1c;
-  color: #fcfbf8;
+  background: rgba(139, 115, 85, 0.1);
+  color: #8B7355;
+  border: 1px solid rgba(139, 115, 85, 0.2);
 }
 
 /* ── Info ─────────────────────────────────────── */

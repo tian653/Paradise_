@@ -146,10 +146,10 @@
   display: inline-block;
   white-space: nowrap;
   font-size: 0.78rem;
-  color: var(--color-text-secondary);
+  color: #4a3c2c;
   font-weight: 600;
-  background: #f4f1ea;
-  border: 1px solid #e5e1d7;
+  background: #eae2d2;
+  border: 1px solid #d4c8b3;
   border-radius: var(--radius-full);
   padding: 0.25rem 0.85rem;
   margin-top: auto;
@@ -159,9 +159,9 @@
 }
 
 .positionCore {
-  background: rgba(139, 115, 85, 0.12);
-  color: #8B7355;
-  border-color: rgba(139, 115, 85, 0.3);
+  background: #8B7355;
+  color: #FAF7F0;
+  border-color: #756044;
   font-weight: 700;
 }
 
