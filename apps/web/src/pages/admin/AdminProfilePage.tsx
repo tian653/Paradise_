@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { Upload, Save, Info } from "lucide-react";
+import { Upload, Save, Info, Trash2 } from "lucide-react";
 import toast from "react-hot-toast";
 import { adminApi } from "../../lib/api";
 import type { SiteSettings } from "../../lib/types";
@@ -27,6 +27,16 @@ export default function AdminProfilePage() {
       .catch(() => toast.error("Gagal memuat profil"))
       .finally(() => setLoading(false));
   }, []);
+
+  const handleRemoveImage = async (field: "logoUrl" | "heroImageUrl") => {
+    try {
+      const updated = await adminApi.updateProfile({ [field]: "" });
+      setProfile(updated);
+      toast.success(field === "heroImageUrl" ? "Foto samping berhasil dihapus!" : "Logo berhasil dihapus!");
+    } catch {
+      toast.error("Gagal menghapus foto");
+    }
+  };
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -122,14 +132,26 @@ export default function AdminProfilePage() {
               <span>Belum ada logo</span>
             </div>
           )}
-          <button
-            className="btn btn-outline btn-sm"
-            onClick={() => logoInputRef.current?.click()}
-            id="profile-upload-logo"
-          >
-            <Upload size={14} />
-            Upload Logo
-          </button>
+          <div style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+            <button
+              className="btn btn-outline btn-sm"
+              onClick={() => logoInputRef.current?.click()}
+              id="profile-upload-logo"
+            >
+              <Upload size={14} />
+              {profile.logoUrl ? "Ganti Logo" : "Upload Logo"}
+            </button>
+            {profile.logoUrl && (
+              <button
+                className="btn btn-danger btn-sm"
+                onClick={() => handleRemoveImage("logoUrl")}
+                id="profile-remove-logo"
+              >
+                <Trash2 size={14} />
+                Hapus Logo
+              </button>
+            )}
+          </div>
           <input
             ref={logoInputRef}
             type="file"
@@ -149,17 +171,29 @@ export default function AdminProfilePage() {
           ) : (
             <div className={styles.uploadPlaceholder}>
               <Upload size={24} />
-              <span>Belum ada foto hero</span>
+              <span>Belum ada foto hero (samping)</span>
             </div>
           )}
-          <button
-            className="btn btn-outline btn-sm"
-            onClick={() => heroInputRef.current?.click()}
-            id="profile-upload-hero"
-          >
-            <Upload size={14} />
-            Upload Foto Samping
-          </button>
+          <div style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+            <button
+              className="btn btn-outline btn-sm"
+              onClick={() => heroInputRef.current?.click()}
+              id="profile-upload-hero"
+            >
+              <Upload size={14} />
+              {profile.heroImageUrl ? "Ganti Foto Samping" : "Upload Foto Samping"}
+            </button>
+            {profile.heroImageUrl && (
+              <button
+                className="btn btn-danger btn-sm"
+                onClick={() => handleRemoveImage("heroImageUrl")}
+                id="profile-remove-hero"
+              >
+                <Trash2 size={14} />
+                Hapus Foto
+              </button>
+            )}
+          </div>
           <input
             ref={heroInputRef}
             type="file"
