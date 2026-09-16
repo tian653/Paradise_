@@ -9,7 +9,7 @@ import profileRouter from "../apps/server/src/routes/profile.js";
 import activitiesRouter from "../apps/server/src/routes/activities.js";
 import galleryRouter from "../apps/server/src/routes/gallery.js";
 import officersRouter from "../apps/server/src/routes/officers.js";
-import contactRouter from "../apps/server/src/routes/contact.js";
+import { contactRouter, contactAdminRouter } from "../apps/server/src/routes/contact.js";
 import { authMiddleware } from "../apps/server/src/middleware/auth.js";
 
 // ── Cloudinary ─────────────────────────────────────────────────────────────────
@@ -56,7 +56,7 @@ admin.route("/profile", profileRouter);
 admin.route("/activities", activitiesRouter);
 admin.route("/gallery", galleryRouter);
 admin.route("/officers", officersRouter);
-admin.route("/contact", contactRouter);
+admin.route("/contact", contactAdminRouter);
 
 // ── File Upload ────────────────────────────────────────────────────────────────
 admin.get("/upload", (c) => {

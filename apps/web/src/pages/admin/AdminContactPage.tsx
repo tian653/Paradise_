@@ -45,8 +45,9 @@ export default function AdminContactPage() {
       const updated = await adminApi.updateContact(contact);
       setContact(updated);
       toast.success("Kontak berhasil disimpan!");
-    } catch {
-      toast.error("Gagal menyimpan kontak");
+    } catch (err: any) {
+      console.error("Save contact error:", err);
+      toast.error(err?.message || "Gagal menyimpan kontak");
     } finally {
       setSaving(false);
     }
