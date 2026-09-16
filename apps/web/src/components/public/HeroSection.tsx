@@ -45,7 +45,7 @@ export default function HeroSection({ profile }: HeroSectionProps) {
               onClick={scrollToAbout}
               id="hero-btn-about"
             >
-              <span>Explore Paradise</span>
+              <span>Jelajahi Paradise</span>
               <ArrowRight size={16} />
             </button>
           </div>

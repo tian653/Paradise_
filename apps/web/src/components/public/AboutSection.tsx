@@ -22,8 +22,8 @@ export default function AboutSection({ profile }: AboutSectionProps) {
       <div className="container">
         {/* Section Header */}
         <div className="section-header">
-          <div className="section-label">About Us</div>
-          <h2 className="section-title">Vision & Mission</h2>
+          <div className="section-label">Tentang Kami</div>
+          <h2 className="section-title">Visi &amp; Misi</h2>
           <div className="divider" />
         </div>
 

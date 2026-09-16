@@ -71,8 +71,8 @@ export default function OfficersSection({ officers }: OfficersSectionProps) {
     <section id="kepengurusan" className={`section ${styles.section}`}>
       <div className="container">
         <div className="section-header">
-          <div className="section-label">Team</div>
-          <h2 className="section-title">Paradise Team</h2>
+          <div className="section-label">Pengurus</div>
+          <h2 className="section-title">Tim Pengurus Paradise</h2>
           <div className="divider" />
           <p className="section-subtitle">
             Struktur dan anggota pengurus Paradise

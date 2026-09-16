@@ -71,8 +71,8 @@ export default function ContactSection({ contact }: ContactSectionProps) {
     <section id="kontak" className={`section ${styles.section}`}>
       <div className="container">
         <div className="section-header">
-          <div className="section-label">Contact</div>
-          <h2 className="section-title">Get in Touch</h2>
+          <div className="section-label">Kontak</div>
+          <h2 className="section-title">Hubungi Kami</h2>
           <div className="divider" />
           <p className="section-subtitle">
             Ingin tahu lebih banyak? Silakan hubungi kami.

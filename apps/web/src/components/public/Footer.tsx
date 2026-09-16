@@ -87,19 +87,19 @@ export default function Footer({
 
           {/* ── Col 2: Navigation ── */}
           <div className={styles.col}>
-            <h4 className={styles.colTitle}>Navigation</h4>
+            <h4 className={styles.colTitle}>Navigasi</h4>
             <ul className={styles.colLinks}>
-              <li><a href="#home" className={styles.colLink}>Home</a></li>
-              <li><a href="#tentang" className={styles.colLink}>About Us</a></li>
-              <li><a href="#kegiatan" className={styles.colLink}>Activities</a></li>
-              <li><a href="#galeri" className={styles.colLink}>Gallery</a></li>
-              <li><a href="#kepengurusan" className={styles.colLink}>Team</a></li>
+              <li><a href="#home" className={styles.colLink}>Beranda</a></li>
+              <li><a href="#tentang" className={styles.colLink}>Tentang Kami</a></li>
+              <li><a href="#kegiatan" className={styles.colLink}>Kegiatan</a></li>
+              <li><a href="#galeri" className={styles.colLink}>Galeri</a></li>
+              <li><a href="#kepengurusan" className={styles.colLink}>Pengurus</a></li>
             </ul>
           </div>
 
           {/* ── Col 3: Contact ── */}
           <div className={styles.col}>
-            <h4 className={styles.colTitle}>Contact</h4>
+            <h4 className={styles.colTitle}>Kontak</h4>
             <ul className={styles.contactList}>
               {contact?.instagram && (
                 <li className={styles.contactItem}>
