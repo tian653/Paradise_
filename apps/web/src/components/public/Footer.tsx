@@ -154,7 +154,7 @@ export default function Footer({
 
         {/* ── Bottom bar ── */}
         <div className={styles.bottom}>
-          <p>© {year} {communityName} Community. All rights reserved.</p>
+          <p>© 2026 Paradise Community. All rights reserved.</p>
         </div>
       </div>
     </footer>

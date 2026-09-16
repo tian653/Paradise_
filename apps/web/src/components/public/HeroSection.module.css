@@ -39,7 +39,7 @@
 .label {
   font-size: 0.78rem;
   font-weight: 700;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.25em;
   color: var(--color-accent, #8B7355);
   text-transform: uppercase;
 }
@@ -62,28 +62,30 @@
 }
 
 .titleMain {
-  font-size: clamp(3.2rem, 7vw, 5.25rem);
+  font-size: clamp(3.5rem, 8.5vw, 6rem);
   font-weight: 800;
-  color: var(--color-text-primary, #1c1c1c);
+  color: #0f172a;
   letter-spacing: 0.02em;
   text-transform: uppercase;
   line-height: 1.05;
 }
 
 .tagline {
-  font-size: 1.1rem;
+  font-size: clamp(1.15rem, 2vw, 1.35rem);
   font-weight: 600;
-  color: var(--color-text-secondary);
+  font-style: italic;
+  color: var(--color-accent, #8B7355);
+  line-height: 1.4;
   margin-bottom: 1.25rem;
   letter-spacing: 0.02em;
 }
 
 .desc {
   font-size: clamp(1rem, 1.5vw, 1.15rem);
-  color: var(--color-text-secondary);
-  line-height: 1.75;
+  color: #374151;
+  line-height: 1.8;
   margin-bottom: 2rem;
-  max-width: 640px;
+  max-width: 580px;
 }
 
 .actions {
@@ -102,15 +104,18 @@
   font-family: var(--font-heading);
   font-weight: 600;
   font-size: 0.95rem;
-  color: var(--color-accent, #8B7355);
-  background: transparent;
-  border: 1.5px solid var(--color-accent, #8B7355);
+  color: #FAF7F0;
+  background: linear-gradient(135deg, #8B7355 0%, #756044 100%);
+  border: none;
+  box-shadow: 0 4px 14px rgba(139, 115, 85, 0.35);
   cursor: pointer;
   transition: all var(--transition-base);
 }
 
 .btnDetail:hover {
-  background: var(--color-accent, #8B7355);
+  background: linear-gradient(135deg, #756044 0%, #604e37 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(139, 115, 85, 0.45);
   color: #ffffff;
 }
 
@@ -137,12 +142,12 @@
   max-height: 380px;
   object-fit: contain;
   opacity: 1;
-  filter: drop-shadow(0 8px 24px rgba(139, 115, 85, 0.18));
+  filter: drop-shadow(0 10px 20px rgba(139, 115, 85, 0.08));
   transition: all 0.35s ease;
 }
 
 .logoImg:hover {
-  filter: drop-shadow(0 12px 32px rgba(139, 115, 85, 0.28));
+  filter: drop-shadow(0 12px 32px rgba(139, 115, 85, 0.15));
   transform: scale(1.02);
 }
 
