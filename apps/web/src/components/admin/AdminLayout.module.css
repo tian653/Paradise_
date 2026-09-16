@@ -2,6 +2,17 @@
   display: flex;
   min-height: 100vh;
   background: var(--admin-bg);
+  /* Override global variables for admin area */
+  --color-surface: var(--admin-surface);
+  --color-border: var(--admin-border);
+  --color-bg-card: var(--admin-surface);
+  --color-text-primary: var(--admin-text-primary);
+  --color-text-secondary: var(--admin-text-secondary);
+  --color-primary: var(--admin-accent);
+  --color-gold: var(--admin-accent);
+  --color-gold-muted: rgba(37, 99, 235, 0.1);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 /* ─── Sidebar ─────────────────────────────────────────────────────────────── */
@@ -11,8 +22,8 @@
   left: 0;
   bottom: 0;
   width: var(--sidebar-width);
-  background: var(--color-bg-secondary);
-  border-right: 1px solid var(--color-border);
+  background: var(--admin-sidebar-bg);
+  border-right: none;
   display: flex;
   flex-direction: column;
   z-index: 200;
@@ -25,7 +36,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 1.25rem 1.25rem 1rem;
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
 }
 
 .logo {
@@ -62,7 +73,7 @@
   font-family: var(--font-heading);
   font-weight: 800;
   font-size: 1rem;
-  color: var(--color-text-primary);
+  color: #ffffff;
   display: block;
   line-height: 1;
   letter-spacing: 0.01em;
@@ -71,8 +82,8 @@
 .logoBadge {
   font-size: 0.62rem;
   font-weight: 700;
-  color: var(--color-gold, #f59e0b);
-  background: rgba(245, 158, 11, 0.12);
+  color: #60a5fa;
+  background: rgba(59, 130, 246, 0.2);
   padding: 0.12rem 0.45rem;
   border-radius: var(--radius-full);
   display: inline-block;
@@ -83,15 +94,15 @@
 
 .closeSidebar {
   display: none;
-  color: var(--color-text-muted);
+  color: var(--admin-sidebar-text);
   padding: 0.25rem;
   border-radius: var(--radius-sm);
   transition: background var(--transition-fast);
 }
 
 .closeSidebar:hover {
-  background: var(--color-surface);
-  color: var(--color-text-primary);
+  background: var(--admin-sidebar-hover);
+  color: #ffffff;
 }
 
 /* Nav */
@@ -112,29 +123,26 @@
   border-radius: var(--radius-md);
   font-size: 0.875rem;
   font-weight: 500;
-  color: var(--color-text-secondary);
+  color: var(--admin-sidebar-text);
   transition: all 0.15s ease;
   text-decoration: none;
-  border-left: 2px solid transparent;
 }
 
 .navItem:hover {
-  background: var(--color-surface);
-  color: var(--color-text-primary);
-  border-left-color: var(--color-border-hover);
+  background: var(--admin-sidebar-hover);
+  color: var(--admin-sidebar-text-active);
 }
 
 .navItem.active {
-  background: rgba(245, 158, 11, 0.08);
-  color: var(--color-gold, #f59e0b);
-  border-left-color: var(--color-gold, #f59e0b);
+  background: var(--admin-accent);
+  color: var(--admin-sidebar-text-active);
   font-weight: 600;
 }
 
 /* Sidebar Footer */
 .sidebarFooter {
   padding: 0.875rem 0.75rem;
-  border-top: 1px solid var(--color-border);
+  border-top: 1px solid rgba(255,255,255,0.08);
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
@@ -147,14 +155,14 @@
   padding: 0.55rem 0.875rem;
   border-radius: var(--radius-md);
   font-size: 0.84rem;
-  color: var(--color-text-secondary);
+  color: var(--admin-sidebar-text);
   text-decoration: none;
   transition: all 0.15s ease;
 }
 
 .viewSite:hover {
-  background: var(--color-surface);
-  color: var(--color-gold, #f59e0b);
+  background: var(--admin-sidebar-hover);
+  color: #ffffff;
 }
 
 .logoutBtn {
@@ -164,26 +172,26 @@
   padding: 0.55rem 0.875rem;
   border-radius: var(--radius-md);
   font-size: 0.84rem;
-  color: var(--color-error);
+  color: #f87171;
   width: 100%;
   transition: all 0.15s ease;
 }
 
 .logoutBtn:hover {
-  background: rgba(255, 87, 87, 0.08);
+  background: rgba(239, 68, 68, 0.1);
 }
 
 .userInfo {
   font-size: 0.74rem;
-  color: var(--color-text-muted);
+  color: var(--admin-sidebar-text);
   padding-top: 0.6rem;
   padding-left: 0.875rem;
-  border-top: 1px solid var(--color-border);
+  border-top: 1px solid rgba(255,255,255,0.08);
   margin-top: 0.2rem;
 }
 
 .userInfo strong {
-  color: var(--color-gold, #f59e0b);
+  color: #ffffff;
 }
 
 /* ─── Overlay ─────────────────────────────────────────────────────────────── */
@@ -207,8 +215,8 @@
 
 .topbar {
   height: 58px;
-  background: var(--color-bg-secondary);
-  border-bottom: 1px solid var(--color-border);
+  background: var(--admin-surface);
+  border-bottom: 1px solid var(--admin-border);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -237,9 +245,9 @@
 }
 
 .topbarUser {
-  font-size: 0.8rem;
-  color: var(--color-text-muted);
-  font-weight: 500;
+  font-size: 0.85rem;
+  color: var(--admin-text-primary);
+  font-weight: 600;
 }
 
 .content {

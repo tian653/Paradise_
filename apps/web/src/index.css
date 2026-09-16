@@ -72,9 +72,20 @@
   /* Navbar height */
   --navbar-height: 88px;
 
-  /* Admin */
+  /* Admin Theme */
   --sidebar-width: 260px;
-  --admin-bg: #FAF7F0;
+  --admin-bg: #f8fafc;
+  --admin-surface: #ffffff;
+  --admin-sidebar-bg: #0f172a;
+  --admin-sidebar-hover: rgba(255, 255, 255, 0.05);
+  --admin-sidebar-active: #2563eb;
+  --admin-sidebar-text: #94a3b8;
+  --admin-sidebar-text-active: #ffffff;
+  --admin-border: #e2e8f0;
+  --admin-text-primary: #0f172a;
+  --admin-text-secondary: #475569;
+  --admin-accent: #2563eb;
+  --admin-accent-hover: #1d4ed8;
 }
 
 /* ─── Reset & Base ────────────────────────────────────────────────────────── */
